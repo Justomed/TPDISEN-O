@@ -11,8 +11,8 @@ public class LevantaPantalla {
 //		FinalizarPago test = new FinalizarPago();
 //		RegistrarPago test = new RegistrarPago();
 //		BuscarPoliza test = new BuscarPoliza();
-		CalcularPremio test = new CalcularPremio();
-		
+//		CalcularPremio test = new CalcularPremio();
+		ConfirmarPremio test = new ConfirmarPremio();
 		
 		test.setVisible(true);
 		
