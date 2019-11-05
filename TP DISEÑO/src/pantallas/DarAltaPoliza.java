@@ -577,6 +577,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridy = 10;
 		constraints.gridwidth = 2;
 		container.add(panelBotones, constraints);
+		
+		
 	}
 	
 }
