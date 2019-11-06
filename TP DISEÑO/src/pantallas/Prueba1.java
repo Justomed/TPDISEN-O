@@ -1,5 +1,5 @@
 package pantallas;
 
-public class Prueba2 {
+public class Prueba1 {
 
 }
