@@ -522,7 +522,10 @@ public class DarAltaPoliza extends JFrame{
 		
 		panelHijosPopUpFecha = new JPanel();
 		panelHijosPopUpFecha.setVisible(true);
-		panelHijosPopUpFecha.setLayout(new GridLayout(3,2));
+		GridLayout glHijosPopUp = new GridLayout(3,2);
+		glHijosPopUp.setVgap(3);
+		glHijosPopUp.setHgap(3);
+		panelHijosPopUpFecha.setLayout(glHijosPopUp);
 		
 		panelHijosPopUpFecha.add(fechaNacimiento);
 		panelHijosPopUpFecha.add(fechaNacimientoTxt);
@@ -584,7 +587,10 @@ public class DarAltaPoliza extends JFrame{
 		
 		panelPremioDescuento = new JPanel();
 		panelPremioDescuento.setVisible(true);
-		panelPremioDescuento.setLayout(new GridLayout(3,2));
+		GridLayout glPremioDescuento = new GridLayout(3,2);
+		glHijosPopUp.setVgap(3);
+		glHijosPopUp.setHgap(3);
+		panelPremioDescuento.setLayout(glPremioDescuento);
 		
 		panelPremioDescuento.add(tipoCoberturaPopUp);
 		panelPremioDescuento.add(tipoCoberturaPopUpComboBox);
