@@ -4,8 +4,8 @@ public class Principal {
 	
 	public static void main (String[] args) {
 		
-		DarAltaPoliza test = new DarAltaPoliza();
-		test.setVisible(true);
+		DarAltaPoliza frame = new DarAltaPoliza();
+		frame.setVisible(true);
 		
 	}
 	

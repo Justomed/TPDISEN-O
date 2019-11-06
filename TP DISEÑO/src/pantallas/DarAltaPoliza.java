@@ -30,6 +30,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.MaskFormatter;
+
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 
 public class DarAltaPoliza extends JFrame{
 	
@@ -123,10 +127,10 @@ public class DarAltaPoliza extends JFrame{
 		JTextField motorTxt = new JTextField();
 		JTextField chasisTxt = new JTextField();
 		JTextField patenteTxt = new JTextField();
-		JTextField fechaNacimientoTxt = new JTextField();
 		JTextField sexoPopUpTxt = new JTextField();
 		JTextField estadoCivilPopUpTxt = new JTextField();
-		JTextField fechaInicioPopUpTxt = new JTextField();
+		JDateChooser fechaInicioPopUpCalendar = new JDateChooser("dd/MM/yy", "##/##/##",'_');
+		JDateChooser fechaNacimientoTxt = new JDateChooser("dd/MM/yy", "##/##/##",'_');
 		JLabel separador = new JLabel("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 		JLabel separador2 = new JLabel("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 		JLabel espacio = new JLabel("");
@@ -585,7 +589,7 @@ public class DarAltaPoliza extends JFrame{
 		panelPremioDescuento.add(tipoCoberturaPopUp);
 		panelPremioDescuento.add(tipoCoberturaPopUpComboBox);
 		panelPremioDescuento.add(fechaInicioPopUp);
-		panelPremioDescuento.add(fechaInicioPopUpTxt);
+		panelPremioDescuento.add(fechaInicioPopUpCalendar);
 		panelPremioDescuento.add(formaPagoPopUp);
 		panelPremioDescuento.add(formaPagoPopUpComboBox);
 		
