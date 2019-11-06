@@ -47,7 +47,7 @@ public class DarAltaPoliza extends JFrame{
 	private JPanel panelSiniestros;
 	private JPanel panelHijosPopUp;
 	private JPanel panelHijosPopUpFecha;
-	private JPanel panelHijosPopUpBotones;
+	private JPanel panelPremioDescuento;
 	private JPanel panelBlanco;
 	private JPanel panelBlanco1;
 	private JPanel panelBlanco2;
@@ -106,6 +106,8 @@ public class DarAltaPoliza extends JFrame{
 		JComboBox anioComboBox = new JComboBox();
 		JComboBox kmAnioComboBox = new JComboBox();
 		JComboBox siniestrosComboBox = new JComboBox();
+		JComboBox tipoCoberturaPopUpComboBox = new JComboBox();
+		JComboBox formaPagoPopUpComboBox = new JComboBox();
 		JTextField nroClienteTxt = new JTextField();
 		JTextField tipoDocumentoTxt = new JTextField();
 		JTextField nroDocumentoTxt = new JTextField();
@@ -124,12 +126,16 @@ public class DarAltaPoliza extends JFrame{
 		JTextField fechaNacimientoTxt = new JTextField();
 		JTextField sexoPopUpTxt = new JTextField();
 		JTextField estadoCivilPopUpTxt = new JTextField();
+		JTextField fechaInicioPopUpTxt = new JTextField();
 		JLabel separador = new JLabel("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 		JLabel separador2 = new JLabel("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 		JLabel espacio = new JLabel("");
 		JLabel fechaNacimiento = new JLabel("Fecha de nacimiento:");
 		JLabel sexoPopUp = new JLabel("Sexo:");
 		JLabel estadoCivilPopUp = new JLabel ("Estado civil:");
+		JLabel tipoCoberturaPopUp = new JLabel("Tipo de cobertura:");
+		JLabel fechaInicioPopUp = new JLabel("Fecha de inicio:");
+		JLabel formaPagoPopUp = new JLabel("Forma de pago");
 		JTextArea nroCliente = new JTextArea("Nro. cliente:");
 		JTextArea tipoDocumento = new JTextArea("Tipo de documento:");
 		JTextArea nroDocumento = new JTextArea("Nro. de documento:");
@@ -572,13 +578,27 @@ public class DarAltaPoliza extends JFrame{
 		panelBotones.add(confirmar);
 		panelBotones.add(cancelar);
 		
+		panelPremioDescuento = new JPanel();
+		panelPremioDescuento.setVisible(true);
+		panelPremioDescuento.setLayout(new GridLayout(3,2));
+		
+		panelPremioDescuento.add(tipoCoberturaPopUp);
+		panelPremioDescuento.add(tipoCoberturaPopUpComboBox);
+		panelPremioDescuento.add(fechaInicioPopUp);
+		panelPremioDescuento.add(fechaInicioPopUpTxt);
+		panelPremioDescuento.add(formaPagoPopUp);
+		panelPremioDescuento.add(formaPagoPopUpComboBox);
+		
+		confirmar.addActionListener(e -> {
+			int respuesta = JOptionPane.showConfirmDialog(this, panelPremioDescuento, "Tipo de cobertura y forma de pago", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		});
+		
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 10;
 		constraints.gridwidth = 2;
 		container.add(panelBotones, constraints);
-		
-		
+				
 	}
 	
 }
