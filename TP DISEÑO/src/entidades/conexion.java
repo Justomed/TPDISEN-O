@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class conexion {//aca se va a cargar el controlador
+	
 	private static final String CONTROLADOR = "com.mysql.jdbc.Driver";
 	private static final String URL = "jdbc:mysql://localhost/bd";	
 	private static final String USUARIO = "root";

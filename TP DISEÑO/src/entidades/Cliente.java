@@ -1,7 +1,7 @@
 package entidades;
 
 public class Cliente {
-	//atributos
+	//atributo
 		int id;
 		String nombre;
 		String apellido;
