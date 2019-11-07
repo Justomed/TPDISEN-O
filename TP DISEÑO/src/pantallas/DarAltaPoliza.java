@@ -9,6 +9,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.text.Format;
 import java.text.ParseException;
@@ -38,6 +42,7 @@ import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
 import utility.FocusTextField;
+import utility.MyOwnFocusTraversalPolicy;
 
 public class DarAltaPoliza extends JFrame{
 	
@@ -221,6 +226,31 @@ public class DarAltaPoliza extends JFrame{
 		tuercaAntirrobo.setBackground(Color.lightGray);
 		tuercaAntirrobo.setFont(new Font("Dialog", Font.PLAIN, 12));
 		
+		Vector<Component> orden = new Vector<Component>();
+		
+		orden.add(buscarCliente);
+		orden.add(provinciaComboBox);
+		orden.add(localidadComboBox);
+		orden.add(marcaComboBox);
+		orden.add(modeloComboBox);
+		orden.add(anioComboBox);
+		orden.add(motorTxt);
+		orden.add(chasisTxt);
+		orden.add(patenteTxt);
+		orden.add(kmAnioComboBox);
+		orden.add(garaje);
+		orden.add(alarma);
+		orden.add(rastreo);
+		orden.add(tuercaAntirrobo);
+		orden.add(siniestrosComboBox);
+		orden.add(agregarHijo);
+		orden.add(eliminarHijo);
+		orden.add(confirmar);
+		orden.add(cancelar);
+		
+		MyOwnFocusTraversalPolicy newPolicy = new MyOwnFocusTraversalPolicy(orden);
+		frame.setFocusTraversalPolicy(newPolicy);
+		
 		panelBuscarCliente = new JPanel();
 		panelBuscarCliente.setBackground(Color.lightGray);
 		panelBuscarCliente.setVisible(true);
@@ -231,6 +261,8 @@ public class DarAltaPoliza extends JFrame{
 			new BuscarCliente();
 			frame.dispose();
 		});
+		
+		buscarCliente.requestFocusInWindow();
 		
 		constraints.anchor = GridBagConstraints.NORTHWEST;
 		constraints.gridx = 0;
@@ -678,6 +710,7 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridwidth = 2;
 		container.add(panelBotones, constraints);
 				
+		
 	}
 	
 }
