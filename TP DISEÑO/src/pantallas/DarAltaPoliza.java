@@ -560,6 +560,11 @@ public class DarAltaPoliza extends JFrame{
 		glSiniestros.setVgap(2);
 		panelSiniestros.setLayout(glSiniestros);
 		
+		siniestrosComboBox.addItem("NINGUNO");
+		siniestrosComboBox.addItem("UNO");
+		siniestrosComboBox.addItem("DOS");
+		siniestrosComboBox.addItem("MAS DE DOS");
+
 		panelSiniestros.add(siniestrosComboBoxLabel);
 		panelSiniestros.add(siniestrosComboBox);
 		
