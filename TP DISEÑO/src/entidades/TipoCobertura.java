@@ -2,7 +2,7 @@ package entidades;
 
 public class TipoCobertura {
 	boolean responsabilidadCivil;
-	boolean respCivilRoboIncencioTotal;
+	boolean respCivilRoboIncendioTotal;
 	boolean todoTotal;
 	boolean tercerosCompletos;
 	boolean todoRiesgoConFranquicia;
@@ -16,11 +16,11 @@ public class TipoCobertura {
 	public void setResponsabilidadCivil(boolean responsabilidadCivil) {
 		this.responsabilidadCivil = responsabilidadCivil;
 	}
-	public boolean isRespCivilRoboIncencioTotal() {
-		return respCivilRoboIncencioTotal;
+	public boolean isRespCivilRoboIncendioTotal() {
+		return respCivilRoboIncendioTotal;
 	}
-	public void setRespCivilRoboIncencioTotal(boolean respCivilRoboIncencioTotal) {
-		this.respCivilRoboIncencioTotal = respCivilRoboIncencioTotal;
+	public void setRespCivilRoboIncendioTotal(boolean respCivilRoboIncendioTotal) {
+		this.respCivilRoboIncendioTotal = respCivilRoboIncendioTotal;
 	}
 	public boolean isTodoTotal() {
 		return todoTotal;

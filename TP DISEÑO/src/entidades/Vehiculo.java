@@ -39,4 +39,12 @@ public class Vehiculo {
 		this.tasavehiculo = tasavehiculo;
 	}
 	
+	public Vehiculo() {
+		
+	}
+	public Vehiculo(Marca marca, Modelo modelo, int anioFabricacion) {
+		this.marca=marca;
+		this.modelo=modelo;
+		this.anioFabricacion=anioFabricacion;
+	}
 }

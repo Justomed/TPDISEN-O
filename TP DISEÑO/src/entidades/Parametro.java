@@ -1,13 +1,14 @@
 package entidades;
 
 public class Parametro {
-	float tasaHijoActual;
-	float tasaVehiculoActual;
-	float tasaLocalActual;
-	float tasaSeguridadActual;
-	float tasaCoberturaActual;
-	float tasaSiniestroActual;
-	float tasaRiesgoActual;
+	private float tasaHijoActual;
+	private float tasaVehiculoActual;
+	private float tasaLocalActual;
+	private float tasaSeguridadActual;
+	private float tasaCoberturaActual;
+	private float tasaSiniestroActual;
+	private float tasaRiesgoActual;
+	private float tasaKmActual;
 	
 	
 	public float getTasaHijoActual() {
@@ -52,6 +53,13 @@ public class Parametro {
 	public void setTasaRiesgoActual(float tasaRiesgoActual) {
 		this.tasaRiesgoActual = tasaRiesgoActual;
 	}
+	public float getTasaKmActual() {
+		return tasaKmActual;
+	}
+	public void setTasaKmActual(float tasaKmActual) {
+		this.tasaKmActual = tasaKmActual;
+	}
+
 	
 	
 }

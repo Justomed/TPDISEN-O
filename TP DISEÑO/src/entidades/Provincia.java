@@ -1,8 +1,11 @@
 package entidades;
 
+import java.util.List;
+
 public class Provincia {
 	String nombreProvincia;
 	Pais pais;
+	List<Localidad> localidades;
 	
 	
 	public String getNombreProvincia() {

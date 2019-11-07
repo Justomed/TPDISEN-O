@@ -38,5 +38,14 @@ public class Seguridad {
 	public void setTasaSeg(float tasaSeg) {
 		this.tasaSeg = tasaSeg;
 	}
-	
+	public Seguridad() {
+		
+	}
+	public Seguridad (boolean garage, boolean alarma, boolean rastreo, boolean tuerca) {
+		this.alarma=alarma;
+		this.garage=garage;
+		this.rastreo=rastreo;
+		this.tuerca=tuerca;
+	}
+
 }

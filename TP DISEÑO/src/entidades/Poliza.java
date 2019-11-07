@@ -1,5 +1,8 @@
 package entidades;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Poliza {
 	int nro;
 	float sumaAsegurada;
@@ -10,6 +13,9 @@ public class Poliza {
 	Parametro parametro;
 	Seguridad seguridad;
 	Usuario usuario;
+	List <Hijo> hijosDeclarados;
+	ArrayList<Cuota> cuotas;
+	
 	
 	
 	public Poliza() {
@@ -112,6 +118,14 @@ public class Poliza {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public List<Hijo> getHijosDeclarados() {
+		return hijosDeclarados;
+	}
+
+	public void setHijosDeclarados(List<Hijo> hijosDeclarados) {
+		this.hijosDeclarados = hijosDeclarados;
 	}
 	
 	
