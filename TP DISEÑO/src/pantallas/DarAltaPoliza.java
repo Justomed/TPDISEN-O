@@ -730,6 +730,11 @@ public class DarAltaPoliza extends JFrame{
 		
 		confirmar.addActionListener(e -> {
 			int respuesta = JOptionPane.showConfirmDialog(this, panelPremioDescuento, "Tipo de cobertura y forma de pago", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			
+			if(respuesta == 0) {
+				new PolizaGenerar();
+				frame.dispose();
+			}
 		});
 		
 		constraints.anchor = GridBagConstraints.CENTER;
