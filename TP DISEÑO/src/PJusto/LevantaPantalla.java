@@ -1,4 +1,4 @@
-package pantallas;
+package PJusto;
 
 public class LevantaPantalla {
 	

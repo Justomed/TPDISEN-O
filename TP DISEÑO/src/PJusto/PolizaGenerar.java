@@ -1,4 +1,4 @@
-package pantallas;
+package PJusto;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -30,14 +30,12 @@ public class PolizaGenerar extends JFrame{
 	private JPanel panelBotones;
 	private JPanel panelBotonDetalle;
 	private JPanel panelBotonCuota;
-	
 	private JPanel panelTablaDescuento;
 	private JPanel panelTablaCuotas;
 	private JPanel panelBlanco;
 	private JPanel panelBlanco1;
 	private JFrame frame=this;
 	private JTable tablaDescuentos;
-//	private JPanel tablas;
 	private JTable tablaCuotas;
 	
 	public PolizaGenerar() {
@@ -271,7 +269,7 @@ public class PolizaGenerar extends JFrame{
 		constraints.gridy = 1;
 		constraints.gridy = 10;
 		container.add(panelBotonDetalle, constraints);
-//----------------PANEL DETALLE------------------------------------	 
+//----------------PANEL CUOTA------------------------------------	 
 		panelBotonCuota = new JPanel();
 		panelBotonCuota.setBackground(Color.lightGray);
 		panelBotonCuota.setVisible(true);
@@ -328,11 +326,7 @@ public class PolizaGenerar extends JFrame{
 		panelTablaDescuento.add(scrollPane);
 		tablaDescuentos.setSize(2, 3);
 		constraints.anchor = GridBagConstraints.NORTHEAST;
-		//constraints.gridx = 1;
-		//constraints.gridy = 5;
-		//constraints.gridheight = 1;
 		constraints.fill = GridBagConstraints.BOTH;
-		
 		detalle.addActionListener(e -> {
 			JOptionPane.showConfirmDialog(this, panelTablaDescuento, "Detalle de descuentos", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		});
@@ -344,7 +338,6 @@ public class PolizaGenerar extends JFrame{
 		panelTablaCuotas.setLayout(new FlowLayout());
 		DefaultTableModel model1 = new DefaultTableModel();
 		panelTablaCuotas.setSize(1, 2);
-		
 		model1.addColumn("N° cuota");
 		model1.addColumn("Monto descuento");
 		Object rowData1[] = null;
@@ -364,20 +357,12 @@ public class PolizaGenerar extends JFrame{
 		tablaCuotas.setSize(2, 3);
 		constraints.anchor = GridBagConstraints.NORTHEAST;
 		constraints.gridx = 1;
-		constraints.gridy = 5;
+		constraints.gridy = 2;
 		constraints.gridheight = 1;
 		constraints.fill = GridBagConstraints.BOTH;
-		
 		cuota.addActionListener(e -> {
 			JOptionPane.showConfirmDialog(this, panelTablaCuotas, "Detalle de cuotas", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		});
-		
-//		container.add(panelTablaCuotas, constraints);
-//----------------------------------------------------------------------- 
-
-		
-		
-
 	}
 	
 }
