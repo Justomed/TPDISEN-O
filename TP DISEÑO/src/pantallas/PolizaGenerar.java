@@ -369,9 +369,9 @@ public class PolizaGenerar extends JFrame{
         panelDatos.add(panelBlanco47);
         panelDatos.add(panelBlanco48);
         panelDatos.add(panelBlanco39);
-//        panelDatos.add(panelBlanco14);
-//        panelDatos.add(panelBlanco5);
-//        panelDatos.add(panelBlanco6);
+        panelDatos.add(panelBlanco14);
+        panelDatos.add(panelBlanco5);
+        panelDatos.add(panelBlanco6);
 //----------------------------------------------------
 		panelDatos.add(diaPago);
 		panelDatos.add(diaPagoTxt);
