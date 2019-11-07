@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.sql.Date;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,6 +36,8 @@ import javax.swing.text.MaskFormatter;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
+
+import utility.FocusTextField;
 
 public class DarAltaPoliza extends JFrame{
 	
@@ -97,7 +101,7 @@ public class DarAltaPoliza extends JFrame{
 		container.setLayout(new GridBagLayout());
 		container.setBackground(Color.lightGray);
 		GridBagConstraints constraints = new GridBagConstraints();
-				
+		
 		JButton buscarCliente = new JButton("Buscar Cliente");
 		JButton agregarHijo = new JButton ("Agregar datos de hijo");
 		JButton eliminarHijo = new JButton ("Eliminar hijo");
@@ -112,7 +116,10 @@ public class DarAltaPoliza extends JFrame{
 		JComboBox siniestrosComboBox = new JComboBox();
 		JComboBox tipoCoberturaPopUpComboBox = new JComboBox();
 		JComboBox formaPagoPopUpComboBox = new JComboBox();
-		JTextField nroClienteTxt = new JTextField();
+		JFormattedTextField nroClienteTxt = new JFormattedTextField("_ _ - _ _ _ _ _ _ _ _");
+		JFormattedTextField sumaAseguradaTxt = new JFormattedTextField("$_ _._ _ _._ _ _,_ _");
+		FocusTextField motorTxt = new FocusTextField();
+		FocusTextField chasisTxt = new FocusTextField();
 		JTextField tipoDocumentoTxt = new JTextField();
 		JTextField nroDocumentoTxt = new JTextField();
 		JTextField apellidoTxt = new JTextField();
@@ -123,9 +130,6 @@ public class DarAltaPoliza extends JFrame{
 		JTextField cpTxt = new JTextField();
 		JTextField calleTxt = new JTextField();
 		JTextField numeroTxt = new JTextField();
-		JTextField sumaAseguradaTxt = new JTextField();
-		JTextField motorTxt = new JTextField();
-		JTextField chasisTxt = new JTextField();
 		JTextField patenteTxt = new JTextField();
 		JTextField sexoPopUpTxt = new JTextField();
 		JTextField estadoCivilPopUpTxt = new JTextField();
@@ -173,6 +177,9 @@ public class DarAltaPoliza extends JFrame{
 		JCheckBox alarma = new JCheckBox("¿Tiene alarma?");
 		JCheckBox rastreo = new JCheckBox("¿Posee dispositivo de rastreo vehicular?");
 		JCheckBox tuercaAntirrobo = new JCheckBox("¿Posee tuercas antirrobo en las cuatro ruedas?");
+		
+		motorTxt.setText("ZZZZZZZZZZZ9999999");
+		chasisTxt.setText("Z9999999");
 		
 		clienteTitulo.setFont(new Font("Dialog", Font.BOLD, 20));
 		clienteTitulo.setBackground(Color.lightGray);
@@ -222,6 +229,7 @@ public class DarAltaPoliza extends JFrame{
 		
 		buscarCliente.addActionListener(e -> {
 			new BuscarCliente();
+			frame.dispose();
 		});
 		
 		constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -274,6 +282,30 @@ public class DarAltaPoliza extends JFrame{
 		panelBlanco2.setBackground(Color.lightGray);
 		panelBlanco3.setBackground(Color.lightGray);
 		panelBlanco4.setBackground(Color.lightGray);
+		
+		nroClienteTxt.setEnabled(false);
+		tipoDocumentoTxt.setEnabled(false);
+		nroDocumentoTxt.setEnabled(false);
+		apellidoTxt.setEnabled(false);
+		nombreTxt.setEnabled(false);
+		paisTxt.setEnabled(false);
+		provinciaTxt.setEnabled(false);
+		localidadTxt.setEnabled(false);
+		cpTxt.setEnabled(false);
+		calleTxt.setEnabled(false);
+		numeroTxt.setEnabled(false);
+		
+		nroClienteTxt.setBackground(Color.GRAY);
+		tipoDocumentoTxt.setBackground(Color.GRAY);
+		nroDocumentoTxt.setBackground(Color.GRAY);
+		apellidoTxt.setBackground(Color.GRAY);
+		nombreTxt.setBackground(Color.GRAY);
+		paisTxt.setBackground(Color.GRAY);
+		provinciaTxt.setBackground(Color.GRAY);
+		localidadTxt.setBackground(Color.GRAY);
+		cpTxt.setBackground(Color.GRAY);
+		calleTxt.setBackground(Color.GRAY);
+		numeroTxt.setBackground(Color.GRAY);
 		
 		panelDatosCliente.add(nroCliente);
 		panelDatosCliente.add(nroClienteTxt);
@@ -399,6 +431,11 @@ public class DarAltaPoliza extends JFrame{
 		panelBlanco29.setBackground(Color.lightGray);
 		panelBlanco30.setBackground(Color.lightGray);
 		
+		localidadComboBox.setEnabled(false);
+		modeloComboBox.setEnabled(false);
+		anioComboBox.setEnabled(false);
+		sumaAseguradaTxt.setEnabled(false);
+		
 		panelPoliza.add(domRiesgo);
 		panelPoliza.add(panelBlanco5);
 		panelPoliza.add(panelBlanco6);
@@ -446,8 +483,35 @@ public class DarAltaPoliza extends JFrame{
 		panelPoliza.add(patente);
 		panelPoliza.add(patenteTxt);
 		panelPoliza.add(kmAnio);
-		panelPoliza.add(kmAnioComboBox);	
+		panelPoliza.add(kmAnioComboBox);
 		
+		provinciaComboBox.addItem("-------------------");
+		provinciaComboBox.addItem("uno");
+		provinciaComboBox.addItem("dos");
+		
+		provinciaComboBox.addActionListener(e -> {
+		if(provinciaComboBox.getSelectedIndex() > 0) {
+			localidadComboBox.setEnabled(true);
+		}
+		});
+		
+		marcaComboBox.addItem("-----------------");
+		marcaComboBox.addItem("prueba");
+		
+		marcaComboBox.addActionListener(e -> {
+			if(marcaComboBox.getSelectedIndex() > 0) {
+				modeloComboBox.setEnabled(true);
+				modeloComboBox.addItem("------------------");
+				modeloComboBox.addItem("prueba");
+		}
+		});
+		
+		modeloComboBox.addActionListener(e -> {
+			if(modeloComboBox.getSelectedIndex() > 0) {
+				anioComboBox.setEnabled(true);
+				anioComboBox.addItem("Puto el que lee");
+		}
+		});
 		
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 0;
@@ -571,7 +635,7 @@ public class DarAltaPoliza extends JFrame{
 		scrollPane.setBackground(Color.lightGray);
 		panelTablaHijos.add(scrollPane);
 		
-		constraints.anchor = GridBagConstraints.NORTHEAST;
+		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 1;
 		constraints.gridy = 9;
 		constraints.gridheight = 3;
