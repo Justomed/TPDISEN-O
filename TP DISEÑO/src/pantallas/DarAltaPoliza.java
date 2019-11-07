@@ -107,6 +107,8 @@ public class DarAltaPoliza extends JFrame{
 		container.setBackground(Color.lightGray);
 		GridBagConstraints constraints = new GridBagConstraints();
 		
+		//---------------------DECLARACION DE COMPONENTES-----------------------------
+		
 		JButton buscarCliente = new JButton("Buscar Cliente");
 		JButton agregarHijo = new JButton ("Agregar datos de hijo");
 		JButton eliminarHijo = new JButton ("Eliminar hijo");
@@ -226,6 +228,8 @@ public class DarAltaPoliza extends JFrame{
 		tuercaAntirrobo.setBackground(Color.lightGray);
 		tuercaAntirrobo.setFont(new Font("Dialog", Font.PLAIN, 12));
 		
+		//-------------------ORDEN DE TABULACION------------------------------
+		
 		Vector<Component> orden = new Vector<Component>();
 		
 		orden.add(buscarCliente);
@@ -251,6 +255,8 @@ public class DarAltaPoliza extends JFrame{
 		MyOwnFocusTraversalPolicy newPolicy = new MyOwnFocusTraversalPolicy(orden);
 		frame.setFocusTraversalPolicy(newPolicy);
 		
+		//-------------------PANEL BUSCAR CLIENTE--------------------------
+		
 		panelBuscarCliente = new JPanel();
 		panelBuscarCliente.setBackground(Color.lightGray);
 		panelBuscarCliente.setVisible(true);
@@ -271,6 +277,8 @@ public class DarAltaPoliza extends JFrame{
 		
 		container.add(panelBuscarCliente, constraints);
 		
+		//-----------------------PRIMER SEPARADOR---------------------------
+		
 		panelSeparador = new JPanel();
 		panelSeparador.setBackground(Color.lightGray);
 		panelSeparador.setVisible(true);
@@ -282,6 +290,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridwidth = 2;
 		
 		container.add(panelSeparador, constraints);
+		
+		//----------------TITULO "DATOS DE CLIENTE SELECCIONADO"-------------------
 		
 		panelTituloCliente = new JPanel();
 		panelTituloCliente.setBackground(Color.lightGray);
@@ -295,6 +305,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridwidth = 2;
 		
 		container.add(panelTituloCliente, constraints);
+		
+		//------------------------PANEL DATOS CLIENTE--------------------------
 		
 		panelDatosCliente = new JPanel();
 		panelDatosCliente.setBackground(Color.lightGray);
@@ -376,6 +388,8 @@ public class DarAltaPoliza extends JFrame{
 		
 		container.add(panelDatosCliente, constraints);
 		
+		//------------------------SEGUNDO SEPARADOR---------------------------
+		
 		panelSeparador2 = new JPanel();
 		panelSeparador2.setBackground(Color.lightGray);
 		panelSeparador2.setVisible(true);
@@ -387,6 +401,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridwidth = 2;
 		
 		container.add(panelSeparador2, constraints);
+		
+		//----------------------TITULO "DATOS DE POLIZA"-------------------------
 		
 		panelTituloPoliza = new JPanel();
 		panelTituloPoliza.setBackground(Color.lightGray);
@@ -400,6 +416,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridwidth = 2;
 		
 		container.add(panelTituloPoliza, constraints);
+		
+		//---------------------------PANEL DATOS POLIZA----------------------------
 		
 		panelPoliza = new JPanel();
 		panelPoliza.setBackground(Color.LIGHT_GRAY);
@@ -551,6 +569,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridwidth = 2;
 		container.add(panelPoliza, constraints);
 		
+		//----------------------PANEL MEDIDAS DE SEGURIDAD-----------------------
+		
 		panelSeguridad = new JPanel();
 		panelSeguridad.setBackground(Color.lightGray);
 		panelSeguridad.setVisible(true);
@@ -585,6 +605,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridwidth = 2;
 		container.add(panelSeguridad, constraints);
 		
+		//--------------------PANEL NUMERO DE SINIESTROS------------------------
+		
 		panelSiniestros = new JPanel();
 		panelSiniestros.setBackground(Color.lightGray);
 		panelSiniestros.setVisible(true);
@@ -605,6 +627,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridy = 8;
 		constraints.gridwidth = 2;
 		container.add(panelSiniestros, constraints);
+		
+		//-------------------------PANEL BOTONES HIJOS---------------------------
 		
 		panelHijos = new JPanel();
 		panelHijos.setBackground(Color.lightGray);
@@ -647,6 +671,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridy = 9;
 		container.add(panelHijos, constraints);
 		
+		//-----------------------PANEL TABLA HIJOS----------------------------
+		
 		panelTablaHijos = new JPanel();
 		panelTablaHijos.setBackground(Color.lightGray);
 		panelTablaHijos.setVisible(true);
@@ -678,6 +704,8 @@ public class DarAltaPoliza extends JFrame{
 		constraints.gridheight = 3;
 		constraints.fill = GridBagConstraints.BOTH;
 		container.add(panelTablaHijos, constraints);
+		
+		//-----------------PANEL BOTONES CONFIRMAR/CANCELAR----------------------
 		
 		panelBotones = new JPanel();
 		panelBotones.setBackground(Color.lightGray);
