@@ -43,7 +43,7 @@ public class PolizaGenerar extends JFrame{
 		this.setTitle("Poliza a generar");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
-		this.setSize(850,450);
+		this.setSize(780,430);
 		this.setResizable(false);
 		Container container = getContentPane();
 		container.setLayout(new GridBagLayout());
@@ -66,6 +66,21 @@ public class PolizaGenerar extends JFrame{
 		JTextField montoTotalTxt = new JTextField();
 		JTextField importeCuotaTxt = new JTextField();
 
+		apellidoTxt.setEnabled(false);
+		nombreTxt.setEnabled(false);
+		marcaTxt.setEnabled(false);
+		modeloTxt.setEnabled(false);
+		motorTxt.setEnabled(false);
+		chasisTxt.setEnabled(false);
+		patenteTxt.setEnabled(false);
+		inicioTxt.setEnabled(false);
+		finTxt.setEnabled(false);
+		sumaAseguradaTxt.setEnabled(false);
+		premioTxt.setEnabled(false);
+		importeDescuentoTxt.setEnabled(false);
+		diaPagoTxt.setEnabled(false);
+		montoTotalTxt.setEnabled(false);
+		importeCuotaTxt.setEnabled(false);
 		
 		JTextArea apellido = new JTextArea("Apellido:");
 		JTextArea nombre = new JTextArea("Nombre:");

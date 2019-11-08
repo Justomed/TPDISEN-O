@@ -151,6 +151,11 @@ public class BuscarCliente extends JFrame{
 		panelAceptarCancelar.add(aceptar);
 		panelAceptarCancelar.add(cancelar);
 		
+		cancelar.addActionListener(e -> {
+			new DarAltaPoliza();
+			frame.dispose();
+		});
+		
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.anchor = GridBagConstraints.CENTER;
