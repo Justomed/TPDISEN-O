@@ -473,7 +473,8 @@ public class PolizaGenerar extends JFrame{
 									   sumaAseguradaPoliza,
 									   auxFechaInicio,
 									   auxFechaFinVigencia,
-									   kmAnio									   
+									   kmAnio,
+									   cliente
 			);
 		});
 	}

@@ -23,7 +23,8 @@ public class GestorPoliza {
 							  String sumaAseguradaPoliza, 
 							  Date fechaInicio, 
 							  Date finVigencia, 
-							  String kmAnio
+							  String kmAnio,
+							  Cliente cliente
 							  ) {
 		
 		Poliza poliza = new Poliza();
@@ -78,7 +79,7 @@ public class GestorPoliza {
 		}
 		
 		poliza.setCuotas(cuotas);
-		
+		poliza.setCliente(cliente);
 		GestorBD gestorBD = new GestorBD();
 		gestorBD.guardarPoliza(poliza);
 	}

@@ -6,12 +6,33 @@ import java.util.List;
 
 public class Poliza {
 	int nro;
+	Cliente cliente;
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
 	String sumaAsegurada;
 	String kmPorAnio;
 	String nroSiniestros;
 	TipoCobertura tipoCobertura;
 	DomicilioDeRiesgo domicilioDeRiesgo;
 	Parametro parametro;
+	Seguridad seguridad;
+	Usuario usuario;
+	ArrayList <Hijo> hijosDeclarados;
+	ArrayList<Cuota> cuotas;
+	String estado;
+	Vehiculo vehiculo;
+	Date fechaInicioVigencia;
+	Date fechaFinVigencia;
+	String motor;
+	String chasis;
+	String patente;
+	
 	public String getMotor() {
 		return motor;
 	}
@@ -35,18 +56,6 @@ public class Poliza {
 	public void setPatente(String patente) {
 		this.patente = patente;
 	}
-
-	Seguridad seguridad;
-	Usuario usuario;
-	ArrayList <Hijo> hijosDeclarados;
-	ArrayList<Cuota> cuotas;
-	String estado;
-	Vehiculo vehiculo;
-	Date fechaInicioVigencia;
-	Date fechaFinVigencia;
-	String motor;
-	String chasis;
-	String patente;
 	
 	public Date getFechaInicioVigencia() {
 		return fechaInicioVigencia;

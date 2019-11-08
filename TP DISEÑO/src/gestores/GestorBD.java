@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.Date;
 
 import entidades.AnioFabricacion;
 import entidades.Localidad;
@@ -63,10 +64,10 @@ public class GestorBD {
 		try {
 
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (?,?,?)");
-			insercion.setString(1, suma);
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (' "+suma+" ', ' "+kmPA+" ', ' "+nroS+" ');");
+			/*insercion.setString(1, suma);
 			insercion.setString(2, kmPA);
-			insercion.setString(3, nroS);
+			insercion.setString(3, nroS);*/
 			int res = insercion.executeUpdate(); //para ver si se ejecuta bien
 			
 			if(res>0) {
@@ -74,7 +75,7 @@ public class GestorBD {
 			}
 			
 		} catch (Exception e) {
-
+			System.out.println("no se pudo guardar poliza");
 		}
 		finally {
 			this.cerrarConexion();
@@ -98,7 +99,7 @@ public class GestorBD {
 				 }
 				  
 		} catch (Exception e) {
-			System.out.println("no se pudo ingresar");
+			System.out.println("no se pudo ingresar al cliente");
 		}
 		finally {
 			this.cerrarConexion();
@@ -174,7 +175,7 @@ public class GestorBD {
 				  System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
 				 }
 		} catch (Exception e) {
-			System.out.println("no se pudo ingresar");
+			System.out.println("no se pudo ingresar a cobertura");
 		}
 		finally {
 			this.cerrarConexion();
@@ -190,7 +191,7 @@ public class GestorBD {
 		ResultSet rs=null;
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM localidad WHERE nombreLocalidad="+localidad);
+			rs=stm.executeQuery("SELECT * FROM localidad WHERE nombreLocalidad='"+localidad+"';");
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
 
@@ -199,7 +200,7 @@ public class GestorBD {
 				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
 				 }
 		} catch (Exception e) {
-			System.out.println("no se pudo ingresar");
+			System.out.println("no se pudo ingresar a localidad");
 		}
 		finally {
 			this.cerrarConexion();
@@ -216,7 +217,7 @@ public class GestorBD {
 		ResultSet rs=null;
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM provincia WHERE nombreProvincia="+provincia);
+			rs=stm.executeQuery("SELECT * FROM provincia WHERE nombreProvincia='"+provincia+"';");
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
 
@@ -225,7 +226,7 @@ public class GestorBD {
 				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
 				 }
 		} catch (Exception e) {
-			System.out.println("no se pudo ingresar");
+			System.out.println("no se pudo ingresar provincia");
 		}
 		finally {
 			this.cerrarConexion();
@@ -242,7 +243,7 @@ public class GestorBD {
 		ResultSet rs=null;
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM aniofabricacion WHERE anio="+anio);
+			rs=stm.executeQuery("SELECT * FROM aniofabricacion WHERE anio='"+anio+"';");
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
 
@@ -251,7 +252,7 @@ public class GestorBD {
 				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
 				 }
 		} catch (Exception e) {
-			System.out.println("no se pudo ingresar");
+			System.out.println("no se pudo ingresar a aniofabricacion");
 		}
 		finally {
 			this.cerrarConexion();
