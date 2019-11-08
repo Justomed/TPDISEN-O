@@ -6,6 +6,22 @@ public class Localidad {
 	Provincia nombreProvincia;
 	float tasaDeRiesgo;
 	
+	public Localidad() {
+		this.nombreProvincia=new Provincia();
+	}
+	
+	public Localidad(String nombre, int cp, Provincia provincia) {
+		this.nombreLocalidad=nombre;
+		this.codigoPostal=cp;
+		this.nombreProvincia=provincia;
+	}
+	
+	public Localidad(String nombre, int cp, Provincia provincia, float tasaRiesgo) {
+		this.nombreLocalidad=nombre;
+		this.codigoPostal=cp;
+		this.nombreProvincia=provincia;
+		this.tasaDeRiesgo=tasaRiesgo;
+	}
 	
 	public String getNombreLocalidad() {
 		return nombreLocalidad;

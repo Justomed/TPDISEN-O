@@ -3,7 +3,7 @@ package entidades;
 public class Parametro {
 	private float tasaHijoActual;
 	private float tasaVehiculoActual;
-	private float tasaLocalActual;
+	private float tasaLocalidadActual;
 	private float tasaSeguridadActual;
 	private float tasaCoberturaActual;
 	private float tasaSiniestroActual;
@@ -23,11 +23,11 @@ public class Parametro {
 	public void setTasaVehiculoActual(float tasaVehiculoActual) {
 		this.tasaVehiculoActual = tasaVehiculoActual;
 	}
-	public float getTasaLocalActual() {
-		return tasaLocalActual;
+	public float getTasaLocalidadActual() {
+		return tasaLocalidadActual;
 	}
-	public void setTasaLocalActual(float tasaLocalActual) {
-		this.tasaLocalActual = tasaLocalActual;
+	public void setTasaLocalidadActual(float tasaLocalActual) {
+		this.tasaLocalidadActual = tasaLocalActual;
 	}
 	public float getTasaSeguridadActual() {
 		return tasaSeguridadActual;

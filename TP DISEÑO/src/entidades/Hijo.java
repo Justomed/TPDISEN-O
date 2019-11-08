@@ -4,8 +4,23 @@ import java.util.Date;
 public class Hijo {
 	private Date fechaNacimiento;
 	private String sexo;
-	private String responsabilidadCivil;
+	private String estadoCivil;
 	
+	public Hijo() {}
+	
+	public Hijo(Date fecha, String sexo, String estadoCivil) {
+		this.fechaNacimiento=fecha;
+		this.sexo=sexo;
+		this.estadoCivil=estadoCivil;
+	}
+	
+	public String getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	public void setEstadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
 	
 	public Date getFechaNacimiento() {
 		return fechaNacimiento;
@@ -18,12 +33,6 @@ public class Hijo {
 	}
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
-	}
-	public String getResponsabilidadCivil() {
-		return responsabilidadCivil;
-	}
-	public void setResponsabilidadCivil(String responsabilidadCivil) {
-		this.responsabilidadCivil = responsabilidadCivil;
 	}
 	
 	

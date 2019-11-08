@@ -1,29 +1,74 @@
 package entidades;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Poliza {
 	int nro;
-	float sumaAsegurada;
+	String sumaAsegurada;
 	String kmPorAnio;
 	String nroSiniestros;
 	TipoCobertura tipoCobertura;
 	DomicilioDeRiesgo domicilioDeRiesgo;
 	Parametro parametro;
+	public String getMotor() {
+		return motor;
+	}
+
+	public void setMotor(String motor) {
+		this.motor = motor;
+	}
+
+	public String getChasis() {
+		return chasis;
+	}
+
+	public void setChasis(String chasis) {
+		this.chasis = chasis;
+	}
+
+	public String getPatente() {
+		return patente;
+	}
+
+	public void setPatente(String patente) {
+		this.patente = patente;
+	}
+
 	Seguridad seguridad;
 	Usuario usuario;
-	List <Hijo> hijosDeclarados;
+	ArrayList <Hijo> hijosDeclarados;
 	ArrayList<Cuota> cuotas;
 	String estado;
+	Vehiculo vehiculo;
+	Date fechaInicioVigencia;
+	Date fechaFinVigencia;
+	String motor;
+	String chasis;
+	String patente;
 	
-	
-	
+	public Date getFechaInicioVigencia() {
+		return fechaInicioVigencia;
+	}
+
+	public void setFechaInicioVigencia(Date fechaInicioVigencia) {
+		this.fechaInicioVigencia = fechaInicioVigencia;
+	}
+
+	public Date getFechaFinVigencia() {
+		return fechaFinVigencia;
+	}
+
+	public void setFechaFinVigencia(Date fechaFinVigencia) {
+		this.fechaFinVigencia = fechaFinVigencia;
+	}
+
 	public Poliza() {
 
 	}
 	
-	public Poliza (int nro,float suma,String km, String siniestros) {
+	public Poliza (int nro,String suma,String km, String siniestros) {
 		this.nro=nro;
 		this.sumaAsegurada=suma;
 		this.kmPorAnio=km;
@@ -31,11 +76,35 @@ public class Poliza {
 		System.out.println("se creo un objeto Poliza");
 	}
 	
+	public ArrayList<Cuota> getCuotas() {
+		return cuotas;
+	}
+
+	public void setCuotas(ArrayList<Cuota> cuotas) {
+		this.cuotas = cuotas;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public Vehiculo getVehiculo() {
+		return vehiculo;
+	}
+
+	public void setVehiculo(Vehiculo vehiculo) {
+		this.vehiculo = vehiculo;
+	}
+
 	public int getnro(){
 		return this.nro;
 	}
 	
-	public float getSumaAsegurada() {
+	public String getSumaAsegurada() {
 		return this.sumaAsegurada ;
 	}
 	public String getKmPorAnio(){
@@ -47,7 +116,7 @@ public class Poliza {
 	
 	}
 	
-	public void setPoliza (float suma,String km, String siniestros) {
+	public void setPoliza (String suma,String km, String siniestros) {
 		this.sumaAsegurada=suma;
 		this.kmPorAnio=km;
 		this.nroSiniestros=siniestros;
@@ -65,7 +134,7 @@ public class Poliza {
 		this.nro = nro;
 	}
 
-	public void setSumaAsegurada(float sumaAsegurada) {
+	public void setSumaAsegurada(String sumaAsegurada) {
 		this.sumaAsegurada = sumaAsegurada;
 	}
 
@@ -125,7 +194,7 @@ public class Poliza {
 		return hijosDeclarados;
 	}
 
-	public void setHijosDeclarados(List<Hijo> hijosDeclarados) {
+	public void setHijosDeclarados(ArrayList<Hijo> hijosDeclarados) {
 		this.hijosDeclarados = hijosDeclarados;
 	}
 	

@@ -6,6 +6,12 @@ public class Pais {
 	String nombrePais;
 	List<Provincia> provincias;
 
+	public Pais() {}
+	
+	public Pais(String nombre) {
+		this.nombrePais=nombre;
+	}
+	
 	public String getNombrePais() {
 		return nombrePais;
 	}

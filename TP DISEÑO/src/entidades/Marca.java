@@ -5,7 +5,13 @@ import java.util.List;
 public class Marca {
 	private String marca;
 	private List<Modelo> modelos;
-
+	
+	public Marca() {}
+	
+	public Marca(String marca) {
+		this.marca=marca;
+	}
+	
 	public String getMarca() {
 		return marca;
 	}

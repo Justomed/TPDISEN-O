@@ -3,7 +3,7 @@ package entidades;
 public class Vehiculo {
 	private Marca marca;
 	private Modelo modelo;
-	private int anioFabricacion;
+	private AnioFabricacion anioFabricacion;
 	private float kilometros;
 	private float tasavehiculo;
 	
@@ -20,10 +20,10 @@ public class Vehiculo {
 	public void setModelo(Modelo modelo) {
 		this.modelo = modelo;
 	}
-	public int getAnioFabricacion() {
+	public AnioFabricacion getAnioFabricacion() {
 		return anioFabricacion;
 	}
-	public void setAnioFabricacion(int anioFabricacion) {
+	public void setAnioFabricacion(AnioFabricacion anioFabricacion) {
 		this.anioFabricacion = anioFabricacion;
 	}
 	public float getKilometros() {
@@ -42,7 +42,7 @@ public class Vehiculo {
 	public Vehiculo() {
 		
 	}
-	public Vehiculo(Marca marca, Modelo modelo, int anioFabricacion) {
+	public Vehiculo(Marca marca, Modelo modelo, AnioFabricacion anioFabricacion) {
 		this.marca=marca;
 		this.modelo=modelo;
 		this.anioFabricacion=anioFabricacion;
