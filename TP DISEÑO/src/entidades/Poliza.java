@@ -15,6 +15,7 @@ public class Poliza {
 	Usuario usuario;
 	List <Hijo> hijosDeclarados;
 	ArrayList<Cuota> cuotas;
+	String estado;
 	
 	
 	
@@ -128,6 +129,13 @@ public class Poliza {
 		this.hijosDeclarados = hijosDeclarados;
 	}
 	
+	public void estadoCuotas() {
+		
+	}
+	
+	public void actualizarEstado() {
+		
+	}
 	
 	
 }
