@@ -4,10 +4,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 
 import entidades.AnioFabricacion;
 import entidades.Localidad;
+import entidades.Marca;
+import entidades.Modelo;
 import entidades.Parametro;
 import entidades.Poliza;
 import entidades.Provincia;
@@ -57,14 +60,13 @@ public class GestorBD {
 	
 	public void guardarPoliza(Poliza p) {
 		connection=this.connectDatabase();
-		String suma=p.getSumaAsegurada();
 		String kmPA=p.getKmPorAnio();
 		String nroS=p.getNroSiniestros();
 	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
 		try {
 
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (' "+suma+" ', ' "+kmPA+" ', ' "+nroS+" ');");
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`kmPorAnio`, `numeroSiniestros`) VALUES (' "+kmPA+" ', ' "+nroS+" ');");
 			/*insercion.setString(1, suma);
 			insercion.setString(2, kmPA);
 			insercion.setString(3, nroS);*/
@@ -260,4 +262,204 @@ public class GestorBD {
 		aux.setAnio(nombre);
 	return aux;
 	}
+	
+	public ArrayList<Provincia> recuperarTodasLasProvincias(){
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		ArrayList<Provincia> listaProvincias= new ArrayList<Provincia> ();
+		String nombre;
+		int id;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM provincia;");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				Provincia provAux= new Provincia(); 
+				id=rs.getInt(1);
+				 nombre = rs.getString(2);
+				 provAux.setId(id);
+				 provAux.setNombreProvincia(nombre);
+				 listaProvincias.add(provAux);
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a provincia");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		/*for(int i=0; i<listaProvincias.size(); i++) {
+			System.out.println(listaProvincias.get(i).getNombreProvincia());
+			System.out.println(listaProvincias.get(i).getId());
+		}*/
+		
+	return listaProvincias;
+	}
+	
+	
+	
+	public ArrayList<Localidad> recuperarTodasLasLocalidades(int idProvincia){
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		ArrayList<Localidad> listaLocalidades= new ArrayList<Localidad> ();
+		
+		String nombre;
+		int codigoPostal;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM localidad WHERE idProvincia="+idProvincia+";");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				Localidad localidadAux= new Localidad();
+				 nombre = rs.getString(2);
+				 codigoPostal=rs.getInt(4);
+				 
+				 localidadAux.setCodigoPostal(codigoPostal);
+				 localidadAux.setNombreLocalidad(nombre);
+				 listaLocalidades.add(localidadAux);
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a provincia");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		for(int i=0; i<listaLocalidades.size(); i++) {
+			System.out.println(listaLocalidades.get(i).getNombreLocalidad());
+		}
+	return listaLocalidades;
+	}
+	
+	public ArrayList<Marca> recuperarTodasLasMarcas(){
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		ArrayList<Marca> listaMarcas= new ArrayList<Marca> ();
+		String nombre;
+		int id;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM marca;");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				Marca marcaAux= new Marca();
+				 id=rs.getInt(1);
+				 nombre = rs.getString(2);
+				 marcaAux.setId(id);
+				 marcaAux.setMarca(nombre);
+				 listaMarcas.add(marcaAux);
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a marca");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+	
+	return listaMarcas;
+	}
+	
+	
+	
+	public ArrayList<Modelo> recuperarTodasListaModelo(int idMarca){
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		ArrayList<Modelo> listaModelos= new ArrayList<Modelo> ();
+		
+		String nombre;
+		int idModelo;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM modelo WHERE idMarca="+idMarca+";");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				Modelo modeloAux= new Modelo();
+				 idModelo=rs.getInt(1);
+				 nombre = rs.getString(2);
+
+				 modeloAux.setId(idModelo);
+				 modeloAux.setModelo(nombre);
+
+				 listaModelos.add(modeloAux);
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a modelo");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+
+	return listaModelos;
+	}
+	
+	
+	
+	
+	public ArrayList<AnioFabricacion> recuperarTodosLosAnios(){
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		ArrayList<AnioFabricacion> listaAnios= new ArrayList<AnioFabricacion> ();
+		String anio;
+		int idAnio;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM aniofabricacion;");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				AnioFabricacion anioAux= new AnioFabricacion();
+				 idAnio=rs.getInt(1);
+				 anio = rs.getString(2);
+				 
+				 anioAux.setAnio(anio);
+				 anioAux.setId(idAnio);
+				 listaAnios.add(anioAux);
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a anio");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+	
+	return listaAnios;
+	}
+	
+	public String recuperarSumaAsegurada(int idModelo, int idAnio){
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+			
+		String suma=null;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT sumaasegurada FROM sumaasegurada WHERE idmodelo="+idModelo+" AND idanio="+idAnio+";");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+
+				 suma = rs.getString(1);
+
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a suma asegurada");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		System.out.println(suma);
+	return suma;
+	}	
 }

@@ -5,8 +5,16 @@ import java.util.List;
 public class Provincia {
 	String nombreProvincia;
 	Pais pais;
-	List<Localidad> localidades;
+	int id;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Provincia() {
 		this.pais=new Pais();
 	}

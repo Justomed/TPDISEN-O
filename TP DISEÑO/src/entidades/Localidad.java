@@ -5,6 +5,7 @@ public class Localidad {
 	int codigoPostal;
 	Provincia nombreProvincia;
 	float tasaDeRiesgo;
+
 	
 	public Localidad() {
 		this.nombreProvincia=new Provincia();

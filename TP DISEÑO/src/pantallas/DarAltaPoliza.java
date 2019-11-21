@@ -45,9 +45,14 @@ import org.joda.time.DateTime;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
+import entidades.AnioFabricacion;
 import entidades.Cliente;
 import entidades.Hijo;
+import entidades.Localidad;
+import entidades.Marca;
+import entidades.Modelo;
 import entidades.Provincia;
+import gestores.GestorBD;
 import utility.FocusTextField;
 import utility.MyOwnFocusTraversalPolicy;
 
@@ -108,6 +113,12 @@ public class DarAltaPoliza extends JFrame{
 	private ArrayList<Hijo> listaHijos = new ArrayList<Hijo>();
 	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
 	private ArrayList<Boolean> seguridad = new ArrayList<Boolean>();
+	private ArrayList<Provincia> listaProvincias = new ArrayList<Provincia>();
+	private ArrayList<Localidad> listaLocalidades = new ArrayList<Localidad>();
+	private ArrayList<Marca> listaMarcas = new ArrayList<Marca>();
+	private ArrayList<Modelo> listaModelos = new ArrayList<Modelo>();
+	private ArrayList<AnioFabricacion> listaAnios = new ArrayList<AnioFabricacion>();
+	private GestorBD gestorBD = new GestorBD();
 	
 	public DarAltaPoliza(Cliente cliente) {
 		
@@ -575,75 +586,108 @@ public class DarAltaPoliza extends JFrame{
 		panelPoliza.add(kmAnio);
 		panelPoliza.add(kmAnioComboBox);
 		
-		provinciaComboBox.addItem("-------------------");
-		provinciaComboBox.addItem("Santa Fe");
-		provinciaComboBox.addItem("Cordoba");
-		provinciaComboBox.addItem("Entre Rios");
-		provinciaComboBox.addItem("Buenos Aires");
+		listaProvincias = gestorBD.recuperarTodasLasProvincias();
+		
+		provinciaComboBox.addItem("-----------------");
+		
+		for(int i=0; i<listaProvincias.size(); i++) {
+			provinciaComboBox.addItem(listaProvincias.get(i).getNombreProvincia());
+		}
 		
 		provinciaComboBox.addActionListener(e -> {
 		if(provinciaComboBox.getSelectedIndex() > 0) {
 			localidadComboBox.setEnabled(true);
 			auxComboBox = provinciaComboBox.getSelectedIndex();
-			
+			int auxIdProvincia=0;
 			switch((String) provinciaComboBox.getItemAt(auxComboBox)) {
 			case "Santa Fe":
 				localidadComboBox.addItem("-----------------");
-				localidadComboBox.addItem("Santa Fe");
-				localidadComboBox.addItem("Santo Tome");
-				localidadComboBox.addItem("Rosario");
+				
+				auxIdProvincia = listaProvincias.get(auxComboBox-1).getId();
+				listaLocalidades = gestorBD.recuperarTodasLasLocalidades(auxIdProvincia);
+				
+				for(int i=0; i<listaLocalidades.size(); i++) {
+					localidadComboBox.addItem(listaLocalidades.get(i).getNombreLocalidad());
+				}
 				break;
 			case "Entre Rios":
 				localidadComboBox.addItem("-----------------");
-				localidadComboBox.addItem("Parana");
-				localidadComboBox.addItem("Federal");
-				localidadComboBox.addItem("Crespo");
+				
+				auxIdProvincia = listaProvincias.get(auxComboBox-1).getId();
+				listaLocalidades = gestorBD.recuperarTodasLasLocalidades(auxIdProvincia);
+				
+				for(int i=0; i<listaLocalidades.size(); i++) {
+					localidadComboBox.addItem(listaLocalidades.get(i).getNombreLocalidad());
+				}
 				break;
 			case "Cordoba":
 				localidadComboBox.addItem("-----------------");
-				localidadComboBox.addItem("Carlos Paz");
-				localidadComboBox.addItem("Cordoba");
-				localidadComboBox.addItem("Unquillo");
+
+				auxIdProvincia = listaProvincias.get(auxComboBox-1).getId();
+				listaLocalidades = gestorBD.recuperarTodasLasLocalidades(auxIdProvincia);
+				
+				for(int i=0; i<listaLocalidades.size(); i++) {
+					localidadComboBox.addItem(listaLocalidades.get(i).getNombreLocalidad());
+				}
 				break;
 			case "Buenos Aires":
 				localidadComboBox.addItem("-----------------");
-				localidadComboBox.addItem("C.A.B.A.");
-				localidadComboBox.addItem("La Plata");
-				localidadComboBox.addItem("La Matanza");
+
+				auxIdProvincia = listaProvincias.get(auxComboBox-1).getId();
+				listaLocalidades = gestorBD.recuperarTodasLasLocalidades(auxIdProvincia);
+				
+				for(int i=0; i<listaLocalidades.size(); i++) {
+					localidadComboBox.addItem(listaLocalidades.get(i).getNombreLocalidad());
+				}
 				break;
 			}
 		}
 		});
 		
+		listaMarcas = gestorBD.recuperarTodasLasMarcas();
+		
 		marcaComboBox.addItem("-----------------");
-		marcaComboBox.addItem("Volkswagen");
-		marcaComboBox.addItem("Chevrolet");
-		marcaComboBox.addItem("Ford");
+		
+		for(int i=0; i<listaMarcas.size(); i++) {
+			marcaComboBox.addItem(listaMarcas.get(i).getMarca());
+		}
 		
 		marcaComboBox.addActionListener(e -> {
 			if(marcaComboBox.getSelectedIndex() > 0) {
 				modeloComboBox.setEnabled(true);
 				auxComboBox = marcaComboBox.getSelectedIndex();
 				auxModelo = marcaComboBox.getSelectedIndex();
-				
+				int auxIdMarca=0;
 				switch((String) marcaComboBox.getItemAt(auxComboBox)) {
 				case "Volkswagen":
 					modeloComboBox.addItem("-----------------");
-					modeloComboBox.addItem("Gol");
-					modeloComboBox.addItem("Fox");
-					modeloComboBox.addItem("Bora");
+					
+					auxIdMarca = listaMarcas.get(auxComboBox-1).getId();
+					listaModelos = gestorBD.recuperarTodasListaModelo(auxIdMarca);
+					
+					for(int i=0; i<listaModelos.size(); i++) {
+						modeloComboBox.addItem(listaModelos.get(i).getModelo());
+					}
 					break;
 				case "Chevrolet":
 					modeloComboBox.addItem("-----------------");
-					modeloComboBox.addItem("Corsa");
-					modeloComboBox.addItem("Astra");
-					modeloComboBox.addItem("Meriva");
+					
+					auxIdMarca = listaMarcas.get(auxComboBox-1).getId();
+					listaModelos = gestorBD.recuperarTodasListaModelo(auxIdMarca);
+					
+					for(int i=0; i<listaModelos.size(); i++) {
+						modeloComboBox.addItem(listaModelos.get(i).getModelo());
+					}
 					break;
 				case "Ford":
 					modeloComboBox.addItem("-----------------");
-					modeloComboBox.addItem("Fiesta");
-					modeloComboBox.addItem("Focus");
-					modeloComboBox.addItem("Ranger");
+					
+					auxIdMarca = listaMarcas.get(auxComboBox-1).getId();
+					listaModelos = gestorBD.recuperarTodasListaModelo(auxIdMarca);
+					
+					for(int i=0; i<listaModelos.size(); i++) {
+						modeloComboBox.addItem(listaModelos.get(i).getModelo());
+					}
 					break;
 				}
 		}
@@ -653,107 +697,111 @@ public class DarAltaPoliza extends JFrame{
 			if(modeloComboBox.getSelectedIndex() > 0) {
 				anioComboBox.setEnabled(true);
 				anioComboBox.addItem("-----------------");
-				anioComboBox.addItem("2008");
-				anioComboBox.addItem("2010");
-				anioComboBox.addItem("2005");
+				
+				listaAnios = gestorBD.recuperarTodosLosAnios();
+				
+				for(int i=0; i<listaAnios.size(); i++) {
+					anioComboBox.addItem(listaAnios.get(i).getAnio());
+				}
 		}
 		});
 		
 		anioComboBox.addActionListener(e -> {
 			if(anioComboBox.getSelectedIndex() > 0) {
-				auxComboBox = anioComboBox.getSelectedIndex();
+				int auxAnio = anioComboBox.getSelectedIndex();
+				int auxModelo = modeloComboBox.getSelectedIndex();
 				
-				switch((String) anioComboBox.getItemAt(auxComboBox)) {
+				switch((String) anioComboBox.getItemAt(auxAnio)) {
 				case "2005":
 					switch((String) modeloComboBox.getItemAt(auxModelo)) {
 					case "Gol":
-						sumaAseguradaTxt.setText("$109.000,00");	
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));	
 						break;
 					case "Fox":
-						sumaAseguradaTxt.setText("$175.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Bora":
-						sumaAseguradaTxt.setText("$255.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Corsa":
-						sumaAseguradaTxt.setText("$150.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Meriva":
-						sumaAseguradaTxt.setText("$142.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Astra":
-						sumaAseguradaTxt.setText("$155.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Fiesta":
-						sumaAseguradaTxt.setText("$150.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Focus":
-						sumaAseguradaTxt.setText("$170.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Ranger":
-						sumaAseguradaTxt.setText("$240.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					}
 					break;
 				case "2008":
 					switch((String) modeloComboBox.getItemAt(auxModelo)) {
 					case "Gol":
-						sumaAseguradaTxt.setText("$140.000,00");	
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Fox":
-						sumaAseguradaTxt.setText("$214.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Bora":
-						sumaAseguradaTxt.setText("$280.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Corsa":
-						sumaAseguradaTxt.setText("$160.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Meriva":
-						sumaAseguradaTxt.setText("$190.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Astra":
-						sumaAseguradaTxt.setText("$190.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Fiesta":
-						sumaAseguradaTxt.setText("$175.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Focus":
-						sumaAseguradaTxt.setText("$200.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Ranger":
-						sumaAseguradaTxt.setText("$300.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					}
 					break;
 				case "2010":
 					switch((String) modeloComboBox.getItemAt(auxModelo)) {
 					case "Gol":
-						sumaAseguradaTxt.setText("$200.000,00");	
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Fox":
-						sumaAseguradaTxt.setText("$220.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Bora":
-						sumaAseguradaTxt.setText("$310.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Corsa":
-						sumaAseguradaTxt.setText("$200.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Meriva":
-						sumaAseguradaTxt.setText("$215.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Astra":
-						sumaAseguradaTxt.setText("$205.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Fiesta":
-						sumaAseguradaTxt.setText("$215.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Focus":
-						sumaAseguradaTxt.setText("$250.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					case "Ranger":
-						sumaAseguradaTxt.setText("$325.000,00");
+						sumaAseguradaTxt.setText(gestorBD.recuperarSumaAsegurada(auxModelo, auxAnio));
 						break;
 					}
 					break;
