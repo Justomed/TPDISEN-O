@@ -29,7 +29,7 @@ public class Menu extends JFrame{
 	public Menu() {
 		
 		this.setTitle("El asegurado");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 		this.setSize(600,450);
 		this.setResizable(false);
@@ -215,6 +215,7 @@ public class Menu extends JFrame{
 		});
 		
 		salir.addActionListener(e -> {
+			new RegistroSistema();
 			this.dispose();
 		});
 	}

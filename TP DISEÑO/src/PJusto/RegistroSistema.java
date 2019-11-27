@@ -28,7 +28,7 @@ public class RegistroSistema extends JFrame{
 	public RegistroSistema() {
 		
 		this.setTitle("Empresa aseguradora");
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.setSize(600,400);
 		this.setResizable(false);
@@ -145,6 +145,16 @@ public class RegistroSistema extends JFrame{
 		constraints.gridy = 1;
 		constraints.gridy = 9;
 		container.add(panelBotones, constraints);	
+//-------------------FUNCIONAMIENTO PANTALLA------------------------
+		ingresar.addActionListener(e -> {
+			//VALIDAR USUARIO Y CONSTRASEÑA CON EL GESTORBD
+			new Menu();
+			this.dispose();
+		});
+		
+		salir.addActionListener(e -> {
+			this.dispose();
+		});
 	}
 
 }
