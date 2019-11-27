@@ -29,7 +29,7 @@ public class Menu extends JFrame{
 	public Menu() {
 		
 		this.setTitle("El asegurado");
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.setSize(600,450);
 		this.setResizable(false);
@@ -187,5 +187,35 @@ public class Menu extends JFrame{
 		constraints.gridy = 1;
 		constraints.gridy = 13;
 		container.add(panelBoton, constraints);
+		
+//---------------FUNCIONAMIENTO DE LA PANTALLA--------------------------
+		darAlta.addActionListener(e -> {
+			//FALTA INVOCAR LA PANTALLA
+		});
+		
+		consultar.addActionListener(e -> {
+			new BuscarPoliza("menu");
+			this.dispose();
+		});
+		
+		registrar.addActionListener(e -> {
+			new RegistrarPago();
+			this.dispose();
+		});
+		
+		generar.setEnabled(false);
+		
+		generarInfo.addActionListener(e -> {
+			new GenerarInforme();
+			this.dispose();
+		});
+		
+		buscar.addActionListener(e -> {
+			//FALTA INVOCAR PANTALLA
+		});
+		
+		salir.addActionListener(e -> {
+			this.dispose();
+		});
 	}
 }

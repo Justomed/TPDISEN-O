@@ -6,6 +6,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -76,6 +80,12 @@ public class GenerarInforme extends JFrame {
 		titulo.setFont(new Font("Dialog", Font.BOLD, 15));
 		titulo.setBackground(Color.lightGray);
 		
+		totalMoraTxt.setEnabled(false);
+		montoMoraTxt.setEnabled(false);
+		totalDiaTxt.setEnabled(false);
+		montoAtrasadasTxt.setEnabled(false);
+		montoAdelantadasTxt.setEnabled(false);
+		montoDiaTxt.setEnabled(false);
 //---------------- PANEL TITULO ---------------------
 		panelTitulo = new JPanel();
 		panelTitulo.setBackground(Color.lightGray);
@@ -93,10 +103,77 @@ public class GenerarInforme extends JFrame {
 		panelMes.setVisible(true);
 		panelMes.setLayout(new FlowLayout());
 		panelMes.add(mes);
-		mesComboBox.addItem("                              ");
+		
+		mesComboBox.addItem("ENERO");
+		mesComboBox.addItem("FEBRERO");
+		mesComboBox.addItem("MARZO");
+		mesComboBox.addItem("ABRIL");
+		mesComboBox.addItem("MAYO");
+		mesComboBox.addItem("JUNIO");
+		mesComboBox.addItem("JULIO");
+		mesComboBox.addItem("AGOSTO");
+		mesComboBox.addItem("SEPTIEMBRE");
+		mesComboBox.addItem("OCTUBRE");
+		mesComboBox.addItem("NOVIEMBRE");
+		mesComboBox.addItem("DICIEMBRE");
+		
+		Date dateAux = new Date();
+		LocalDate fechaHoyAux = dateAux.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		
+		switch(fechaHoyAux.getMonthValue()) {
+		case 1:
+			mesComboBox.setSelectedIndex(11);
+			break;
+		case 2:
+			mesComboBox.setSelectedIndex(0);
+			break;
+		case 3:
+			mesComboBox.setSelectedIndex(1);
+			break;
+		case 4:
+			mesComboBox.setSelectedIndex(2);
+			break;
+		case 5:
+			mesComboBox.setSelectedIndex(3);
+			break;
+		case 6:
+			mesComboBox.setSelectedIndex(4);
+			break;
+		case 7:
+			mesComboBox.setSelectedIndex(5);
+			break;
+		case 8:
+			mesComboBox.setSelectedIndex(6);
+			break;
+		case 9:
+			mesComboBox.setSelectedIndex(7);
+			break;
+		case 10:
+			mesComboBox.setSelectedIndex(8);
+			break;
+		case 11:
+			mesComboBox.setSelectedIndex(9);
+			break;
+		case 12:
+			mesComboBox.setSelectedIndex(10);
+			break;
+		}
+		
 		panelMes.add(mesComboBox);
 		panelMes.add(anio);
-		anioComboBox.addItem("                              ");
+		
+		anioComboBox.addItem("2019");
+		anioComboBox.addItem("2018");
+		
+		switch(fechaHoyAux.getMonthValue()) {
+		case 1:
+			anioComboBox.setSelectedIndex(1);
+			break;
+		default:
+			anioComboBox.setSelectedIndex(0);
+			break;
+		}
+		
 		panelMes.add(anioComboBox);
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
@@ -204,8 +281,19 @@ public class GenerarInforme extends JFrame {
 		constraints.gridy = 1;
 		constraints.gridy = 12;
 		container.add(panelBotones, constraints);
+//--------------FUNCIONAMIENTO PANTALLA------------------
+		confirmar.addActionListener(e -> {
+			//IMPLEMENTAR CON GESTORBD EL METODO
+		});
 		
+		aceptar.addActionListener(e -> {
+			//IMPLEMENTAR IMPRESION DE LOS DATOS ????
+		});
 		
+		cancelar.addActionListener(e -> {
+			new Menu();
+			this.dispose();
+		});
 	}
 	
 

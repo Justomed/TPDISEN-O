@@ -24,7 +24,7 @@ public class BuscarPoliza extends JFrame {
 	private JPanel panelMonto;
 	private JPanel panelBoton;
 	
-	public BuscarPoliza() {
+	public BuscarPoliza(String pantalla) {
 		
 		this.setTitle("Buscar póliza");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -60,6 +60,10 @@ public class BuscarPoliza extends JFrame {
 		JButton aceptar = new JButton("Aceptar");
 		JButton cancelar = new JButton("Cancelar");
 		
+		if(pantalla == "menu") {
+			aceptar.setEnabled(false);
+		}
+		
 		nroPoliza.setBackground(Color.lightGray);
 		nroCliente.setBackground(Color.lightGray);
 		nroPolizaa.setBackground(Color.lightGray);
@@ -70,6 +74,14 @@ public class BuscarPoliza extends JFrame {
 		monto.setBackground(Color.lightGray);
 		diaPago.setBackground(Color.lightGray);
 		fecha.setBackground(Color.lightGray);
+		
+		nroClienteTxt.setEnabled(false);
+		nroPolizaaTxt.setEnabled(false);
+		apellidoTxt.setEnabled(false);
+		nombreTxt.setEnabled(false);
+		tipoDocTxt.setEnabled(false);
+		nroDocTxt.setEnabled(false);
+		montoTxt.setEnabled(false);
 		
 //----------------PANEL NRO POLIZA ------------------------------------		
 		panelNroPoliza = new JPanel();
@@ -201,5 +213,28 @@ public class BuscarPoliza extends JFrame {
 		constraints.gridy = 1;
 		constraints.gridy = 11;
 		container.add(panelBoton, constraints);
+//------------------FUNCIONAMIENTO PANTALLA-------------------------
+		buscar.addActionListener(e -> {
+			//UTILIZAR GESTORBD PARA RECUPERAR LA POLIZA
+			//RELLENAR LOS CAMPOS INACTIVOS CON LOS DATOS
+		});
+		
+		aceptar.addActionListener(e -> {
+			new RegistrarPago();
+			this.dispose();
+		});
+		
+		cancelar.addActionListener(e -> {
+			switch(pantalla) {
+			case "menu":
+				new Menu();
+				this.dispose();
+				break;
+			case "registrar pago":
+				new RegistrarPago();
+				this.dispose();
+				break;
+			}
+		});
 	}
 }

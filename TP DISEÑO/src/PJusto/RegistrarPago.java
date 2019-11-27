@@ -2,6 +2,7 @@ package PJusto;
 //
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,8 +10,11 @@ import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 public class RegistrarPago extends JFrame{
 	
@@ -27,6 +31,8 @@ public class RegistrarPago extends JFrame{
 	private JPanel panelCuotasFuturas;
 	private JPanel panelTablaCuotasFuturas;
 	private JPanel panelBotones;
+	private JTable tablaCuotasPendientes;
+	private JTable tablaCuotasFuturas;
 	
 	
 	public RegistrarPago() {
@@ -34,7 +40,7 @@ public class RegistrarPago extends JFrame{
 		this.setTitle("Registrar pago de póliza");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
-		this.setSize(500,450);
+		this.setSize(450,675);
 		this.setResizable(false);
 		Container container = getContentPane();
 		container.setLayout(new GridBagLayout());
@@ -81,6 +87,16 @@ public class RegistrarPago extends JFrame{
 		hasta.setBackground(Color.lightGray);
 		pendientes.setBackground(Color.lightGray);
 		futuras.setBackground(Color.lightGray);
+		
+		nroClienteTxt.setEnabled(false);
+		nroPolizaTxt.setEnabled(false);
+		apellidoTxt.setEnabled(false);
+		nombreTxt.setEnabled(false);
+		marcaTxt.setEnabled(false);
+		modeloTxt.setEnabled(false);
+		patenteTxt.setEnabled(false);
+		desdeTxt.setEnabled(false);
+		hastaTxt.setEnabled(false);
 //---------------- PANEL BUSCAR ---------------------
 		panelBuscar = new JPanel();
 		panelBuscar.setBackground(Color.lightGray);
@@ -201,9 +217,29 @@ public class RegistrarPago extends JFrame{
 		constraints.gridy = 9;
 		container.add(panelCuotasPendientes, constraints);	
 //---------------- PANEL TABLA CUOTAS PENDIENTES ---------------------
+		DefaultTableModel modeloTablaPendientes = new DefaultTableModel();
+		modeloTablaPendientes.addColumn("Fecha");
+		modeloTablaPendientes.addColumn("Valor Original");
+		modeloTablaPendientes.addColumn("Valor Actual");
 		
-		//ACA VA TABLA DE CUOTAS PENDIENTES
+		panelTablaCuotasPendientes = new JPanel();
+		panelTablaCuotasPendientes.setBackground(Color.lightGray);
+		panelTablaCuotasPendientes.setVisible(true);
+		panelTablaCuotasPendientes.setLayout(new FlowLayout());
 		
+		tablaCuotasPendientes = new JTable(3,3);
+		tablaCuotasPendientes.setBackground(Color.lightGray);
+		tablaCuotasPendientes.setModel(modeloTablaPendientes);
+		tablaCuotasPendientes.setPreferredScrollableViewportSize(new Dimension(375,100));
+		tablaCuotasPendientes.setFillsViewportHeight(true);
+		JScrollPane scrollPanePendientes = new JScrollPane(tablaCuotasPendientes);
+		scrollPanePendientes.setBackground(Color.lightGray);
+		panelTablaCuotasPendientes.add(scrollPanePendientes);
+		
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 0;
+		constraints.gridy = 10;
+		container.add(panelTablaCuotasPendientes, constraints);
 //---------------- PANEL CUOTAS FUTURAS---------------------
 		panelCuotasFuturas = new JPanel();
 		panelCuotasFuturas.setBackground(Color.lightGray);
@@ -216,10 +252,29 @@ public class RegistrarPago extends JFrame{
 		constraints.gridy = 11;
 		container.add(panelCuotasFuturas, constraints);	
 //---------------- PANEL TABLA CUOTAS FUTURAS ---------------------
+		DefaultTableModel modeloTablaFuturas = new DefaultTableModel();
+		modeloTablaFuturas.addColumn("Fecha");
+		modeloTablaFuturas.addColumn("Valor Original");
+		modeloTablaFuturas.addColumn("Valor Actual");
 		
+		panelTablaCuotasFuturas = new JPanel();
+		panelTablaCuotasFuturas.setBackground(Color.lightGray);
+		panelTablaCuotasFuturas.setVisible(true);
+		panelTablaCuotasFuturas.setLayout(new FlowLayout());
 		
-		//ACA VA TABLA DE CUOTAS FUTURAS
+		tablaCuotasFuturas = new JTable(3,3);
+		tablaCuotasFuturas.setBackground(Color.lightGray);
+		tablaCuotasFuturas.setModel(modeloTablaFuturas);
+		tablaCuotasFuturas.setPreferredScrollableViewportSize(new Dimension(375,100));	
+		tablaCuotasFuturas.setFillsViewportHeight(true);
+		JScrollPane scrollPaneFuturas = new JScrollPane(tablaCuotasFuturas);
+		scrollPaneFuturas.setBackground(Color.lightGray);
+		panelTablaCuotasFuturas.add(scrollPaneFuturas);
 		
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 0;
+		constraints.gridy = 12;
+		container.add(panelTablaCuotasFuturas, constraints);
 //---------------- PANEL BOTONES --------------------
 		panelBotones = new JPanel();
 		panelBotones.setBackground(Color.lightGray);
@@ -232,8 +287,21 @@ public class RegistrarPago extends JFrame{
 		constraints.gridy = 1;
 		constraints.gridy = 13;
 		container.add(panelBotones, constraints);
+//--------------FUNCIONAMIENTO PANTALLA--------------------------
+		buscar.addActionListener(e -> {
+			new BuscarPoliza("registrar pago");
+			this.dispose();
+		});
 		
+		abonar.addActionListener(e -> {
+			//IMPLEMENTAR
+		});
 		
+		cancelar.addActionListener(e -> {
+			new Menu();
+			this.dispose();
+		});
+
 	}
 
 }
