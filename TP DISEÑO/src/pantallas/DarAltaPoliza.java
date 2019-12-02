@@ -943,7 +943,10 @@ public class DarAltaPoliza extends JFrame{
 				}
 			}
 		});
-			
+		
+		eliminarHijo.addActionListener(e -> {
+			model.removeRow(tablaHijos.getSelectedRow());
+		});			
 		
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 0;

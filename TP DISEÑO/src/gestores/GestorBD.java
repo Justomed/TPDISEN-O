@@ -65,9 +65,10 @@ public class GestorBD {
 		connection=this.connectDatabase();
 		String kmPA=p.getKmPorAnio();
 		String nroS=p.getNroSiniestros();
+		String nroP=p.getNroPoliza();
 		Date auxFechaInicio;
 		auxFechaInicio=p.getFechaInicioVigencia();
-	
+		System.out.println(nroP);
 		int auxAnioInicio=auxFechaInicio.getYear()+1900;
 		int auxMesInicio=auxFechaInicio.getMonth();
 		int auxDiaInicio=auxFechaInicio.getDay();
@@ -80,12 +81,11 @@ public class GestorBD {
 		int auxDiaFin=auxFechaFinVigencia.getDay();
 		String fechaFin=auxAnioFin+"-"+auxMesFin+"-"+auxDiaFin;
 
-
 	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
 		try {
 
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`) VALUES (' "+kmPA+" ', ' "+nroS+" ','"+fechaInicio+"','"+fechaFin+"');");
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"');");
 			/*insercion.setString(1, suma);
 			insercion.setString(2, kmPA);
 			insercion.setString(3, nroS);*/
@@ -597,4 +597,31 @@ public class GestorBD {
 		System.out.println(suma);
 	return suma;
 	}	
+	
+	/*public Poliza recuperarPoliza(String numeroPoliza) {
+		Localidad aux = new Localidad();
+		String nombre = null;
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM poliza WHERE nombreLocalidad='"+localidad+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+
+				 nombre = rs.getString(2);
+				  
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a localidad");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		aux.setNombreLocalidad(nombre);
+	return aux;
+	}*/
+	
 }

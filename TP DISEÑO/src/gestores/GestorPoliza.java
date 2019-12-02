@@ -3,6 +3,7 @@ package gestores;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import entidades.*;
 import jdk.nashorn.api.tree.ForInLoopTree;
@@ -40,8 +41,21 @@ public class GestorPoliza {
 		poliza.setMotor(motorPoliza);
 		poliza.setPatente(patentePoliza);
 		
+		String sucursal = "0001";
+		String nroClienteAux = cliente.getId().substring(4);
+		Random r = new Random();
+		int random = r.nextInt(100);
 		
-
+		String nroPoliza;
+		if(random < 10) {
+			nroPoliza = sucursal + nroClienteAux + '0' + random;
+		} else {
+			nroPoliza = sucursal + nroClienteAux + random;
+		}
+		
+		poliza.setNroPoliza(nroPoliza);
+		
+		System.out.println(nroPoliza);
 		
 		GestorParametro gestorParametro = new GestorParametro();
 		

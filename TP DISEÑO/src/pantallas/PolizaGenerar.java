@@ -9,6 +9,8 @@ import java.awt.GridLayout;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -120,14 +122,14 @@ public class PolizaGenerar extends JFrame{
 		chasisTxt.setText(chasisPoliza);
 		patenteTxt.setText(patentePoliza);
 		inicioTxt.setText(fechaInicio);
-		finTxt.setText(formato.format(finVigencia));
+		finTxt.setText(formato.format(auxFechaFinVigencia));
 		sumaAseguradaTxt.setText(sumaAseguradaPoliza);
 		premioTxt.setText("$1.000,00");
 		importeDescuentoTxt.setText("$600,00");
 		diaPagoTxt.setText(formato.format(ultimoPago));
 		montoTotalTxt.setText("$7.600,00");
 		importeCuotaTxt.setText("$6.000,00");
-
+		
 		apellidoTxt.setEnabled(false);
 		nombreTxt.setEnabled(false);
 		marcaTxt.setEnabled(false);

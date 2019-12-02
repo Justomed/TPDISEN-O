@@ -47,12 +47,12 @@ public class GenerarInforme extends JFrame {
 		
 		JTextArea mes = new JTextArea("Mes:");
 		JTextArea anio = new JTextArea("Año:");
-		JTextArea totalMora = new JTextArea("Total de clientes en mora:                             ");
-		JTextArea montoMora = new JTextArea("Monto total de la mora:                                   ");
-		JTextArea totalDia = new JTextArea("Total de clientes al día:                                  ");
-		JTextArea montoAtrasadas = new JTextArea("Monto recaudado en cuotas atrasadas:     ");
-		JTextArea montoAdelantadas = new JTextArea("Monto recaudado en cuotas adelantadas:");
-		JTextArea montoDia = new JTextArea("Monto recaudado en cuotas al día:             ");
+		JTextArea totalMora = new JTextArea("Total de clientes en mora:                               ");
+		JTextArea montoMora = new JTextArea("Monto total de la mora:                                    ");
+		JTextArea totalDia = new JTextArea("Total de clientes al día:                                    ");
+		JTextArea montoAtrasadas = new JTextArea("Monto recaudado en cuotas atrasadas:          ");
+		JTextArea montoAdelantadas = new JTextArea("Monto recaudado en cuotas adelantadas:      ");
+		JTextArea montoDia = new JTextArea("Monto recaudado en cuotas al día:                  ");
 		JTextArea titulo = new JTextArea("Seleccione mes y año:");
 		
 		JButton confirmar = new JButton("Confirmar");

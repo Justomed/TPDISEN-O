@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Poliza {
-	int nro;
+	String nroPoliza;
 	Cliente cliente;
 	public Cliente getCliente() {
 		return cliente;
@@ -77,8 +77,8 @@ public class Poliza {
 
 	}
 	
-	public Poliza (int nro,String suma,String km, String siniestros) {
-		this.nro=nro;
+	public Poliza (String nro,String suma,String km, String siniestros) {
+		this.nroPoliza=nro;
 		this.sumaAsegurada=suma;
 		this.kmPorAnio=km;
 		this.nroSiniestros=siniestros;
@@ -109,8 +109,8 @@ public class Poliza {
 		this.vehiculo = vehiculo;
 	}
 
-	public int getnro(){
-		return this.nro;
+	public String getnroPoliza(){
+		return this.nroPoliza;
 	}
 	
 	public String getSumaAsegurada() {
@@ -139,8 +139,8 @@ public class Poliza {
 		this.domicilioDeRiesgo=domicilioDeRiesgo;
 	}
 
-	public void setNro(int nro) {
-		this.nro = nro;
+	public void setNro(String nroPoliza) {
+		this.nroPoliza = nroPoliza;
 	}
 
 	public void setSumaAsegurada(String sumaAsegurada) {
@@ -171,8 +171,12 @@ public class Poliza {
 		this.parametro = parametro;
 	}
 
-	public int getNro() {
-		return nro;
+	public String getNroPoliza() {
+		return nroPoliza;
+	}
+
+	public void setNroPoliza(String nroPoliza) {
+		this.nroPoliza = nroPoliza;
 	}
 
 	public TipoCobertura getTipoCobertura() {

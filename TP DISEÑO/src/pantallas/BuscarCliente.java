@@ -136,7 +136,6 @@ public class BuscarCliente extends JFrame{
 		panelAceptarCancelar = new JPanel();
 		panelAceptarCancelar.setVisible(true);
 		panelAceptarCancelar.setLayout(new FlowLayout());
-		
 		panelAceptarCancelar.add(aceptar);
 		panelAceptarCancelar.add(cancelar);
 		
@@ -171,8 +170,16 @@ public class BuscarCliente extends JFrame{
 		});
 		
 		aceptar.addActionListener(e -> {
-			new DarAltaPoliza(listaClientes.get(tablaClientes.getSelectedRow()));
-			frame.dispose();
+			switch(pantalla) {
+			case "menu":
+				new Menu();
+				this.dispose();
+				break;
+			case "alta poliza":
+				new DarAltaPoliza(listaClientes.get(tablaClientes.getSelectedRow()));
+				frame.dispose();
+				break;
+			}
 		});
 		
 		constraints.gridx = 0;
