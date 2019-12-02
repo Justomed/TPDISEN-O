@@ -9,9 +9,11 @@ import java.util.Date;
 
 import entidades.AnioFabricacion;
 import entidades.Cliente;
+import entidades.DomicilioCliente;
 import entidades.Localidad;
 import entidades.Marca;
 import entidades.Modelo;
+import entidades.Pais;
 import entidades.Parametro;
 import entidades.Poliza;
 import entidades.Provincia;
@@ -102,19 +104,37 @@ public class GestorBD {
 		
 	}
 	
-	public void recuperarCliente(int nroC, String ap, String nom, String tipoDoc, String nroDoc) {
+	public ArrayList<Cliente> recuperarCliente(String nroC, String ap, String nom, String tipoDoc, String nroDoc) {
 		connection = this.connectDatabase();
 		Statement stm = null;
 		ResultSet rs=null;
+		
+		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+		String numero;
+		String apellido;
+		String nombre;
+		String tipoDocumento;
+		String documento;
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM cliente WHERE numCliente="+nroC+ " AND nombre='"+nom+"' AND apellido='"+ap+ "' AND tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"';");
+			rs=stm.executeQuery("SELECT * FROM cliente WHERE numCliente='"+nroC+ "' AND nombre='"+nom+"' AND apellido='"+ap+ "' AND tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"';");
 			// AND nombre="+nom+" AND apellido="+ap+" AND nroDni="+nroDoc+" AND tipo="+tipoDoc+
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
-				 int idUsuario = rs.getInt(1);//traigo el valor de col 1 
-				 String nombre = rs.getString(2);
-				  
-				  System.out.println(idUsuario+"-"+nombre); //HASTA ACA PARA
+				Cliente aux = new Cliente(); 
+				numero = rs.getString(1);//traigo el valor de col 1 
+				 nombre = rs.getString(2);
+				 apellido = rs.getString(3);
+				 documento = rs.getString(4);
+				 tipoDocumento = rs.getString(5);
+				 
+				 aux.setId(numero);
+				 aux.setNombre(nombre);
+				 aux.setApellido(apellido);
+				 aux.setDni(documento);
+				 aux.setTipoDni(tipoDocumento);
+				 aux.setDomicilio(this.recuperarDomicilioCliente(rs.getInt(10)));
+				 
+				 clientes.add(aux);
 				 }
 				  
 		} catch (Exception e) {
@@ -124,7 +144,105 @@ public class GestorBD {
 			this.cerrarConexion();
 		}
 		
+		return clientes;
+	}
+	
+	public DomicilioCliente recuperarDomicilioCliente(int id) {
+		DomicilioCliente domicilio = new DomicilioCliente();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
 		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM domiciliocliente WHERE idDomicilioCliente='"+id+"';");
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				domicilio.setCalle(rs.getString(2));
+				domicilio.setNumero(rs.getInt(3));
+				domicilio.setPiso(rs.getInt(4));
+				domicilio.setLocalidad(this.recuperarLocalidad(rs.getInt(5)));
+				 }
+				  
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar al cliente");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+		return domicilio;
+	}
+	
+	public Localidad recuperarLocalidad(int id) {
+		Localidad aux = new Localidad();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM localidad WHERE idLocalidad='"+id+"';");
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setNombreLocalidad(rs.getString(2));
+				aux.setNombreProvincia(this.recuperarProvincia(rs.getInt(3)));
+				aux.setCodigoPostal(rs.getInt(4));
+				 }
+				  
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar al cliente");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+		return aux;
+	}
+	
+	public Provincia recuperarProvincia(int id) {
+		Provincia aux = new Provincia();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM provincia WHERE idProvincia='"+id+"';");
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setNombreProvincia(rs.getString(2));
+				aux.setPais(this.recuperarPais(rs.getInt(3)));
+				 }
+				  
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar al cliente");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+		return aux;
+	}
+	
+	public Pais recuperarPais(int id) {
+		Pais aux = new Pais();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM pais WHERE idPais='"+id+"';");
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setNombrePais(rs.getString(2));
+				 }
+				  
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar al cliente");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+		return aux;
 	}
 	
 	public Parametro recuperarParametro() {

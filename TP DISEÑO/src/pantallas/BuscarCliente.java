@@ -23,6 +23,7 @@ import entidades.DomicilioCliente;
 import entidades.Localidad;
 import entidades.Pais;
 import entidades.Provincia;
+import gestores.GestorCliente;
 
 public class BuscarCliente extends JFrame{
 
@@ -34,8 +35,11 @@ public class BuscarCliente extends JFrame{
 	private JPanel panelBlanco1;
 	private JPanel panelBlanco2;
 	private JTable tablaClientes;
+	private GestorCliente gestorCliente = new GestorCliente();
+	private ArrayList<Cliente> listaClientes = new ArrayList<Cliente>();
+	private int contadorAux = 1;
 	
-	public BuscarCliente () {
+	public BuscarCliente (String pantalla) {
 		
 		this.setTitle("Buscar cliente");
 		this.setVisible(true);
@@ -61,6 +65,11 @@ public class BuscarCliente extends JFrame{
 		JButton buscar = new JButton("Buscar");
 		JButton aceptar = new JButton("Aceptar");
 		JButton cancelar = new JButton("Cancelar");
+		
+		tipoDocumentoComboBox.addItem("--------------------------");
+		tipoDocumentoComboBox.addItem("DNI");
+		tipoDocumentoComboBox.addItem("LE");
+		tipoDocumentoComboBox.addItem("LC");
 		
 		panelDatos = new JPanel();
 		panelDatos.setVisible(true);
@@ -111,35 +120,6 @@ public class BuscarCliente extends JFrame{
 		model.addColumn("Tipo documento");
 		model.addColumn("N° documento");
 		
-		Object rowData[] = null;
-		String[][] cliente = {{"1", "23-56894127", "Gerarduzzi", "Claudio", "DNI", "39858525"}};
-		
-		model.addRow(cliente[0]);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		model.addRow(rowData);
-		
 		tablaClientes = new JTable(4,5);
 		tablaClientes.setModel(model);
 		tablaClientes.setFillsViewportHeight(true);
@@ -160,20 +140,38 @@ public class BuscarCliente extends JFrame{
 		panelAceptarCancelar.add(aceptar);
 		panelAceptarCancelar.add(cancelar);
 		
+		buscar.addActionListener(e -> {
+			String tipoDocAux = (String) tipoDocumentoComboBox.getSelectedItem();
+			listaClientes = gestorCliente.recuperarCliente(nroClienteTxt.getText(), apellidoTxt.getText(), nombreTxt.getText(), tipoDocAux, nroDocumentoTxt.getText());
+			
+			for(Cliente auxCliente : listaClientes) {
+				String nroAux = auxCliente.getId();
+				String apellidoAux = auxCliente.getApellido();
+				String nombreAux = auxCliente.getNombre();
+				String tipoAux = auxCliente.getTipoDni();
+				String documentoAux = auxCliente.getDni();
+				
+				Object[] datos = {contadorAux, nroAux, apellidoAux, nombreAux, tipoAux, documentoAux};
+				
+				model.addRow(datos);
+				contadorAux++;
+			}
+		});
+		
 		cancelar.addActionListener(e -> {
-			new DarAltaPoliza(aux);
-			frame.dispose();
+			switch(pantalla) {
+			case "menu":
+				new Menu();
+				this.dispose();
+				break;
+			case "alta poliza":
+				new DarAltaPoliza(aux);
+				this.dispose();
+			}
 		});
 		
 		aceptar.addActionListener(e -> {
-			aux.setId(cliente[tablaClientes.getSelectedRow()][1]);
-			aux.setApellido(cliente[tablaClientes.getSelectedRow()][2]);
-			aux.setNombre(cliente[tablaClientes.getSelectedRow()][3]);
-			aux.setTipoDni(cliente[tablaClientes.getSelectedRow()][4]);
-			aux.setDni(cliente[tablaClientes.getSelectedRow()][5]);
-			aux.setDomicilio(new DomicilioCliente("Lavalle", 6217, new Localidad("Santa Fe", 3000, new Provincia("Santa Fe", new Pais("Argentina")))));
-			
-			new DarAltaPoliza(aux);
+			new DarAltaPoliza(listaClientes.get(tablaClientes.getSelectedRow()));
 			frame.dispose();
 		});
 		

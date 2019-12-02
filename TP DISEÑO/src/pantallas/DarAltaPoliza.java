@@ -318,7 +318,7 @@ public class DarAltaPoliza extends JFrame{
 		panelBuscarCliente.add(buscarCliente);
 		
 		buscarCliente.addActionListener(e -> {
-			new BuscarCliente();
+			new BuscarCliente("alta poliza");
 			frame.dispose();
 		});
 		
@@ -1100,6 +1100,11 @@ confirmar.addActionListener(e -> {
 			}
 		}
 		});
+
+cancelar.addActionListener(e -> {
+	new Menu();
+	this.dispose();
+});
 		
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
@@ -1108,16 +1113,6 @@ confirmar.addActionListener(e -> {
 		container.add(panelBotones, constraints);
 				
 		
-	}
-	public static boolean validarMotor(String motor) {
-		return motor.matches("^[A-Z]{10}[0-9]{7}$");
-		
-	}
-	public static boolean validarPatente(String patente) {
-		return patente.matches("^[A-Z]{3}[ ][0-9]{3}|[A-Z]{2}[ ][0-9]{3}[ ][A-Z]{2}$");
-	}
-	public static boolean validarChasis(String chasis) {
-		return chasis.matches("^[A-Z]{1}[0-9]{7}$");
 	}
 	
 }

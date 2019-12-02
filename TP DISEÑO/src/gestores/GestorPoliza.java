@@ -96,33 +96,16 @@ public class GestorPoliza {
 	
 public String validarDatos(String patente, String motor, String chasis, ArrayList<Hijo> listaHijos) {
 		
-		if(patente == "") {
+		if(this.validarPatente(patente) == false) {
 			return "patente";
 		}
-		if(motor.length()!=17) {
+		if(this.validarMotor(motor) == false) {
 			return "motor";
 		}
-		if(chasis.length()!=8) {
+		if(this.validarChasis(chasis) == false) {
 			return "chasis";
 		}
 
-		if(patente.length()<6 || patente.length()>7) {
-			return "patente";
-		}
-		switch(motor) {
-		case "":
-			return "motor";
-		case "ZZZZZZZZZZZ9999999":
-			return "motor";
-		}
-		
-		switch(chasis) {
-		case "":
-			return "chasis";
-		case "Z9999999":
-			return "chasis";
-		}
-		
 		for(Hijo aux : listaHijos) {
 			
 			Date hoy = new Date();
@@ -148,7 +131,6 @@ public String validarDatos(String patente, String motor, String chasis, ArrayLis
 				}
 			}
 		}
-		
 		return "";
 	}
 
@@ -171,6 +153,16 @@ public String validarDatos(String patente, String motor, String chasis, ArrayLis
 		}
 		
 		return true;
+	}
+	
+	public static boolean validarMotor(String motor) {
+		return motor.matches("^[A-Z]{10}[0-9]{7}$");
+	}
+	public static boolean validarPatente(String patente) {
+		return patente.matches("^[A-Z]{3}[0-9]{3}|[A-Z]{2}[0-9]{3}[A-Z]{2}$");
+	}
+	public static boolean validarChasis(String chasis) {
+		return chasis.matches("^[A-Z]{1}[0-9]{7}$");
 	}
 	
 }
