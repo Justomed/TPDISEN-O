@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import entidades.AnioFabricacion;
+import entidades.Cliente;
 import entidades.Localidad;
 import entidades.Marca;
 import entidades.Modelo;
@@ -62,11 +63,27 @@ public class GestorBD {
 		connection=this.connectDatabase();
 		String kmPA=p.getKmPorAnio();
 		String nroS=p.getNroSiniestros();
+		Date auxFechaInicio;
+		auxFechaInicio=p.getFechaInicioVigencia();
+	
+		int auxAnioInicio=auxFechaInicio.getYear()+1900;
+		int auxMesInicio=auxFechaInicio.getMonth();
+		int auxDiaInicio=auxFechaInicio.getDay();
+		String fechaInicio=auxAnioInicio+"-"+auxMesInicio+"-"+auxDiaInicio;
+		
+		Date auxFechaFinVigencia=p.getFechaFinVigencia();
+		
+		int auxAnioFin=auxFechaFinVigencia.getYear()+1900;
+		int auxMesFin=auxFechaFinVigencia.getMonth();
+		int auxDiaFin=auxFechaFinVigencia.getDay();
+		String fechaFin=auxAnioFin+"-"+auxMesFin+"-"+auxDiaFin;
+
+
 	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
 		try {
 
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`kmPorAnio`, `numeroSiniestros`) VALUES (' "+kmPA+" ', ' "+nroS+" ');");
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`) VALUES (' "+kmPA+" ', ' "+nroS+" ','"+fechaInicio+"','"+fechaFin+"');");
 			/*insercion.setString(1, suma);
 			insercion.setString(2, kmPA);
 			insercion.setString(3, nroS);*/

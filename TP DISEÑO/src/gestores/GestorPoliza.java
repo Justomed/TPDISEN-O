@@ -1,9 +1,11 @@
 package gestores;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import entidades.*;
+import jdk.nashorn.api.tree.ForInLoopTree;
 
 public class GestorPoliza {
 	
@@ -37,6 +39,9 @@ public class GestorPoliza {
 		poliza.setChasis(chasisPoliza);
 		poliza.setMotor(motorPoliza);
 		poliza.setPatente(patentePoliza);
+		
+		
+
 		
 		GestorParametro gestorParametro = new GestorParametro();
 		
@@ -81,7 +86,91 @@ public class GestorPoliza {
 		poliza.setCuotas(cuotas);
 		poliza.setCliente(cliente);
 		GestorBD gestorBD = new GestorBD();
+		
+		System.out.println(poliza.getSumaAsegurada());
+		//System.out.println("antes de envio"); HASTA ACA OK
 		gestorBD.guardarPoliza(poliza);
+		System.out.println(poliza.getSumaAsegurada());
+
+	}
+	
+public String validarDatos(String patente, String motor, String chasis, ArrayList<Hijo> listaHijos) {
+		
+		if(patente == "") {
+			return "patente";
+		}
+		if(motor.length()!=17) {
+			return "motor";
+		}
+		if(chasis.length()!=8) {
+			return "chasis";
+		}
+
+		if(patente.length()<6 || patente.length()>7) {
+			return "patente";
+		}
+		switch(motor) {
+		case "":
+			return "motor";
+		case "ZZZZZZZZZZZ9999999":
+			return "motor";
+		}
+		
+		switch(chasis) {
+		case "":
+			return "chasis";
+		case "Z9999999":
+			return "chasis";
+		}
+		
+		for(Hijo aux : listaHijos) {
+			
+			Date hoy = new Date();
+			
+			switch(aux.getFechaNacimiento().compareTo(hoy)) {
+			case 0:
+				return "hijos";
+			case 1:
+				return "hijos";
+			case -1:
+				Calendar auxHijo = Calendar.getInstance();
+				Calendar auxHoy = Calendar.getInstance();
+				
+				auxHijo.setTime(aux.getFechaNacimiento());
+				auxHoy.setTime(hoy);
+				
+				if(auxHoy.get(Calendar.YEAR) - auxHijo.get(Calendar.YEAR) < 18) {
+					return "hijos";
+				}
+				
+				if(auxHoy.get(Calendar.YEAR) - auxHijo.get(Calendar.YEAR) > 30) {
+					return "hijos";
+				}
+			}
+		}
+		
+		return "";
+	}
+
+	public boolean validarFecha(Date fechaInicio) {
+		
+		Date hoy = new Date();
+		
+		Calendar auxHoy = Calendar.getInstance();
+		Calendar auxFechaInicio = Calendar.getInstance();
+		
+		auxHoy.setTime(hoy);
+		auxFechaInicio.setTime(fechaInicio);
+		
+		if(auxHoy.get(Calendar.MONTH) - auxFechaInicio.get(Calendar.MONTH) < 0) {
+			return false;
+		}
+		
+		if(auxFechaInicio.get(Calendar.DAY_OF_MONTH) - (auxHoy.get(Calendar.DAY_OF_MONTH)+1) < 0) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 }

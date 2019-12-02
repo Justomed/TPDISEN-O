@@ -459,6 +459,7 @@ public class PolizaGenerar extends JFrame{
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
+
 			gestorPoliza.darAltaPoliza(listaHijos,
 									   cobertura,
 									   provincia,

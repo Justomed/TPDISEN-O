@@ -53,6 +53,7 @@ import entidades.Marca;
 import entidades.Modelo;
 import entidades.Provincia;
 import gestores.GestorBD;
+import gestores.GestorPoliza;
 import utility.FocusTextField;
 import utility.MyOwnFocusTraversalPolicy;
 
@@ -119,6 +120,8 @@ public class DarAltaPoliza extends JFrame{
 	private ArrayList<Modelo> listaModelos = new ArrayList<Modelo>();
 	private ArrayList<AnioFabricacion> listaAnios = new ArrayList<AnioFabricacion>();
 	private GestorBD gestorBD = new GestorBD();
+	
+	private GestorPoliza gestorPoliza = new GestorPoliza();
 	
 	public DarAltaPoliza(Cliente cliente) {
 		
@@ -1001,7 +1004,37 @@ public class DarAltaPoliza extends JFrame{
 		panelPremioDescuento.add(formaPagoPopUp);
 		panelPremioDescuento.add(formaPagoPopUpComboBox);
 		
-		confirmar.addActionListener(e -> {
+confirmar.addActionListener(e -> {
+
+			java.util.Date auxFechaHijo = null;
+			String auxSexoHijo;
+			String auxEstadoHijo;
+			
+			for(int i=0; i < tablaHijos.getRowCount(); i++) {
+				try {
+					auxFechaHijo = formato.parse(tablaHijos.getValueAt(i, 1).toString());
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+				auxSexoHijo = tablaHijos.getValueAt(i, 2).toString();
+				auxEstadoHijo = tablaHijos.getValueAt(i, 3).toString();
+				Hijo hijoAux = new Hijo(auxFechaHijo, auxSexoHijo, auxEstadoHijo);
+				listaHijos.add(hijoAux);
+			}
+			switch(gestorPoliza.validarDatos(patenteTxt.getText(), motorTxt.getText(), chasisTxt.getText(), listaHijos)) {
+			case "patente":
+				JOptionPane.showMessageDialog(this, "PATENTE NO VALIDA. Por favor verifique los datos ingresados.");
+				break;
+			case "motor":
+				JOptionPane.showMessageDialog(this, "MOTOR NO VALIDO. Por favor verifique los datos ingresados.");
+				break;
+			case "chasis":
+				JOptionPane.showMessageDialog(this, "CHASIS NO VALIDO. Por favor verifique los datos ingresados.");
+				break;
+			case "hijos":
+				JOptionPane.showMessageDialog(this, "FECHA DE NACIMIENTO NO VALIDA. Por favor verifique los datos ingresados.");
+				break;
+			default:
 			//setea fecha del proximo dia por defecto
 			Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.DATE, +1);
@@ -1010,26 +1043,14 @@ public class DarAltaPoliza extends JFrame{
 			
 			int respuesta = JOptionPane.showConfirmDialog(this, panelPremioDescuento, "Tipo de cobertura y forma de pago", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 			
-			if(respuesta == 0) {
-				java.util.Date auxFechaHijo = null;
-				String auxSexoHijo;
-				String auxEstadoHijo;
-				
-				for(int i=0; i < tablaHijos.getRowCount(); i++) {
-					try {
-						auxFechaHijo = formato.parse(tablaHijos.getValueAt(i, 1).toString());
-					} catch (ParseException e1) {
-						e1.printStackTrace();
-					}
-					auxSexoHijo = tablaHijos.getValueAt(i, 2).toString();
-					auxEstadoHijo = tablaHijos.getValueAt(i, 3).toString();
-					Hijo hijoAux = new Hijo(auxFechaHijo, auxSexoHijo, auxEstadoHijo);
-					listaHijos.add(hijoAux);
-				}
-				
+			if(respuesta == 0) {		
 				String fechaInicioAux = formato.format(fechaInicioPopUpCalendar.getDate());
 				String coberturaAux = tipoCoberturaPopUpComboBox.getSelectedItem().toString();
 				String formaPagoAux = formaPagoPopUpComboBox.getSelectedItem().toString();
+				
+				if(gestorPoliza.validarFecha(fechaInicioPopUpCalendar.getDate()) == false) {
+					JOptionPane.showMessageDialog(this, "FECHA NO VALIDA. Por favor verifique los datos ingresados.");
+				} else {
 				
 				if(garaje.isSelected() == true) {
 					seguridad.add(true);
@@ -1075,7 +1096,9 @@ public class DarAltaPoliza extends JFrame{
 						seguridad
 						);
 				frame.dispose();
+				}
 			}
+		}
 		});
 		
 		constraints.anchor = GridBagConstraints.CENTER;
@@ -1085,6 +1108,16 @@ public class DarAltaPoliza extends JFrame{
 		container.add(panelBotones, constraints);
 				
 		
+	}
+	public static boolean validarMotor(String motor) {
+		return motor.matches("^[A-Z]{10}[0-9]{7}$");
+		
+	}
+	public static boolean validarPatente(String patente) {
+		return patente.matches("^[A-Z]{3}[ ][0-9]{3}|[A-Z]{2}[ ][0-9]{3}[ ][A-Z]{2}$");
+	}
+	public static boolean validarChasis(String chasis) {
+		return chasis.matches("^[A-Z]{1}[0-9]{7}$");
 	}
 	
 }
