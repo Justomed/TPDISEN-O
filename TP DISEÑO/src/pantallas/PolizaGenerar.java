@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -26,7 +27,10 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import entidades.Cliente;
+import entidades.Cuota;
 import entidades.Hijo;
+import entidades.Marca;
+import entidades.Modelo;
 import gestores.GestorPoliza;
 
 public class PolizaGenerar extends JFrame{
@@ -54,8 +58,8 @@ public class PolizaGenerar extends JFrame{
 	
 	public PolizaGenerar(Cliente cliente,
 						 ArrayList<Hijo> listaHijos,
-						 String marcaPoliza,
-						 String modeloPoliza,
+						 Marca marcaPoliza,
+						 Modelo modeloPoliza,
 						 String anioPoliza,
 						 String motorPoliza,
 						 String chasisPoliza,
@@ -104,30 +108,31 @@ public class PolizaGenerar extends JFrame{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(finVigencia);
-		calendar.set(Calendar.DATE, -1);
+		calendar.add(Calendar.DAY_OF_YEAR, -1);
 		ultimoPago = calendar.getTime();
 		
 		calendar.setTime(finVigencia);
-		calendar.set(Calendar.DATE, +180);
+		calendar.add(Calendar.MONTH, 6);
 		finVigencia = calendar.getTime();
 		Date auxFechaFinVigencia = finVigencia;
 		
 		apellidoTxt.setText(cliente.getApellido());
 		nombreTxt.setText(cliente.getNombre());
-		marcaTxt.setText(marcaPoliza);
-		modeloTxt.setText(modeloPoliza);
+		marcaTxt.setText(marcaPoliza.getMarca());
+		modeloTxt.setText(modeloPoliza.getModelo());
 		motorTxt.setText(motorPoliza);
 		chasisTxt.setText(chasisPoliza);
 		patenteTxt.setText(patentePoliza);
 		inicioTxt.setText(fechaInicio);
 		finTxt.setText(formato.format(auxFechaFinVigencia));
 		sumaAseguradaTxt.setText(sumaAseguradaPoliza);
-		premioTxt.setText("$1.000,00");
+		premioTxt.setText("$6.600,00");
 		importeDescuentoTxt.setText("$600,00");
 		diaPagoTxt.setText(formato.format(ultimoPago));
-		montoTotalTxt.setText("$7.600,00");
+		montoTotalTxt.setText("$6.000,00");
 		importeCuotaTxt.setText("$6.000,00");
 		
 		apellidoTxt.setEnabled(false);
@@ -436,6 +441,23 @@ public class PolizaGenerar extends JFrame{
 		model1.addRow(rowData1[3]);
 		model1.addRow(rowData1[4]);
 		model1.addRow(rowData1[5]);
+		
+		ArrayList<Cuota> cuotas = new ArrayList<Cuota>();
+		calendar.setTime(ultimoPago);
+		Date fechaCuota = null;
+		
+		for(int i=0; i<6; i++) {
+			fechaCuota = calendar.getTime();
+			
+			Cuota cuotaAux = new Cuota();
+			cuotaAux.setNumeroCuota(i+1);
+			cuotaAux.setMontoFinal((String) rowData1[i][1]);
+			cuotaAux.setFechaVencimiento(fechaCuota);
+			cuotas.add(cuotaAux);
+			
+			calendar.add(Calendar.MONTH, 1);
+		}
+		
 		tablaCuotas = new JTable(2,1);
 		tablaCuotas.setBackground(Color.lightGray);
 		tablaCuotas.setModel(model1);	
@@ -477,7 +499,9 @@ public class PolizaGenerar extends JFrame{
 									   auxFechaInicio,
 									   auxFechaFinVigencia,
 									   kmAnio,
-									   cliente
+									   cliente,
+									   cuotas,
+									   siniestros
 			);
 		});
 	}

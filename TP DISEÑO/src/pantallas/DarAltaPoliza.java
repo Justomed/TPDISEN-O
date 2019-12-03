@@ -812,6 +812,7 @@ public class DarAltaPoliza extends JFrame{
 			}
 		});
 		
+		kmAnioComboBox.addItem("-----------------");
 		kmAnioComboBox.addItem("0 - 10.000");
 		kmAnioComboBox.addItem("10.000 - 20.000");
 		kmAnioComboBox.addItem("20.000 - 30.000");
@@ -875,6 +876,7 @@ public class DarAltaPoliza extends JFrame{
 		glSiniestros.setVgap(2);
 		panelSiniestros.setLayout(glSiniestros);
 		
+		siniestrosComboBox.addItem("-----------------");
 		siniestrosComboBox.addItem("NINGUNO");
 		siniestrosComboBox.addItem("UNO");
 		siniestrosComboBox.addItem("DOS");
@@ -1079,11 +1081,26 @@ confirmar.addActionListener(e -> {
 					seguridad.add(false);
 				}
 				
+				Marca marcaAux = new  Marca();
+				Modelo modeloAux = new Modelo();
+				
+				for(int i=0; i<listaMarcas.size(); i++) {
+					if(listaMarcas.get(i).getMarca() == marcaComboBox.getSelectedItem()) {
+						marcaAux = listaMarcas.get(i);
+					}
+				}
+				
+				for(int i=0; i<listaModelos.size(); i++) {
+					if(listaModelos.get(i).getModelo() == modeloComboBox.getSelectedItem()) {
+						modeloAux = listaModelos.get(i);
+					}
+				}
+				
 				new PolizaGenerar(
 						cliente, 
 						listaHijos, 
-						marcaComboBox.getSelectedItem().toString(), 
-						modeloComboBox.getSelectedItem().toString(), 
+						marcaAux, 
+						modeloAux, 
 						anioComboBox.getSelectedItem().toString(),
 						motorTxt.getText(), 
 						chasisTxt.getText(), 

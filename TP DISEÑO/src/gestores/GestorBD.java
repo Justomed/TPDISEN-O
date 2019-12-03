@@ -4,11 +4,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import entidades.AnioFabricacion;
 import entidades.Cliente;
+import entidades.Cuota;
 import entidades.DomicilioCliente;
 import entidades.Localidad;
 import entidades.Marca;
@@ -18,11 +22,14 @@ import entidades.Parametro;
 import entidades.Poliza;
 import entidades.Provincia;
 import entidades.TipoCobertura;
+import entidades.Vehiculo;
 
 import java.sql.ResultSet;
 
 public class GestorBD {
 	private Connection connection;
+	private DateFormat formatoInvertido = new SimpleDateFormat("yyyy-MM-dd");
+	private DateFormat formatoNormal = new SimpleDateFormat("dd/MM/yy");
 	public void GestorDB() {
 		this.connection = null;
 	}
@@ -66,26 +73,24 @@ public class GestorBD {
 		String kmPA=p.getKmPorAnio();
 		String nroS=p.getNroSiniestros();
 		String nroP=p.getNroPoliza();
+		String nroCliente=p.getCliente().getId();
+		String patente=p.getPatente();
+		
 		Date auxFechaInicio;
 		auxFechaInicio=p.getFechaInicioVigencia();
-		System.out.println(nroP);
-		int auxAnioInicio=auxFechaInicio.getYear()+1900;
-		int auxMesInicio=auxFechaInicio.getMonth();
-		int auxDiaInicio=auxFechaInicio.getDay();
-		String fechaInicio=auxAnioInicio+"-"+auxMesInicio+"-"+auxDiaInicio;
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(auxFechaInicio);
+		String fechaInicio = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
 		
 		Date auxFechaFinVigencia=p.getFechaFinVigencia();
-		
-		int auxAnioFin=auxFechaFinVigencia.getYear()+1900;
-		int auxMesFin=auxFechaFinVigencia.getMonth();
-		int auxDiaFin=auxFechaFinVigencia.getDay();
-		String fechaFin=auxAnioFin+"-"+auxMesFin+"-"+auxDiaFin;
+		calendar.setTime(auxFechaFinVigencia);
+		String fechaFin = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
 
 	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
 		try {
 
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"');");
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`,`numCliente`,`patente`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"','"+nroCliente+"','"+patente+"');");
 			/*insercion.setString(1, suma);
 			insercion.setString(2, kmPA);
 			insercion.setString(3, nroS);*/
@@ -469,6 +474,29 @@ public class GestorBD {
 	return listaLocalidades;
 	}
 	
+	public void guardarVehiculo(Vehiculo vehiculo, String poliza) {
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		int modelo=vehiculo.getModelo().getId();
+		
+		try {
+			PreparedStatement insercion;
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`vehiculo` (`idModelo`,`nroPoliza`) VALUES ('"+modelo+"','"+poliza+"');");
+			int res = insercion.executeUpdate(); //para ver si se ejecuta bien
+			
+			if(res>0) {
+				System.out.println("se guardo registro");
+			}
+			
+		} catch (Exception e) {
+			System.out.println("no se pudo guardar vehiculo");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+	}
+	
 	public ArrayList<Marca> recuperarTodasLasMarcas(){
 		connection = this.connectDatabase();
 		Statement stm = null;
@@ -598,21 +626,90 @@ public class GestorBD {
 	return suma;
 	}	
 	
-	/*public Poliza recuperarPoliza(String numeroPoliza) {
-		Localidad aux = new Localidad();
-		String nombre = null;
+	public Cliente recuperarCliente(String id) {
+		Cliente aux = new Cliente();
 		connection = this.connectDatabase();
 		Statement stm = null;
 		ResultSet rs=null;
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM poliza WHERE nombreLocalidad='"+localidad+"';");
+			rs=stm.executeQuery("SELECT * FROM cliente WHERE numCliente='"+id+"';");
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
-
-				 nombre = rs.getString(2);
+				aux.setId(rs.getString(1));
+				aux.setNombre(rs.getString(2));
+				aux.setApellido(rs.getString(3));
+				aux.setDni(rs.getString(4));
+				aux.setTipoDni(rs.getString(5));
 				  
 				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a cliente");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+	return aux;
+	}
+	
+	public Poliza recuperarPoliza(String numeroPoliza) {
+		Poliza aux = new Poliza();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		String fechaNormal;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM poliza WHERE numeroPoliza='"+numeroPoliza+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setNroPoliza(rs.getString(1));
+				aux.setCliente(this.recuperarCliente(rs.getString(6)));
+				aux.setCuotas(this.recuperarCuotas(rs.getString(1)));
+				aux.setVehiculo(this.recuperarVehiculo(rs.getString(1)));
+				
+				Date fechaInvertidaInicio = formatoInvertido.parse(rs.getString(4));
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(fechaInvertidaInicio);
+				
+				if(calendar.get(Calendar.DATE) < 10) {
+					if((calendar.get(Calendar.MONTH)+1) < 10) {
+						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					} else {
+						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					}
+				} else {
+					if((calendar.get(Calendar.MONTH)+1) < 10) {
+						fechaNormal = +calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					} else {
+						fechaNormal = +calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					}
+				}
+				
+				aux.setFechaInicioVigencia(formatoNormal.parse(fechaNormal));
+				
+				Date fechaInvertidaFin = formatoInvertido.parse(rs.getString(5));
+				calendar = Calendar.getInstance();
+				calendar.setTime(fechaInvertidaFin);
+				
+				if(calendar.get(Calendar.DATE) < 10) {
+					if((calendar.get(Calendar.MONTH)+1) < 10) {
+						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					} else {
+						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					}
+				} else {
+					if((calendar.get(Calendar.MONTH)+1) < 10) {
+						fechaNormal = +calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					} else {
+						fechaNormal = +calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					}
+				}
+				
+				aux.setFechaFinVigencia(formatoNormal.parse(fechaNormal));
+				aux.setPatente(rs.getString(12));
 				 }
 		} catch (Exception e) {
 			System.out.println("no se pudo ingresar a localidad");
@@ -620,8 +717,127 @@ public class GestorBD {
 		finally {
 			this.cerrarConexion();
 		}
-		aux.setNombreLocalidad(nombre);
+	
 	return aux;
-	}*/
+	}
+	
+	public Vehiculo recuperarVehiculo(String id) {
+		Vehiculo aux = new Vehiculo();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM vehiculo WHERE nroPoliza='"+id+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				//COMPLETAR
+				//COMPLETAR
+				//COMPLETAR
+				//COMPLETAR
+				//COMPLETAR
+				//COMPLETAR
+				//COMPLETAR
+				//COMPLETAR				  
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a cliente");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+	return aux;
+	}
+	
+	public ArrayList<Cuota> recuperarCuotas(String nroPoliza) {
+		ArrayList<Cuota> aux = new ArrayList<Cuota>();
+		String fechaNormal;
+		connection=this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+
+	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM cuota WHERE numeroPoliza='"+nroPoliza+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				Cuota cuotaAux = new Cuota();
+				cuotaAux.setNumeroCuota(rs.getInt(2));
+				
+				Date fechaInvertida = formatoInvertido.parse(rs.getString(3));
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(fechaInvertida);
+				
+				if(calendar.get(Calendar.DATE) < 10) {
+					if((calendar.get(Calendar.MONTH)+1) < 10) {
+						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					} else {
+						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					}
+				} else {
+					if((calendar.get(Calendar.MONTH)+1) < 10) {
+						fechaNormal = +calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					} else {
+						fechaNormal = +calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					}
+				}
+				cuotaAux.setFechaVencimiento(formatoNormal.parse(fechaNormal));
+				cuotaAux.setMontoFinal(rs.getString(4));
+				
+				aux.add(cuotaAux);
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a cuotas");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		return aux;
+	}
+	
+	public void guardarCuota(ArrayList<Cuota>  cuotas, String nroPoliza) {
+		
+		connection=this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+
+	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
+		try {
+			
+			for(Cuota aux : cuotas) {
+				PreparedStatement insercion;
+				int nroC=aux.getNumeroCuota();
+				Date fechaAux=aux.getFechaVencimiento();
+				String montoFinal=aux.getMontoFinal();
+				
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(fechaAux);
+				String fechaFin = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
+				
+				insercion = connection.prepareStatement("INSERT INTO `bd`.`cuota` (`nroCuota`,`fechaVencimiento`,`montoFinal`,`numeroPoliza`) VALUES ('"+nroC+"','"+fechaFin+"','"+montoFinal+"','"+nroPoliza+"');");
+	
+				int res = insercion.executeUpdate(); //para ver si se ejecuta bien
+			
+				if(res>0) {
+					System.out.println("se guardo registro");
+				}
+			
+			}
+			
+		} catch (Exception e) {
+			System.out.println("no se pudo guardar poliza");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+	}
+	
+	
+	
+	
 	
 }

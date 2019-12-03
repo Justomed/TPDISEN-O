@@ -1,6 +1,7 @@
 package gestores;
 
 import entidades.AnioFabricacion;
+import entidades.Vehiculo;
 
 public class GestorVehiculo {
 	
@@ -15,4 +16,8 @@ public class GestorVehiculo {
 		return aux;
 	}
 	
+	public void guardarVehiculo(Vehiculo vehiculo, String poliza) {
+		GestorBD gestorBD = new GestorBD();
+		gestorBD.guardarVehiculo(vehiculo, poliza);
+	}
 }

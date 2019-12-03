@@ -11,6 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import entidades.Poliza;
+import gestores.GestorBD;
+
 public class BuscarPoliza extends JFrame {
 	
 	private JPanel panelNroPoliza;
@@ -23,6 +26,8 @@ public class BuscarPoliza extends JFrame {
 	private JPanel panelFecha;
 	private JPanel panelMonto;
 	private JPanel panelBoton;
+	private GestorBD gestorBD = new GestorBD();
+	private Poliza poliza = new Poliza();
 	
 	public BuscarPoliza() {
 		
@@ -44,6 +49,7 @@ public class BuscarPoliza extends JFrame {
 		JTextField tipoDocTxt = new JTextField();
 		JTextField nroDocTxt = new JTextField();
 		JTextField montoTxt = new JTextField();
+		JTextField fechaTxt = new JTextField();
 		
 		JTextArea nroPoliza = new JTextArea("Nro. de póliza:");
 		JTextArea nroCliente = new JTextArea("Nro. de cliente:");
@@ -78,6 +84,7 @@ public class BuscarPoliza extends JFrame {
 		tipoDocTxt.setEnabled(false);
 		nroDocTxt.setEnabled(false);
 		montoTxt.setEnabled(false);
+		fechaTxt.setEnabled(false);
 		
 //----------------PANEL NRO POLIZA ------------------------------------		
 		panelNroPoliza = new JPanel();
@@ -178,6 +185,8 @@ public class BuscarPoliza extends JFrame {
 		panelFecha.setVisible(true);
 		panelFecha.setLayout(new FlowLayout());
 		panelFecha.add(fecha);
+		panelFecha.add(fechaTxt);
+		fechaTxt.setColumns(10);
 		//AGREGAR DATE CHOOSER ACA
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 0;
@@ -211,17 +220,25 @@ public class BuscarPoliza extends JFrame {
 		container.add(panelBoton, constraints);
 //------------------FUNCIONAMIENTO PANTALLA-------------------------
 		buscar.addActionListener(e -> {
-			//UTILIZAR GESTORBD PARA RECUPERAR LA POLIZA
-			//RELLENAR LOS CAMPOS INACTIVOS CON LOS DATOS
+			poliza = gestorBD.recuperarPoliza(nroPolizaTxt.getText());
+			
+			nroClienteTxt.setText(poliza.getCliente().getId());
+			nroPolizaaTxt.setText(poliza.getNroPoliza());
+			apellidoTxt.setText(poliza.getCliente().getApellido());
+			nombreTxt.setText(poliza.getCliente().getNombre());
+			tipoDocTxt.setText(poliza.getCliente().getTipoDni());
+			nroDocTxt.setText(poliza.getCliente().getDni());
+			//SETEAR FECHA DEL ULTIMO PAGO
+			//SETEAR MONTO DEL ULTIMO PAGO
 		});
 		
 		aceptar.addActionListener(e -> {
-			new RegistrarPago();
+			new RegistrarPago(poliza);
 			this.dispose();
 		});
 		
 		cancelar.addActionListener(e -> {
-			new RegistrarPago();
+			new RegistrarPago(poliza);
 			this.dispose();
 		});
 	}

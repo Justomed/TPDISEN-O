@@ -17,8 +17,8 @@ public class GestorPoliza {
 							  String provincia, 
 							  String localidad,
 							  String anioPoliza, 
-							  String marcaPoliza, 
-							  String modeloPoliza, 
+							  Marca marcaPoliza, 
+							  Modelo modeloPoliza, 
 							  String motorPoliza,
 							  String chasisPoliza, 
 							  String patentePoliza,
@@ -27,7 +27,9 @@ public class GestorPoliza {
 							  Date fechaInicio, 
 							  Date finVigencia, 
 							  String kmAnio,
-							  Cliente cliente
+							  Cliente cliente,
+							  ArrayList<Cuota> cuotas,
+							  String siniestros
 							  ) {
 		
 		Poliza poliza = new Poliza();
@@ -39,6 +41,9 @@ public class GestorPoliza {
 		poliza.setSumaAsegurada(sumaAseguradaPoliza);
 		poliza.setChasis(chasisPoliza);
 		poliza.setMotor(motorPoliza);
+		poliza.setPatente(patentePoliza);
+		poliza.setCuotas(cuotas);
+		poliza.setNroSiniestros(siniestros);
 		poliza.setPatente(patentePoliza);
 		
 		String sucursal = "0001";
@@ -78,10 +83,8 @@ public class GestorPoliza {
 		GestorVehiculo gestorVehiculo = new GestorVehiculo();
 		
 		AnioFabricacion anio = gestorVehiculo.obtenerAnio(anioPoliza);
-		Marca marca = new Marca(marcaPoliza);
-		Modelo modelo = new Modelo(modeloPoliza);
 		
-		Vehiculo vehiculo = new Vehiculo(marca, modelo, anio); //vehiculo creado
+		Vehiculo vehiculo = new Vehiculo(marcaPoliza, modeloPoliza, anio); //vehiculo creado
 		
 		poliza.setVehiculo(vehiculo); //vehiculo seteado
 		
@@ -89,11 +92,9 @@ public class GestorPoliza {
 		
 		poliza.setSeguridad(seguridadPoliza); //seguridad seteada
 		
-		ArrayList<Cuota> cuotas = new ArrayList<Cuota>();
-		
 		for(int i=0; i>6; i++) {
 			Cuota aux = new Cuota();
-			aux.setValor(1000.00);
+			aux.setValor("$1000.00");
 			cuotas.add(aux);
 		}
 		
@@ -104,7 +105,8 @@ public class GestorPoliza {
 		System.out.println(poliza.getSumaAsegurada());
 		//System.out.println("antes de envio"); HASTA ACA OK
 		gestorBD.guardarPoliza(poliza);
-		System.out.println(poliza.getSumaAsegurada());
+		gestorVehiculo.guardarVehiculo(vehiculo, poliza.getNroPoliza());
+		gestorBD.guardarCuota(cuotas, poliza.getNroPoliza());
 
 	}
 	

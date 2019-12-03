@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,6 +17,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import entidades.Poliza;
 
 public class RegistrarPago extends JFrame{
 	
@@ -33,9 +37,10 @@ public class RegistrarPago extends JFrame{
 	private JPanel panelBotones;
 	private JTable tablaCuotasPendientes;
 	private JTable tablaCuotasFuturas;
+	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
 	
 	
-	public RegistrarPago() {
+	public RegistrarPago(Poliza poliza) {
 		
 		this.setTitle("Registrar pago de póliza");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -74,6 +79,19 @@ public class RegistrarPago extends JFrame{
 		JTextField patenteTxt = new JTextField();
 		JTextField desdeTxt = new JTextField();
 		JTextField hastaTxt = new JTextField();
+		
+		if(poliza.getNroPoliza() != null) {
+			nroClienteTxt.setText(poliza.getCliente().getId());
+			nroPolizaTxt.setText(poliza.getNroPoliza());
+			apellidoTxt.setText(poliza.getCliente().getApellido());
+			nombreTxt.setText(poliza.getCliente().getNombre());
+			//marcaTxt.setText(poliza.getVehiculo().getMarca().getMarca());
+			//modeloTxt.setText(poliza.getVehiculo().getModelo().getModelo());
+			patenteTxt.setText(poliza.getPatente());
+			desdeTxt.setText(formato.format(poliza.getFechaInicioVigencia()));
+			hastaTxt.setText(formato.format(poliza.getFechaFinVigencia()));
+			
+		}
 		
 		nroCliente.setBackground(Color.lightGray);
 		nroPoliza.setBackground(Color.lightGray);

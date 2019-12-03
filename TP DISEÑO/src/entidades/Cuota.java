@@ -3,21 +3,30 @@ package entidades;
 import java.util.Date;
 
 public class Cuota {
-	private double valor;
+	private String valor;
 	private Date fechaVencimiento;
 	private int numeroCuota;
 	private float tasaMora;
 	private float descuento;
 	private float recargo;
 	private EstadoCuota estado;
+	private String montoFinal;
+
+	public String getMontoFinal() {
+		return montoFinal;
+	}
+
+	public void setMontoFinal(String montoFinal) {
+		this.montoFinal = montoFinal;
+	}
 
 	public Cuota() {}
 
-	public double getValor() {
+	public String getValor() {
 		return valor;
 	}
 
-	public void setValor(double valor) {
+	public void setValor(String valor) {
 		this.valor = valor;
 	}
 

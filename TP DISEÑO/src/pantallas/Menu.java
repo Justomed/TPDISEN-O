@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import entidades.Cliente;
+import entidades.Poliza;
 
 public class Menu extends JFrame{
 	
@@ -199,7 +200,7 @@ public class Menu extends JFrame{
 		consultar.setEnabled(false);
 		
 		registrar.addActionListener(e -> {
-			new RegistrarPago();
+			new RegistrarPago(new Poliza());
 			this.dispose();
 		});
 		

@@ -4,7 +4,7 @@ public class Vehiculo {
 	private Marca marca;
 	private Modelo modelo;
 	private AnioFabricacion anioFabricacion;
-	private float kilometros;
+	private String kilometros;
 	private float tasavehiculo;
 	
 	
@@ -26,10 +26,10 @@ public class Vehiculo {
 	public void setAnioFabricacion(AnioFabricacion anioFabricacion) {
 		this.anioFabricacion = anioFabricacion;
 	}
-	public float getKilometros() {
+	public String getKilometros() {
 		return kilometros;
 	}
-	public void setKilometros(float kilometros) {
+	public void setKilometros(String kilometros) {
 		this.kilometros = kilometros;
 	}
 	public float getTasavehiculo() {
