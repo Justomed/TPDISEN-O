@@ -181,4 +181,24 @@ public String validarDatos(String patente, String motor, String chasis, ArrayLis
 		return chasis.matches("^[A-Z]{1}[0-9]{7}$");
 	}
 	
+	public Poliza recuperarPoliza(String poliza) {
+		Poliza aux = new Poliza();
+		GestorBD gestorBD = new GestorBD();
+		
+		aux = gestorBD.recuperarPoliza(poliza);
+		this.actualizarEstadoCuotas(aux.getCuotas());
+		
+		return aux;
+	}
+	
+	public void actualizarEstadoCuotas(ArrayList<Cuota> cuotas) {
+		for(Cuota aux : cuotas) {
+			if(aux.getPago().getMonto() != null) {
+				aux.setEstado(EstadoCuota.PAGA);
+			} else {
+				aux.setEstado(EstadoCuota.IMPAGA);
+			}
+		}
+	}
+	
 }

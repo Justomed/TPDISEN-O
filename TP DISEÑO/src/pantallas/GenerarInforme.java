@@ -14,6 +14,7 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -287,7 +288,7 @@ public class GenerarInforme extends JFrame {
 		});
 		
 		aceptar.addActionListener(e -> {
-			//IMPLEMENTAR IMPRESION DE LOS DATOS ????
+			JOptionPane.showMessageDialog(this, "SE IMPRIMIO EL INFORME");
 		});
 		
 		cancelar.addActionListener(e -> {

@@ -11,6 +11,15 @@ public class Cuota {
 	private float recargo;
 	private EstadoCuota estado;
 	private String montoFinal;
+	private Pago pago;
+
+	public Pago getPago() {
+		return pago;
+	}
+
+	public void setPago(Pago pago) {
+		this.pago = pago;
+	}
 
 	public String getMontoFinal() {
 		return montoFinal;

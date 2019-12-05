@@ -8,6 +8,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +21,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import entidades.Cuota;
+import entidades.EstadoCuota;
 import entidades.Poliza;
 
 public class RegistrarPago extends JFrame{
@@ -79,19 +84,6 @@ public class RegistrarPago extends JFrame{
 		JTextField patenteTxt = new JTextField();
 		JTextField desdeTxt = new JTextField();
 		JTextField hastaTxt = new JTextField();
-		
-		if(poliza.getNroPoliza() != null) {
-			nroClienteTxt.setText(poliza.getCliente().getId());
-			nroPolizaTxt.setText(poliza.getNroPoliza());
-			apellidoTxt.setText(poliza.getCliente().getApellido());
-			nombreTxt.setText(poliza.getCliente().getNombre());
-			//marcaTxt.setText(poliza.getVehiculo().getMarca().getMarca());
-			//modeloTxt.setText(poliza.getVehiculo().getModelo().getModelo());
-			patenteTxt.setText(poliza.getPatente());
-			desdeTxt.setText(formato.format(poliza.getFechaInicioVigencia()));
-			hastaTxt.setText(formato.format(poliza.getFechaFinVigencia()));
-			
-		}
 		
 		nroCliente.setBackground(Color.lightGray);
 		nroPoliza.setBackground(Color.lightGray);
@@ -306,6 +298,39 @@ public class RegistrarPago extends JFrame{
 		constraints.gridy = 13;
 		container.add(panelBotones, constraints);
 //--------------FUNCIONAMIENTO PANTALLA--------------------------
+		
+		if(poliza.getNroPoliza() != null) {
+			nroClienteTxt.setText(poliza.getCliente().getId());
+			nroPolizaTxt.setText(poliza.getNroPoliza());
+			apellidoTxt.setText(poliza.getCliente().getApellido());
+			nombreTxt.setText(poliza.getCliente().getNombre());
+			marcaTxt.setText(poliza.getVehiculo().getMarca().getMarca());
+			modeloTxt.setText(poliza.getVehiculo().getModelo().getModelo());
+			patenteTxt.setText(poliza.getPatente());
+			desdeTxt.setText(formato.format(poliza.getFechaInicioVigencia()));
+			hastaTxt.setText(formato.format(poliza.getFechaFinVigencia()));		
+			
+			Date fechaHoy = new Date();
+			
+			for(Cuota auxCuota : poliza.getCuotas()) {
+				if(fechaHoy.after(auxCuota.getFechaVencimiento())) {
+					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
+						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1,5)+"."+auxCuota.getMontoFinal().substring(6));
+						String montoFinal = String.valueOf(montoAux*1.2);
+						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+						modeloTablaPendientes.addRow(fila);
+					}
+				} else {
+					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
+						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1,5)+"."+auxCuota.getMontoFinal().substring(6));
+						String montoFinal = String.valueOf(montoAux*0.9);
+						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+						modeloTablaFuturas.addRow(fila);
+					}
+				}
+			}
+		}
+		
 		buscar.addActionListener(e -> {
 			new BuscarPoliza();
 			this.dispose();

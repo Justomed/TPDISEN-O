@@ -5,14 +5,20 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import entidades.Cuota;
 import entidades.Poliza;
 import gestores.GestorBD;
+import gestores.GestorPoliza;
 
 public class BuscarPoliza extends JFrame {
 	
@@ -26,8 +32,9 @@ public class BuscarPoliza extends JFrame {
 	private JPanel panelFecha;
 	private JPanel panelMonto;
 	private JPanel panelBoton;
-	private GestorBD gestorBD = new GestorBD();
+	private GestorPoliza gestorPoliza = new GestorPoliza();
 	private Poliza poliza = new Poliza();
+	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
 	
 	public BuscarPoliza() {
 		
@@ -60,7 +67,7 @@ public class BuscarPoliza extends JFrame {
 		JTextArea nroDoc = new JTextArea("Nro. de documento:");
 		JTextArea monto = new JTextArea("Monto:");
 		JTextArea diaPago = new JTextArea("Ultimo dia de pago:");
-		JTextArea fecha = new JTextArea("Fecha de pago:");
+		JTextArea fecha = new JTextArea("Ultimo pago:");
 		
 		JButton buscar = new JButton("Buscar");
 		JButton aceptar = new JButton("Aceptar");
@@ -220,7 +227,7 @@ public class BuscarPoliza extends JFrame {
 		container.add(panelBoton, constraints);
 //------------------FUNCIONAMIENTO PANTALLA-------------------------
 		buscar.addActionListener(e -> {
-			poliza = gestorBD.recuperarPoliza(nroPolizaTxt.getText());
+			poliza = gestorPoliza.recuperarPoliza(nroPolizaTxt.getText());
 			
 			nroClienteTxt.setText(poliza.getCliente().getId());
 			nroPolizaaTxt.setText(poliza.getNroPoliza());
@@ -228,8 +235,24 @@ public class BuscarPoliza extends JFrame {
 			nombreTxt.setText(poliza.getCliente().getNombre());
 			tipoDocTxt.setText(poliza.getCliente().getTipoDni());
 			nroDocTxt.setText(poliza.getCliente().getDni());
-			//SETEAR FECHA DEL ULTIMO PAGO
-			//SETEAR MONTO DEL ULTIMO PAGO
+			
+			switch(poliza.getCuotas().get(0).getEstado()) {
+			case PAGA:
+				if(poliza.getCuotas().size() > 1) {
+					int cuotaAux = this.ultimoPago(poliza.getCuotas());
+					fechaTxt.setText(formato.format(poliza.getCuotas().get(cuotaAux).getPago().getFecha()));
+					montoTxt.setText(poliza.getCuotas().get(cuotaAux).getPago().getMonto());
+				} else {
+					fechaTxt.setText(formato.format(poliza.getCuotas().get(0).getPago().getFecha()));
+					montoTxt.setText(poliza.getCuotas().get(0).getPago().getMonto());
+				}
+				
+				break;
+			case IMPAGA:
+				fechaTxt.setText("NO REGISTRADO");
+				montoTxt.setText("NO REGISTRADO");
+				break;
+			}
 		});
 		
 		aceptar.addActionListener(e -> {
@@ -241,5 +264,18 @@ public class BuscarPoliza extends JFrame {
 			new RegistrarPago(poliza);
 			this.dispose();
 		});
+	}
+	
+	public int ultimoPago(ArrayList<Cuota> cuotas) {
+		int indice = 0;
+		
+		for(Cuota aux : cuotas) {
+			if(aux.getPago() == null) {
+				return (indice-1);
+			}
+			indice++;
+		}
+		
+		return indice-1;
 	}
 }

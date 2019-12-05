@@ -17,6 +17,7 @@ import entidades.DomicilioCliente;
 import entidades.Localidad;
 import entidades.Marca;
 import entidades.Modelo;
+import entidades.Pago;
 import entidades.Pais;
 import entidades.Parametro;
 import entidades.Poliza;
@@ -380,6 +381,7 @@ public class GestorBD {
 	public AnioFabricacion recuperarAnioFabricacion(String anio) {
 		AnioFabricacion aux = new AnioFabricacion();
 		String nombre = null;
+		int id = 0;
 		connection = this.connectDatabase();
 		Statement stm = null;
 		ResultSet rs=null;
@@ -388,7 +390,7 @@ public class GestorBD {
 			rs=stm.executeQuery("SELECT * FROM aniofabricacion WHERE anio='"+anio+"';");
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
-
+				id = rs.getInt(1);
 				 nombre = rs.getString(2);
 				  
 				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
@@ -400,6 +402,7 @@ public class GestorBD {
 			this.cerrarConexion();
 		}
 		aux.setAnio(nombre);
+		aux.setId(id);
 	return aux;
 	}
 	
@@ -475,26 +478,45 @@ public class GestorBD {
 	}
 	
 	public void guardarVehiculo(Vehiculo vehiculo, String poliza) {
+		int idSuma = this.recuperarIdSumaAsegurada(vehiculo);
 		connection = this.connectDatabase();
-		Statement stm = null;
-		ResultSet rs=null;
 		int modelo=vehiculo.getModelo().getId();
-		
 		try {
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`vehiculo` (`idModelo`,`nroPoliza`) VALUES ('"+modelo+"','"+poliza+"');");
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`vehiculo` (`idModelo`,`nroPoliza`,`idSumaAsegurada`) VALUES ('"+modelo+"','"+poliza+"','"+idSuma+"');");			
 			int res = insercion.executeUpdate(); //para ver si se ejecuta bien
-			
 			if(res>0) {
 				System.out.println("se guardo registro");
 			}
 			
 		} catch (Exception e) {
 			System.out.println("no se pudo guardar vehiculo");
+			System.out.println(e.getMessage());
 		}
 		finally {
 			this.cerrarConexion();
 		}
+	}
+	
+	public int recuperarIdSumaAsegurada(Vehiculo vehiculo ) {
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		int idSumaAsegurada = 0;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM sumaasegurada WHERE idmodelo='"+vehiculo.getModelo().getId()+"' AND idanio='"+vehiculo.getAnioFabricacion().getId()+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				idSumaAsegurada = rs.getInt(1);
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a suma asegurada");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		return idSumaAsegurada;
 	}
 	
 	public ArrayList<Marca> recuperarTodasLasMarcas(){
@@ -728,21 +750,92 @@ public class GestorBD {
 		ResultSet rs=null;
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM vehiculo WHERE nroPoliza='"+id+"';");
+			rs=stm.executeQuery("SELECT sumaasegurada.idmodelo,sumaasegurada.idanio FROM vehiculo,sumaasegurada WHERE nroPoliza='"+id+"' AND sumaasegurada.id=vehiculo.idSumaAsegurada;");
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
-				//COMPLETAR
-				//COMPLETAR
-				//COMPLETAR
-				//COMPLETAR
-				//COMPLETAR
-				//COMPLETAR
-				//COMPLETAR
-				//COMPLETAR				  
-				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				aux.setModelo(this.recuperarModelo(rs.getInt(1)));
+				connection = this.connectDatabase();
+				aux.setAnioFabricacion(this.recuperarAnioFabricacion(rs.getInt(2)));
+				connection = this.connectDatabase();
+				aux.setMarca(this.recuperarMarca(rs.getInt(1)));
 				 }
 		} catch (Exception e) {
 			System.out.println("no se pudo ingresar a cliente");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+	return aux;
+	}
+	
+	public AnioFabricacion recuperarAnioFabricacion(int id) {
+		AnioFabricacion aux = new AnioFabricacion();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM aniofabricacion WHERE idanio='"+id+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setId(rs.getInt(1));
+				aux.setAnio(rs.getString(2));
+				  
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a aniofabricacion");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+	return aux;
+	}
+	
+	public Marca recuperarMarca(int idModelo) {
+		Marca aux = new Marca();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT marca.idmarca,marca.nombreMarca FROM marca,modelo WHERE modelo.idModelo='"+idModelo+"' AND marca.idmarca=modelo.idMarca;");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setId(rs.getInt(1));
+				aux.setMarca(rs.getString(2));
+				  
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a marca");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+	return aux;
+	}
+	
+	public Modelo recuperarModelo(int id) {
+		Modelo aux = new Modelo();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM modelo WHERE idModelo='"+id+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setId(rs.getInt(1));
+				aux.setModelo(rs.getString(2));
+				  
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a modelo");
 		}
 		finally {
 			this.cerrarConexion();
@@ -786,11 +879,60 @@ public class GestorBD {
 				}
 				cuotaAux.setFechaVencimiento(formatoNormal.parse(fechaNormal));
 				cuotaAux.setMontoFinal(rs.getString(4));
+				cuotaAux.setPago(this.recuperarPago(rs.getInt(5)));
+				
+				connection=this.connectDatabase();
 				
 				aux.add(cuotaAux);
 				 }
 		} catch (Exception e) {
 			System.out.println("no se pudo ingresar a cuotas");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		return aux;
+	}
+	
+	public Pago recuperarPago(int id) {
+		Pago aux = new Pago();
+		String fechaNormal;
+		connection=this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+
+	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM pago WHERE idPago='"+id+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setId(rs.getInt(1));
+				aux.setMonto(rs.getString(2));
+				
+				Date fechaInvertida = formatoInvertido.parse(rs.getString(5));
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(fechaInvertida);
+				
+				if(calendar.get(Calendar.DATE) < 10) {
+					if((calendar.get(Calendar.MONTH)+1) < 10) {
+						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					} else {
+						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					}
+				} else {
+					if((calendar.get(Calendar.MONTH)+1) < 10) {
+						fechaNormal = +calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					} else {
+						fechaNormal = +calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+					}
+				}
+				
+				aux.setFecha(formatoNormal.parse(fechaNormal));
+				
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a pago");
 		}
 		finally {
 			this.cerrarConexion();
