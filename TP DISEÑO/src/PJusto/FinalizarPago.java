@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 public class FinalizarPago extends JFrame{
 	
+	private JPanel panelImporte;
 	private JPanel panelMonto;
 	private JPanel panelVuelto;
 	private JPanel panelBotones;
@@ -34,16 +35,35 @@ public class FinalizarPago extends JFrame{
 		GridBagConstraints constraints = new GridBagConstraints();	
 //---------------- DECLARACION DE COMPONENTES ---------------------		
 		
-		JTextArea monto = new JTextArea("Monto:");
-		JTextArea vuelto = new JTextArea("Vuelto:");
+		JTextArea importe = new JTextArea("Importe total:");
+		JTextArea monto = new JTextArea("Monto:           ");
+		JTextArea vuelto = new JTextArea("Vuelto:           ");
 		JButton emitir = new JButton("Emitir recibo de pago");
 		JButton cancelar = new JButton("Cancelar");
 		
+		JFormattedTextField importeTxt =new JFormattedTextField("$ _ _ _. _ _ _. _ _ _, _ _ _");
 		JFormattedTextField montoTxt = new JFormattedTextField("$ _ _ _. _ _ _. _ _ _, _ _ _");
 		JFormattedTextField vueltoTxt = new JFormattedTextField("$ _ _ _. _ _ _. _ _ _, _ _ _");
 		
+		importe.setBackground(Color.lightGray);
 		monto.setBackground(Color.lightGray);	
-		vuelto.setBackground(Color.lightGray);	
+		vuelto.setBackground(Color.lightGray);
+		
+		importeTxt.setEnabled(false);
+		vueltoTxt.setEnabled(false);
+//----------------PANEL IMPORTE ----------------------------------
+    	panelImporte = new JPanel();
+		panelImporte.setBackground(Color.lightGray);
+		panelImporte.setVisible(true);
+		panelImporte.setLayout(new FlowLayout());
+		panelImporte.add(importe);
+		panelImporte.add(importeTxt);
+		importeTxt.setColumns(13);
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridy = 2;
+		container.add(panelImporte, constraints);	
 //----------------PANEL MONTO ------------------------------------		
     	panelMonto = new JPanel();
 		panelMonto.setBackground(Color.lightGray);
@@ -55,7 +75,7 @@ public class FinalizarPago extends JFrame{
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		constraints.gridy = 2;
+		constraints.gridy = 3;
 		container.add(panelMonto, constraints);	
 //----------------PANEL MONTO ------------------------------------		
     	panelVuelto = new JPanel();
@@ -68,7 +88,7 @@ public class FinalizarPago extends JFrame{
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		constraints.gridy = 3;
+		constraints.gridy = 4;
 		container.add(panelVuelto, constraints);
 //----------------PANEL BLANCO --------------------------------------
 		panelBlanco = new JPanel();
@@ -78,7 +98,7 @@ public class FinalizarPago extends JFrame{
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		constraints.gridy = 4;
+		constraints.gridy = 5;
 		container.add(panelBlanco, constraints);
 //----------------PANEL BLANCO 1--------------------------------------
 		panelBlanco1 = new JPanel();
@@ -88,7 +108,7 @@ public class FinalizarPago extends JFrame{
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		constraints.gridy = 5;
+		constraints.gridy = 6;
 		container.add(panelBlanco1, constraints);
 //----------------PANEL BOTONES ------------------------------------
 		panelBotones = new JPanel();
@@ -100,7 +120,7 @@ public class FinalizarPago extends JFrame{
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		constraints.gridy = 6;
+		constraints.gridy = 7;
 		container.add(panelBotones, constraints);				
 	}
 
