@@ -14,6 +14,7 @@ import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -43,6 +44,9 @@ public class RegistrarPago extends JFrame{
 	private JTable tablaCuotasPendientes;
 	private JTable tablaCuotasFuturas;
 	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+	private ArrayList<Cuota> cuotasPendientes = new ArrayList<Cuota>();
+	private ArrayList<Cuota> cuotasFuturas = new ArrayList<Cuota>();
+	private ArrayList<Cuota> cuotasAbonadas = new ArrayList<Cuota>();
 	
 	
 	public RegistrarPago(Poliza poliza) {
@@ -317,15 +321,17 @@ public class RegistrarPago extends JFrame{
 					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
 						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1,5)+"."+auxCuota.getMontoFinal().substring(6));
 						String montoFinal = String.valueOf(montoAux*1.2);
-						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal+"0"};
 						modeloTablaPendientes.addRow(fila);
+						cuotasPendientes.add(auxCuota);
 					}
 				} else {
 					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
 						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1,5)+"."+auxCuota.getMontoFinal().substring(6));
 						String montoFinal = String.valueOf(montoAux*0.9);
-						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal+"0"};
 						modeloTablaFuturas.addRow(fila);
+						cuotasFuturas.add(auxCuota);
 					}
 				}
 			}
@@ -337,7 +343,35 @@ public class RegistrarPago extends JFrame{
 		});
 		
 		abonar.addActionListener(e -> {
-			//IMPLEMENTAR
+			int[] indicesCuotasPendientes = tablaCuotasPendientes.getSelectedRows();
+			int[] indicesCuotasFuturas = tablaCuotasFuturas.getSelectedRows();
+			
+			if(indicesCuotasPendientes.length == 0) {
+				if(indicesCuotasFuturas.length == 0) {
+					JOptionPane.showMessageDialog(this, "ERROR: NO HAY CUOTAS SELECCIONADAS PARA ABONAR");
+				} else {
+					for(int cuotaFutura : indicesCuotasFuturas) {
+						cuotasAbonadas.add(cuotasFuturas.get(cuotaFutura));
+						System.out.println(cuotasFuturas.get(cuotaFutura).getFechaVencimiento().toString());
+					}
+				}
+			} else {
+				if(indicesCuotasFuturas.length == 0) {
+					for(int cuotaPendiente : indicesCuotasPendientes) {
+						cuotasAbonadas.add(cuotasPendientes.get(cuotaPendiente));
+						System.out.println(cuotasPendientes.get(cuotaPendiente).getFechaVencimiento().toString());
+					} 					
+				} else {
+					for(int cuotaPendiente : indicesCuotasPendientes) {
+						cuotasAbonadas.add(cuotasPendientes.get(cuotaPendiente));
+						System.out.println(cuotasPendientes.get(cuotaPendiente).getFechaVencimiento().toString());
+					}
+					for(int cuotaFutura : indicesCuotasFuturas) {
+						cuotasAbonadas.add(cuotasFuturas.get(cuotaFutura));
+						System.out.println(cuotasFuturas.get(cuotaFutura).getFechaVencimiento().toString());
+					}
+				}
+			}
 		});
 		
 		cancelar.addActionListener(e -> {
