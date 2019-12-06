@@ -12,6 +12,15 @@ public class Cuota {
 	private EstadoCuota estado;
 	private String montoFinal;
 	private Pago pago;
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public Pago getPago() {
 		return pago;

@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import entidades.Cuota;
+import entidades.EstadoCuota;
 import entidades.Poliza;
 import gestores.GestorBD;
 import gestores.GestorPoliza;
@@ -238,15 +239,22 @@ public class BuscarPoliza extends JFrame {
 			
 			switch(poliza.getCuotas().get(0).getEstado()) {
 			case PAGA:
-				if(poliza.getCuotas().size() > 1) {
-					int cuotaAux = this.ultimoPago(poliza.getCuotas());
-					fechaTxt.setText(formato.format(poliza.getCuotas().get(cuotaAux).getPago().getFecha()));
-					montoTxt.setText(poliza.getCuotas().get(cuotaAux).getPago().getMonto());
-				} else {
-					fechaTxt.setText(formato.format(poliza.getCuotas().get(0).getPago().getFecha()));
-					montoTxt.setText(poliza.getCuotas().get(0).getPago().getMonto());
-				}
+				fechaTxt.setText("CUOTAS PAGAS");
+				montoTxt.setText("CUOTAS PAGAS");
 				
+				if(poliza.getCuotas().size() > 1) {
+					try {
+						for(int i=0; i<poliza.getCuotas().size(); i++) {
+							if(poliza.getCuotas().get(i).getEstado() == EstadoCuota.IMPAGA) {
+								fechaTxt.setText(formato.format(poliza.getCuotas().get(i-1).getPago().getFecha()));
+								montoTxt.setText(poliza.getCuotas().get(i-1).getPago().getMonto());
+								break;
+							}
+						}
+					} catch (Exception exception) {
+						System.out.println(exception.getMessage());
+					}
+				}
 				break;
 			case IMPAGA:
 				fechaTxt.setText("NO REGISTRADO");

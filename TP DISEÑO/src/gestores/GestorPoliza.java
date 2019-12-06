@@ -110,7 +110,7 @@ public class GestorPoliza {
 
 	}
 	
-public String validarDatos(String patente, String motor, String chasis, ArrayList<Hijo> listaHijos) {
+	public String validarDatos(String patente, String motor, String chasis, ArrayList<Hijo> listaHijos) {
 		
 		if(this.validarPatente(patente) == false) {
 			return "patente";
@@ -199,6 +199,11 @@ public String validarDatos(String patente, String motor, String chasis, ArrayLis
 				aux.setEstado(EstadoCuota.IMPAGA);
 			}
 		}
+	}
+	
+	public void pagarCuotas(ArrayList<Cuota> cuotas, int idPago) {
+		GestorBD gestorBD = new GestorBD();
+		gestorBD.actualizarCuotasPagas(cuotas, idPago);
 	}
 	
 }

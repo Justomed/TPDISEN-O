@@ -319,18 +319,21 @@ public class RegistrarPago extends JFrame{
 			for(Cuota auxCuota : poliza.getCuotas()) {
 				if(fechaHoy.after(auxCuota.getFechaVencimiento())) {
 					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
-						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1,5)+"."+auxCuota.getMontoFinal().substring(6));
+						System.out.println(auxCuota.getMontoFinal());
+						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
 						String montoFinal = String.valueOf(montoAux*1.2);
 						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal+"0"};
 						modeloTablaPendientes.addRow(fila);
+						auxCuota.setMontoFinal("$"+montoFinal+"0");
 						cuotasPendientes.add(auxCuota);
 					}
 				} else {
 					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
-						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1,5)+"."+auxCuota.getMontoFinal().substring(6));
+						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
 						String montoFinal = String.valueOf(montoAux*0.9);
 						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal+"0"};
 						modeloTablaFuturas.addRow(fila);
+						auxCuota.setMontoFinal("$"+montoFinal+"0");
 						cuotasFuturas.add(auxCuota);
 					}
 				}
@@ -352,25 +355,26 @@ public class RegistrarPago extends JFrame{
 				} else {
 					for(int cuotaFutura : indicesCuotasFuturas) {
 						cuotasAbonadas.add(cuotasFuturas.get(cuotaFutura));
-						System.out.println(cuotasFuturas.get(cuotaFutura).getFechaVencimiento().toString());
 					}
 				}
 			} else {
 				if(indicesCuotasFuturas.length == 0) {
 					for(int cuotaPendiente : indicesCuotasPendientes) {
 						cuotasAbonadas.add(cuotasPendientes.get(cuotaPendiente));
-						System.out.println(cuotasPendientes.get(cuotaPendiente).getFechaVencimiento().toString());
 					} 					
 				} else {
 					for(int cuotaPendiente : indicesCuotasPendientes) {
 						cuotasAbonadas.add(cuotasPendientes.get(cuotaPendiente));
-						System.out.println(cuotasPendientes.get(cuotaPendiente).getFechaVencimiento().toString());
 					}
 					for(int cuotaFutura : indicesCuotasFuturas) {
 						cuotasAbonadas.add(cuotasFuturas.get(cuotaFutura));
-						System.out.println(cuotasFuturas.get(cuotaFutura).getFechaVencimiento().toString());
 					}
 				}
+			}
+			
+			if(cuotasAbonadas.size() > 0) {
+				new ConfirmarPago(cuotasAbonadas);
+				this.dispose();
 			}
 		});
 		

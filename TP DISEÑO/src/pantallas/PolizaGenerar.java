@@ -31,6 +31,7 @@ import entidades.Cuota;
 import entidades.Hijo;
 import entidades.Marca;
 import entidades.Modelo;
+import entidades.Poliza;
 import gestores.GestorPoliza;
 
 public class PolizaGenerar extends JFrame{
@@ -129,11 +130,11 @@ public class PolizaGenerar extends JFrame{
 		inicioTxt.setText(fechaInicio);
 		finTxt.setText(formato.format(auxFechaFinVigencia));
 		sumaAseguradaTxt.setText(sumaAseguradaPoliza);
-		premioTxt.setText("$6.600,00");
-		importeDescuentoTxt.setText("$600,00");
+		premioTxt.setText("$6600.00");
+		importeDescuentoTxt.setText("$600.00");
 		diaPagoTxt.setText(formato.format(ultimoPago));
-		montoTotalTxt.setText("$6.000,00");
-		importeCuotaTxt.setText("$6.000,00");
+		montoTotalTxt.setText("$6000.00");
+		importeCuotaTxt.setText("$6000.00");
 		
 		apellidoTxt.setEnabled(false);
 		nombreTxt.setEnabled(false);
@@ -391,12 +392,12 @@ public class PolizaGenerar extends JFrame{
 
 		model.addColumn("N° cuota");
 		model.addColumn("Monto descuento");
-		Object rowData[][] = {{"1", "$100,00"},
-							{"2", "$100,00"},
-							{"3", "$100,00"},
-							{"4", "$100,00"},
-							{"5", "$100,00"},
-							{"6", "$100,00"}
+		Object rowData[][] = {{"1", "$100.00"},
+							{"2", "$100.00"},
+							{"3", "$100.00"},
+							{"4", "$100.00"},
+							{"5", "$100.00"},
+							{"6", "$100.00"}
 		};
 		
 		model.addRow(rowData[0]);
@@ -428,12 +429,12 @@ public class PolizaGenerar extends JFrame{
 		panelTablaCuotas.setSize(1, 2);
 		model1.addColumn("N° cuota");
 		model1.addColumn("Monto cuota");
-		Object rowData1[][] = {{"1", "$1000,00"},
-				{"2", "$1000,00"},
-				{"3", "$1000,00"},
-				{"4", "$1000,00"},
-				{"5", "$1000,00"},
-				{"6", "$1000,00"}
+		Object rowData1[][] = {{"1", "$1000.00"},
+				{"2", "$1000.00"},
+				{"3", "$1000.00"},
+				{"4", "$1000.00"},
+				{"5", "$1000.00"},
+				{"6", "$1000.00"}
 		};
 		model1.addRow(rowData1[0]);
 		model1.addRow(rowData1[1]);
@@ -503,6 +504,16 @@ public class PolizaGenerar extends JFrame{
 									   cuotas,
 									   siniestros
 			);
+			
+			JOptionPane.showMessageDialog(this, "POLIZA CREADA EXITOSAMENTE");
+			new Menu();
+			this.dispose();
+			
+		});
+		
+		cancelar.addActionListener(e -> {
+			new DarAltaPoliza(new Cliente());
+			this.dispose();
 		});
 	}
 	

@@ -155,6 +155,7 @@ public class DarAltaPoliza extends JFrame{
 		JFormattedTextField sumaAseguradaTxt = new JFormattedTextField("$_ _._ _ _._ _ _,_ _");
 		FocusTextField motorTxt = new FocusTextField();
 		FocusTextField chasisTxt = new FocusTextField();
+		FocusTextField patenteTxt = new FocusTextField();
 		JTextField tipoDocumentoTxt = new JTextField();
 		JTextField nroDocumentoTxt = new JTextField();
 		JTextField apellidoTxt = new JTextField();
@@ -165,7 +166,6 @@ public class DarAltaPoliza extends JFrame{
 		JTextField cpTxt = new JTextField();
 		JTextField calleTxt = new JTextField();
 		JTextField numeroTxt = new JTextField();
-		JTextField patenteTxt = new JTextField();
 		JTextField sexoPopUpTxt = new JTextField();
 		JTextField estadoCivilPopUpTxt = new JTextField();
 		JDateChooser fechaInicioPopUpCalendar = new JDateChooser("dd/MM/yy", "##/##/##",'_');
@@ -215,6 +215,7 @@ public class DarAltaPoliza extends JFrame{
 		
 		motorTxt.setText("ZZZZZZZZZZZ9999999");
 		chasisTxt.setText("Z9999999");
+		patenteTxt.setText("AAA999/AA999AA");
 		
 		nroClienteTxt.setText(cliente.getId());		
 		apellidoTxt.setText(cliente.getApellido());
@@ -604,6 +605,7 @@ public class DarAltaPoliza extends JFrame{
 			int auxIdProvincia=0;
 			switch((String) provinciaComboBox.getItemAt(auxComboBox)) {
 			case "Santa Fe":
+				localidadComboBox.removeAllItems();
 				localidadComboBox.addItem("-----------------");
 				
 				auxIdProvincia = listaProvincias.get(auxComboBox-1).getId();
@@ -614,6 +616,7 @@ public class DarAltaPoliza extends JFrame{
 				}
 				break;
 			case "Entre Rios":
+				localidadComboBox.removeAllItems();
 				localidadComboBox.addItem("-----------------");
 				
 				auxIdProvincia = listaProvincias.get(auxComboBox-1).getId();
@@ -624,6 +627,7 @@ public class DarAltaPoliza extends JFrame{
 				}
 				break;
 			case "Cordoba":
+				localidadComboBox.removeAllItems();
 				localidadComboBox.addItem("-----------------");
 
 				auxIdProvincia = listaProvincias.get(auxComboBox-1).getId();
@@ -634,6 +638,7 @@ public class DarAltaPoliza extends JFrame{
 				}
 				break;
 			case "Buenos Aires":
+				localidadComboBox.removeAllItems();
 				localidadComboBox.addItem("-----------------");
 
 				auxIdProvincia = listaProvincias.get(auxComboBox-1).getId();
@@ -663,6 +668,7 @@ public class DarAltaPoliza extends JFrame{
 				int auxIdMarca=0;
 				switch((String) marcaComboBox.getItemAt(auxComboBox)) {
 				case "Volkswagen":
+					modeloComboBox.removeAllItems();
 					modeloComboBox.addItem("-----------------");
 					
 					auxIdMarca = listaMarcas.get(auxComboBox-1).getId();
@@ -673,6 +679,7 @@ public class DarAltaPoliza extends JFrame{
 					}
 					break;
 				case "Chevrolet":
+					modeloComboBox.removeAllItems();
 					modeloComboBox.addItem("-----------------");
 					
 					auxIdMarca = listaMarcas.get(auxComboBox-1).getId();
@@ -683,6 +690,7 @@ public class DarAltaPoliza extends JFrame{
 					}
 					break;
 				case "Ford":
+					modeloComboBox.removeAllItems();
 					modeloComboBox.addItem("-----------------");
 					
 					auxIdMarca = listaMarcas.get(auxComboBox-1).getId();
@@ -699,6 +707,7 @@ public class DarAltaPoliza extends JFrame{
 		modeloComboBox.addActionListener(e -> {
 			if(modeloComboBox.getSelectedIndex() > 0) {
 				anioComboBox.setEnabled(true);
+				anioComboBox.removeAllItems();
 				anioComboBox.addItem("-----------------");
 				
 				listaAnios = gestorBD.recuperarTodosLosAnios();
@@ -993,11 +1002,11 @@ public class DarAltaPoliza extends JFrame{
 		glHijosPopUp.setHgap(3);
 		panelPremioDescuento.setLayout(glPremioDescuento);
 		
-		tipoCoberturaPopUpComboBox.addItem("RESPONSABILIDAD CIVIL");
+		/*tipoCoberturaPopUpComboBox.addItem("RESPONSABILIDAD CIVIL");
 		tipoCoberturaPopUpComboBox.addItem("RESPONSABILIDAD CIVIL, ROBO, INCENDIO TOTAL");
 		tipoCoberturaPopUpComboBox.addItem("TODO TOTAL");
 		tipoCoberturaPopUpComboBox.addItem("TERCEROS COMPLETO");
-		tipoCoberturaPopUpComboBox.addItem("TODO RIESGO CON FRANQUICIA");
+		tipoCoberturaPopUpComboBox.addItem("TODO RIESGO CON FRANQUICIA");*/
 		
 		formaPagoPopUpComboBox.addItem("MENSUAL");
 		formaPagoPopUpComboBox.addItem("SEMESTRAL");
@@ -1045,6 +1054,18 @@ confirmar.addActionListener(e -> {
 			calendar.add(Calendar.DATE, +1);
 			java.util.Date auxFecha = calendar.getTime();
 			fechaInicioPopUpCalendar.setDate(auxFecha);
+			
+			if((2019 - Integer.parseInt((String) anioComboBox.getSelectedItem())) > 10) {
+				tipoCoberturaPopUpComboBox.removeAllItems();
+				tipoCoberturaPopUpComboBox.addItem("RESPONSABILIDAD CIVIL");
+			} else {
+				tipoCoberturaPopUpComboBox.removeAllItems();
+				tipoCoberturaPopUpComboBox.addItem("RESPONSABILIDAD CIVIL");
+				tipoCoberturaPopUpComboBox.addItem("RESPONSABILIDAD CIVIL, ROBO, INCENDIO TOTAL");
+				tipoCoberturaPopUpComboBox.addItem("TODO TOTAL");
+				tipoCoberturaPopUpComboBox.addItem("TERCEROS COMPLETO");
+				tipoCoberturaPopUpComboBox.addItem("TODO RIESGO CON FRANQUICIA");
+			}
 			
 			int respuesta = JOptionPane.showConfirmDialog(this, panelPremioDescuento, "Tipo de cobertura y forma de pago", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 			
@@ -1096,35 +1117,62 @@ confirmar.addActionListener(e -> {
 					}
 				}
 				
-				new PolizaGenerar(
-						cliente, 
-						listaHijos, 
-						marcaAux, 
-						modeloAux, 
-						anioComboBox.getSelectedItem().toString(),
-						motorTxt.getText(), 
-						chasisTxt.getText(), 
-						patenteTxt.getText(),
-						fechaInicioAux, 
-						coberturaAux, 
-						formaPagoAux, 
-						sumaAseguradaTxt.getText(), 
-						kmAnioComboBox.getSelectedItem().toString(), 
-						siniestrosComboBox.getSelectedItem().toString(), 
-						provinciaComboBox.getSelectedItem().toString(), 
-						localidadComboBox.getSelectedItem().toString(),
-						seguridad
-						);
-				frame.dispose();
+				switch((String) formaPagoPopUpComboBox.getSelectedItem()) {
+				case "MENSUAL":
+					new PolizaGenerar(
+							cliente, 
+							listaHijos, 
+							marcaAux, 
+							modeloAux, 
+							anioComboBox.getSelectedItem().toString(),
+							motorTxt.getText(), 
+							chasisTxt.getText(), 
+							patenteTxt.getText(),
+							fechaInicioAux, 
+							coberturaAux, 
+							formaPagoAux, 
+							sumaAseguradaTxt.getText(), 
+							kmAnioComboBox.getSelectedItem().toString(), 
+							siniestrosComboBox.getSelectedItem().toString(), 
+							provinciaComboBox.getSelectedItem().toString(), 
+							localidadComboBox.getSelectedItem().toString(),
+							seguridad
+							);
+					frame.dispose();
+					break;
+				case "SEMESTRAL":
+					new PolizaGenerarSemestral(
+							cliente, 
+							listaHijos, 
+							marcaAux, 
+							modeloAux, 
+							anioComboBox.getSelectedItem().toString(),
+							motorTxt.getText(), 
+							chasisTxt.getText(), 
+							patenteTxt.getText(),
+							fechaInicioAux, 
+							coberturaAux, 
+							formaPagoAux, 
+							sumaAseguradaTxt.getText(), 
+							kmAnioComboBox.getSelectedItem().toString(), 
+							siniestrosComboBox.getSelectedItem().toString(), 
+							provinciaComboBox.getSelectedItem().toString(), 
+							localidadComboBox.getSelectedItem().toString(),
+							seguridad
+							);
+					frame.dispose();
+				}
+				
+				
 				}
 			}
 		}
 		});
 
-cancelar.addActionListener(e -> {
-	new Menu();
-	this.dispose();
-});
+	cancelar.addActionListener(e -> {
+		new Menu();
+		this.dispose();
+	});
 		
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;

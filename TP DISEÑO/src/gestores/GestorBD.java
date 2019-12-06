@@ -204,6 +204,27 @@ public class GestorBD {
 		return aux;
 	}
 	
+	public void actualizarCuotasPagas(ArrayList<Cuota> cuotas, int idPago) {
+		connection=this.connectDatabase();
+		
+		for(Cuota auxCuota : cuotas) {
+			try {
+
+				PreparedStatement insercion;
+				insercion = connection.prepareStatement("UPDATE `bd`.`cuota` SET `idPago`='"+idPago+"' WHERE idcuota='"+auxCuota.getId()+"';");
+				int res = insercion.executeUpdate(); //para ver si se ejecuta bien
+				
+				if(res>0) {
+					System.out.println("se guardo registro");
+				}
+				
+			} catch (Exception e) {
+				System.out.println("no se pudo actualizar cuota");
+			}
+		}
+		this.cerrarConexion();		
+	}
+	
 	public Provincia recuperarProvincia(int id) {
 		Provincia aux = new Provincia();
 		connection = this.connectDatabase();
@@ -475,6 +496,57 @@ public class GestorBD {
 			System.out.println(listaLocalidades.get(i).getNombreLocalidad());
 		}
 	return listaLocalidades;
+	}
+	
+	public int recuperarUltimoPago(){
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		
+		int idPago = 0;
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT MAX(idPago) FROM pago;");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				idPago = rs.getInt(1);
+				  
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a pago");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+	return idPago;
+	}
+	
+	public void guardarPago(Pago pago) {
+		connection = this.connectDatabase();
+		String monto = pago.getMonto();
+		
+		Date auxFecha;
+		auxFecha = pago.getFecha();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(auxFecha);
+		String fechaPago = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
+		
+		try {
+			PreparedStatement insercion;
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`pago` (`valor`,`fechaPago`) VALUES ('"+monto+"','"+fechaPago+"');");			
+			int res = insercion.executeUpdate(); //para ver si se ejecuta bien
+			if(res>0) {
+				System.out.println("se guardo registro");
+			}
+			
+		} catch (Exception e) {
+			System.out.println("no se pudo guardar pago");
+			System.out.println(e.getMessage());
+		}
+		finally {
+			this.cerrarConexion();
+		}
 	}
 	
 	public void guardarVehiculo(Vehiculo vehiculo, String poliza) {
@@ -858,6 +930,7 @@ public class GestorBD {
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
 				Cuota cuotaAux = new Cuota();
+				cuotaAux.setId(rs.getInt(1));
 				cuotaAux.setNumeroCuota(rs.getInt(2));
 				
 				Date fechaInvertida = formatoInvertido.parse(rs.getString(3));
@@ -896,47 +969,50 @@ public class GestorBD {
 	
 	public Pago recuperarPago(int id) {
 		Pago aux = new Pago();
-		String fechaNormal;
-		connection=this.connectDatabase();
-		Statement stm = null;
-		ResultSet rs=null;
-
-	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
-		try {
-			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM pago WHERE idPago='"+id+"';");
+		
+		if(id != 0) {
+			String fechaNormal;
+			connection=this.connectDatabase();
+			Statement stm = null;
+			ResultSet rs=null;
 			
-			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
-				aux.setId(rs.getInt(1));
-				aux.setMonto(rs.getString(2));
+			try {
+				stm= connection.createStatement();
+				rs=stm.executeQuery("SELECT * FROM pago WHERE idPago='"+id+"';");
 				
-				Date fechaInvertida = formatoInvertido.parse(rs.getString(5));
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(fechaInvertida);
-				
-				if(calendar.get(Calendar.DATE) < 10) {
-					if((calendar.get(Calendar.MONTH)+1) < 10) {
-						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+				while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+					aux.setId(rs.getInt(1));
+					aux.setMonto(rs.getString(2));
+					
+					Date fechaInvertida = formatoInvertido.parse(rs.getString(5));
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(fechaInvertida);
+					
+					if(calendar.get(Calendar.DATE) < 10) {
+						if((calendar.get(Calendar.MONTH)+1) < 10) {
+							fechaNormal = "0"+calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+						} else {
+							fechaNormal = "0"+calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+						}
 					} else {
-						fechaNormal = "0"+calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+						if((calendar.get(Calendar.MONTH)+1) < 10) {
+							fechaNormal = +calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+						} else {
+							fechaNormal = +calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+						}
 					}
-				} else {
-					if((calendar.get(Calendar.MONTH)+1) < 10) {
-						fechaNormal = +calendar.get(Calendar.DATE)+"/0"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
-					} else {
-						fechaNormal = +calendar.get(Calendar.DATE)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
-					}
-				}
-				
-				aux.setFecha(formatoNormal.parse(fechaNormal));
-				
-				 }
-		} catch (Exception e) {
-			System.out.println("no se pudo ingresar a pago");
+					
+					aux.setFecha(formatoNormal.parse(fechaNormal));
+					
+					 }
+			} catch (Exception e) {
+				System.out.println("no se pudo ingresar a pago");
+			}
+			finally {
+				this.cerrarConexion();
+			}
 		}
-		finally {
-			this.cerrarConexion();
-		}
+		
 		return aux;
 	}
 	
