@@ -10,19 +10,27 @@ import jdk.nashorn.api.tree.ForInLoopTree;
 
 public class GestorPoliza {
 	
+	private ArrayList<Poliza> polizas = new ArrayList<Poliza>();
+	private ArrayList<Cliente> clientesEnMora = new ArrayList<Cliente>();
+	private ArrayList<Cliente> clientesAlDia = new ArrayList<Cliente>();
+	private float montoTotalMora = 0;
+	private float montoCuotasAtrasadas = 0;
+	private float montoCuotasAlDia = 0;
+	private float montoCuotasAdelantadas = 0;
+	
 	public GestorPoliza() {}
 
 	public void darAltaPoliza(ArrayList<Hijo> listaHijos, 
 							  String cobertura, 
-							  String provincia, 
-							  String localidad,
+							  Provincia provincia, 
+							  Localidad localidad,
 							  String anioPoliza, 
 							  Marca marcaPoliza, 
 							  Modelo modeloPoliza, 
 							  String motorPoliza,
 							  String chasisPoliza, 
 							  String patentePoliza,
-							  ArrayList<Boolean> seguridad, 
+							  ArrayList seguridad, 
 							  String sumaAseguradaPoliza, 
 							  Date fechaInicio, 
 							  Date finVigencia, 
@@ -60,36 +68,30 @@ public class GestorPoliza {
 		
 		poliza.setNroPoliza(nroPoliza);
 		
-		System.out.println(nroPoliza);
-		
+		//PARAMETROS(TASAS)
 		GestorParametro gestorParametro = new GestorParametro();
-		
 		Parametro parametro = gestorParametro.obtenerParametros();
-		
-		poliza.setParametro(parametro);
+		poliza.setParametro(parametro); //parametros seteados
 		
 		//COBERTURA
+		GestorCobertura gestorCobertura = new GestorCobertura();
+		TipoCobertura coberturaAux = gestorCobertura.obtenerCobertura(cobertura);
+		poliza.setTipoCobertura(coberturaAux); //cobertura seteada
 		
-		/*GestorCobertura gestorCobertura = new GestorCobertura();
-		
-		TipoCobertura cobertura = gestorCobertura.obtenerCobertura();*/
-		
+		//DOMICILIO RIESGO
 		GestorDomicilioRiesgo gestorDomicilioRiesgo = new GestorDomicilioRiesgo();
-		
 		DomicilioDeRiesgo domicilioRiesgo = gestorDomicilioRiesgo.obtenerDomicilioRiesgo(localidad, provincia);
-		
 		poliza.setDomRiesgo(domicilioRiesgo); //domicilio seteado
 		
+		//VEHICULO
 		GestorVehiculo gestorVehiculo = new GestorVehiculo();
-		
 		AnioFabricacion anio = gestorVehiculo.obtenerAnio(anioPoliza);
-		
 		Vehiculo vehiculo = new Vehiculo(marcaPoliza, modeloPoliza, anio); //vehiculo creado
-		
 		poliza.setVehiculo(vehiculo); //vehiculo seteado
 		
-		Seguridad seguridadPoliza = new Seguridad(seguridad.get(0), seguridad.get(1), seguridad.get(2), seguridad.get(3));
-		
+		//SEGURIDAD
+		GestorBD gestorBD = new GestorBD();
+		Seguridad seguridadPoliza = gestorBD.recuperarSeguridad(seguridad);
 		poliza.setSeguridad(seguridadPoliza); //seguridad seteada
 		
 		for(int i=0; i>6; i++) {
@@ -100,13 +102,11 @@ public class GestorPoliza {
 		
 		poliza.setCuotas(cuotas);
 		poliza.setCliente(cliente);
-		GestorBD gestorBD = new GestorBD();
 		
-		System.out.println(poliza.getSumaAsegurada());
-		//System.out.println("antes de envio"); HASTA ACA OK
 		gestorBD.guardarPoliza(poliza);
 		gestorVehiculo.guardarVehiculo(vehiculo, poliza.getNroPoliza());
 		gestorBD.guardarCuota(cuotas, poliza.getNroPoliza());
+		gestorBD.guardarHijos(listaHijos, poliza.getNroPoliza());
 
 	}
 	
@@ -204,6 +204,163 @@ public class GestorPoliza {
 	public void pagarCuotas(ArrayList<Cuota> cuotas, int idPago) {
 		GestorBD gestorBD = new GestorBD();
 		gestorBD.actualizarCuotasPagas(cuotas, idPago);
+	}
+	
+	public ArrayList<String> generarInformeMensual(String mes, String anio) {
+		ArrayList<String> informe = new ArrayList<String>();
+		
+		GestorBD gestorBD = new GestorBD();
+		polizas = gestorBD.recuperarPolizas(mes, anio);
+		
+		Calendar fechaInforme = Calendar.getInstance();
+		fechaInforme.set(Calendar.YEAR, Integer.valueOf(anio));
+		fechaInforme.set(Calendar.MONTH, Integer.valueOf(mes));
+		fechaInforme.add(Calendar.MONTH, -1);
+		fechaInforme.set(Calendar.DAY_OF_MONTH, 1);
+		
+		for(Poliza polizaAux : polizas) {
+			this.actualizarEstadoCuotas(polizaAux.getCuotas());
+		}
+		
+		ArrayList<String> montos = this.calcularMontos(polizas, fechaInforme);
+		
+		for(Cliente clienteAux : clientesEnMora) {
+			if(clientesAlDia.contains(clienteAux)) {
+				clientesAlDia.remove(clienteAux);
+			}
+		}
+		
+		informe.add(String.valueOf(clientesEnMora.size()));
+		informe.add(montos.get(0));
+		informe.add(String.valueOf(clientesAlDia.size()));
+		informe.add(montos.get(1));
+		informe.add(montos.get(2));
+		informe.add(montos.get(3));
+		
+		return informe;
+	}
+	
+	private ArrayList<String> calcularMontos(ArrayList<Poliza> polizas, Calendar fechaInforme) {
+		ArrayList<String> montos = new ArrayList<String>();
+		for(Poliza polizaAux : polizas) {
+			System.out.println(polizaAux.getCuotas().size());
+			switch(polizaAux.getCuotas().size()) {
+			case 1: //PAGO SEMESTRAL
+				System.out.println("SEMESTRAL");
+				Calendar fechaVencimientoCuota = Calendar.getInstance();
+				fechaVencimientoCuota.setTime(polizaAux.getCuotas().get(0).getFechaVencimiento());
+				
+				Calendar fechaPago = Calendar.getInstance();
+				fechaPago.setTime(polizaAux.getCuotas().get(0).getPago().getFecha());
+				
+				if(this.diferenciaMeses(fechaInforme, fechaVencimientoCuota) == 1) { //vencimiento de la cuota es del mes anterior al informe
+					switch(polizaAux.getCuotas().get(0).getEstado()) {
+					case IMPAGA:
+						if(!clientesEnMora.contains(polizaAux.getCliente())) {
+							clientesEnMora.add(polizaAux.getCliente());
+						}
+						montoTotalMora = montoTotalMora + Float.valueOf(polizaAux.getCuotas().get(0).getMontoFinal().substring(1));
+						break;
+					case PAGA:
+						if(fechaPago.before(fechaInforme)) {
+							if(!clientesAlDia.contains(polizaAux.getCliente())) {
+								clientesAlDia.add(polizaAux.getCliente());
+							}
+							if(fechaPago.before(fechaVencimientoCuota)) {
+								if(this.diferenciaMeses(fechaPago, fechaVencimientoCuota) >= 1) {
+									montoCuotasAdelantadas = (float) (montoCuotasAdelantadas + (Float.valueOf(polizaAux.getCuotas().get(0).getMontoFinal().substring(1))*0.9));
+								} else {
+									montoCuotasAlDia = montoCuotasAlDia + Float.valueOf(polizaAux.getCuotas().get(0).getMontoFinal().substring(1));
+								}
+							} else {
+								montoCuotasAtrasadas = (float) (montoCuotasAtrasadas + Float.valueOf(polizaAux.getCuotas().get(0).getMontoFinal().substring(1))*1.2);
+							}
+						}
+					}
+				}
+				break;
+			default: //PAGO MENSUAL
+				System.out.println("MENSUAL");
+				Calendar fechaCuotaMensual = Calendar.getInstance();
+				for(int i=0; i<polizaAux.getCuotas().size(); i++) {
+					
+					fechaCuotaMensual.setTime(polizaAux.getCuotas().get(i).getFechaVencimiento());
+					if(fechaInforme.before(fechaCuotaMensual)) {
+						System.out.println("fecha anterior");
+						Calendar fechaVencimientoCuotaMensual = Calendar.getInstance();
+						fechaVencimientoCuotaMensual.setTime(polizaAux.getCuotas().get(i-1).getFechaVencimiento());
+						
+						Calendar fechaPagoMensual = Calendar.getInstance();
+						fechaPagoMensual.setTime(polizaAux.getCuotas().get(i-1).getPago().getFecha());
+						
+						if(this.diferenciaMeses(fechaPagoMensual, fechaVencimientoCuotaMensual) == 1) { //vencimiento de la cuota es del mes anterior al informe
+							switch(polizaAux.getCuotas().get(i-1).getEstado()) {
+							case IMPAGA:
+								if(!clientesEnMora.contains(polizaAux.getCliente())) {
+									clientesEnMora.add(polizaAux.getCliente());
+								}
+								montoTotalMora = montoTotalMora + Float.valueOf(polizaAux.getCuotas().get(i-1).getMontoFinal().substring(1));
+								break;
+							case PAGA:
+								if(fechaPagoMensual.before(fechaInforme)) {
+									if(!clientesAlDia.contains(polizaAux.getCliente())) {
+										clientesAlDia.add(polizaAux.getCliente());
+									}
+									if(fechaPagoMensual.before(fechaVencimientoCuotaMensual)) {
+										if(this.diferenciaMeses(fechaPagoMensual, fechaVencimientoCuotaMensual) >= 1) {
+											montoCuotasAdelantadas = (float) (montoCuotasAdelantadas + (Float.valueOf(polizaAux.getCuotas().get(i-1).getMontoFinal().substring(1))*0.9));
+										} else {
+											montoCuotasAlDia = montoCuotasAlDia + Float.valueOf(polizaAux.getCuotas().get(i-1).getMontoFinal().substring(1));
+										}
+									} else {
+										montoCuotasAtrasadas = (float) (montoCuotasAtrasadas + Float.valueOf(polizaAux.getCuotas().get(i-1).getMontoFinal().substring(1))*1.2);
+									}
+								}
+							break;
+							}
+						}
+						/*
+						switch(polizaAux.getCuotas().get(i-1).getEstado()) {
+						case IMPAGA:
+							if(!clientesEnMora.contains(polizaAux.getCliente())) {
+								clientesEnMora.add(polizaAux.getCliente());
+							}
+							montoTotalMora = montoTotalMora + Float.valueOf(polizaAux.getCuotas().get(i-1).getMontoFinal().substring(1));
+							break;
+						case PAGA:
+							if(fechaInforme.before(polizaAux.getCuotas().get(i-1).getPago().getFecha())) {
+								if(!clientesAlDia.contains(polizaAux.getCliente())) {
+									clientesAlDia.add(polizaAux.getCliente());
+								}
+								montoCuotasAlDia = montoCuotasAlDia + Float.valueOf(polizaAux.getCuotas().get(i-1).getMontoFinal().substring(1));
+							} else {
+								if(!clientesEnMora.contains(polizaAux.getCliente())) {
+									clientesEnMora.add(polizaAux.getCliente());
+								}
+								montoTotalMora = montoTotalMora + Float.valueOf(polizaAux.getCuotas().get(i-1).getMontoFinal().substring(1));
+							}
+							break;
+						}*/
+					break;
+					}
+				}
+			}
+			
+		}
+		
+		montos.add("$"+montoTotalMora+"0");
+		montos.add("$"+montoCuotasAtrasadas+"0");
+		montos.add("$"+montoCuotasAdelantadas+"0");
+		montos.add("$"+montoCuotasAlDia+"0");
+		
+		return montos;
+	}
+
+	public int diferenciaMeses(Calendar fechaPago, Calendar fechaCuota) {
+		int anios = fechaPago.get(Calendar.YEAR) - fechaCuota.get(Calendar.YEAR);
+		int diferencia = (anios * 12) + (fechaPago.get(Calendar.MONTH) - fechaCuota.get(Calendar.MONTH));
+		System.out.println(diferencia);
+		return diferencia;
 	}
 	
 }

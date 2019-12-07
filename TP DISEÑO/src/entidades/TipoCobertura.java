@@ -1,44 +1,18 @@
 package entidades;
 
 public class TipoCobertura {
-	boolean responsabilidadCivil;
-	boolean respCivilRoboIncendioTotal;
-	boolean todoTotal;
-	boolean tercerosCompletos;
-	boolean todoRiesgoConFranquicia;
+	int id;
 	String detalle;
 	float tasaTipoCobertura;
 	
-	
-	public boolean isResponsabilidadCivil() {
-		return responsabilidadCivil;
+	public TipoCobertura() {
+		
 	}
-	public void setResponsabilidadCivil(boolean responsabilidadCivil) {
-		this.responsabilidadCivil = responsabilidadCivil;
+	public int getId() {
+		return id;
 	}
-	public boolean isRespCivilRoboIncendioTotal() {
-		return respCivilRoboIncendioTotal;
-	}
-	public void setRespCivilRoboIncendioTotal(boolean respCivilRoboIncendioTotal) {
-		this.respCivilRoboIncendioTotal = respCivilRoboIncendioTotal;
-	}
-	public boolean isTodoTotal() {
-		return todoTotal;
-	}
-	public void setTodoTotal(boolean todoTotal) {
-		this.todoTotal = todoTotal;
-	}
-	public boolean isTercerosCompletos() {
-		return tercerosCompletos;
-	}
-	public void setTercerosCompletos(boolean tercerosCompletos) {
-		this.tercerosCompletos = tercerosCompletos;
-	}
-	public boolean isTodoRiesgoConFranquicia() {
-		return todoRiesgoConFranquicia;
-	}
-	public void setTodoRiesgoConFranquicia(boolean todoRiesgoConFranquicia) {
-		this.todoRiesgoConFranquicia = todoRiesgoConFranquicia;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getDetalle() {
 		return detalle;
@@ -52,8 +26,4 @@ public class TipoCobertura {
 	public void setTasaTipoCobertura(float tasaTipoCobertura) {
 		this.tasaTipoCobertura = tasaTipoCobertura;
 	}
-	
-
-	
-
 }

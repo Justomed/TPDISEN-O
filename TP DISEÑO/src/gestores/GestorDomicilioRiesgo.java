@@ -8,13 +8,16 @@ public class GestorDomicilioRiesgo {
 
 	public GestorDomicilioRiesgo() {}
 	
-	public DomicilioDeRiesgo obtenerDomicilioRiesgo(String localidad, String provincia) {
+	public DomicilioDeRiesgo obtenerDomicilioRiesgo(Localidad localidad, Provincia provincia) {
 		DomicilioDeRiesgo domRiesgo = new DomicilioDeRiesgo();
 		GestorBD gestorBD = new GestorBD();
 		
-		domRiesgo.setLocalidadDR(gestorBD.recuperarLocalidad(localidad));
-		domRiesgo.setProvinciaDR(gestorBD.recuperarProvincia(provincia));
-		domRiesgo.getLocalidadDR().setNombreProvincia(domRiesgo.getProvinciaDR());
+		domRiesgo.setLocalidadDR(localidad);
+		domRiesgo.setProvinciaDR(provincia);
+		domRiesgo.setId(gestorBD.recuperarDomicilioRiesgo(localidad.getId()));
+		
+		System.out.println(localidad.getId());
+		System.out.println(domRiesgo.getId());
 		
 		return domRiesgo;
 	}

@@ -6,11 +6,11 @@ public class GestorCobertura {
 
 	public GestorCobertura() {}
 	
-	public TipoCobertura obtenerCobertura() {
+	public TipoCobertura obtenerCobertura(String cobertura) {
 		TipoCobertura aux = new TipoCobertura();
 		GestorBD gestorBD = new GestorBD();
 		
-		aux = gestorBD.recuperarCobertura();
+		aux = gestorBD.recuperarCobertura(cobertura);
 		
 		return aux;
 	}

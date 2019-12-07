@@ -54,7 +54,7 @@ public class ConfirmarPago extends JFrame{
 		JTextArea importe = new JTextArea("Importe total:");
 
 		JButton continuar = new JButton("Continuar");
-		JButton editar = new JButton("Quitar cuota");
+		JButton quitar = new JButton("Quitar cuota");
 		JButton cancelar = new JButton("Cancelar");
 		
 		importe.setBackground(Color.lightGray);
@@ -124,7 +124,7 @@ public class ConfirmarPago extends JFrame{
 		panelBotones.setVisible(true);
 		panelBotones.setLayout(new FlowLayout());
 		panelBotones.add(continuar);
-		panelBotones.add(editar);
+		panelBotones.add(quitar);
 		panelBotones.add(cancelar);
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
@@ -146,6 +146,13 @@ public class ConfirmarPago extends JFrame{
 			this.dispose();
 		});
 		
+		quitar.addActionListener(e -> {
+			cuotasAbonadas.remove(tablaCuotas.getSelectedRow());
+			modeloTablaCuotas.removeRow(tablaCuotas.getSelectedRow());
+			this.calcularMontoTotal(cuotasAbonadas);
+			importeTxt.setText("$"+montoTotal+"0");
+		});
+		
 		cancelar.addActionListener(e -> {
 			new RegistrarPago(new Poliza());
 			this.dispose();
@@ -153,4 +160,10 @@ public class ConfirmarPago extends JFrame{
 		
 	}
 	
+	public void calcularMontoTotal(ArrayList<Cuota> cuotasAbonadas) {
+		montoTotal = 0;
+		for(Cuota cuotaAux : cuotasAbonadas) {
+			montoTotal = montoTotal + Float.valueOf(cuotaAux.getMontoFinal().substring(1));
+		}
+	}
 }

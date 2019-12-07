@@ -14,6 +14,7 @@ import entidades.AnioFabricacion;
 import entidades.Cliente;
 import entidades.Cuota;
 import entidades.DomicilioCliente;
+import entidades.Hijo;
 import entidades.Localidad;
 import entidades.Marca;
 import entidades.Modelo;
@@ -22,6 +23,7 @@ import entidades.Pais;
 import entidades.Parametro;
 import entidades.Poliza;
 import entidades.Provincia;
+import entidades.Seguridad;
 import entidades.TipoCobertura;
 import entidades.Vehiculo;
 
@@ -76,6 +78,10 @@ public class GestorBD {
 		String nroP=p.getNroPoliza();
 		String nroCliente=p.getCliente().getId();
 		String patente=p.getPatente();
+		int idParametros=p.getParametro().getId();
+		int idDomicilioRiesgo=p.getDomicilioDeRiesgo().getId();
+		int idSeguridad=p.getSeguridad().getId();
+		int idCobertura=p.getTipoCobertura().getId();
 		
 		Date auxFechaInicio;
 		auxFechaInicio=p.getFechaInicioVigencia();
@@ -86,15 +92,11 @@ public class GestorBD {
 		Date auxFechaFinVigencia=p.getFechaFinVigencia();
 		calendar.setTime(auxFechaFinVigencia);
 		String fechaFin = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
-
-	//	String sq ="INSERT INTO `bd`.`poliza` (`sumaAsegurada`, `kmPorAnio`, `numeroSiniestros`) VALUES (" +p.getSumaAsegurada()+ ',' +kmPA +','+ nroS+ ");";
+		
 		try {
 
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`,`numCliente`,`patente`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"','"+nroCliente+"','"+patente+"');");
-			/*insercion.setString(1, suma);
-			insercion.setString(2, kmPA);
-			insercion.setString(3, nroS);*/
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`,`numCliente`,`idDomicilioRiesgo`,`idTasa`,`idSeguridad`,`idTipoCobertura`,`patente`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"','"+nroCliente+"','"+idDomicilioRiesgo+"','"+idParametros+"','"+idSeguridad+"','"+idCobertura+"','"+patente+"');");
 			int res = insercion.executeUpdate(); //para ver si se ejecuta bien
 			
 			if(res>0) {
@@ -108,6 +110,56 @@ public class GestorBD {
 			this.cerrarConexion();
 		}
 		
+	}
+	
+	public ArrayList<Poliza> recuperarPolizas(String mes, String anio) {
+		ArrayList<Poliza> polizasAux = new ArrayList<Poliza>();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		
+		int auxMes = Integer.valueOf(mes) - 1;
+		int auxAnio = Integer.valueOf(anio);
+		
+		if(auxMes == 0) {
+			auxMes = 12;
+			auxAnio--;
+		}
+		
+		String anioFinal = String.valueOf(auxAnio);
+		String mesFinal = String.valueOf(auxMes);
+		if(mesFinal.length() == 1) {
+			try {
+				stm= connection.createStatement();
+				rs=stm.executeQuery("SELECT poliza.numeroPoliza FROM poliza,cuota WHERE poliza.numeroPoliza=cuota.numeroPoliza AND cuota.fechaVencimiento LIKE '"+anioFinal+"-0"+mesFinal+"%';");
+				while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+					polizasAux.add(this.recuperarPoliza(rs.getString(1)));
+					//connection = this.connectDatabase();
+				}
+					  
+			} catch (Exception e) {
+				System.out.println("no se pudo ingresar a poliza");
+			}
+			finally {
+				this.cerrarConexion();
+			}
+		} else {
+			try {
+				stm= connection.createStatement();
+				rs=stm.executeQuery("SELECT poliza.numeroPoliza FROM poliza,cuota WHERE poliza.numeroPoliza=cuota.numeroPoliza AND cuota.fechaVencimiento LIKE '"+anioFinal+"-"+mesFinal+"%';");
+				while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+					polizasAux.add(this.recuperarPoliza(rs.getString(1)));
+					//connection = this.connectDatabase();
+				}
+					  
+			} catch (Exception e) {
+				System.out.println("no se pudo ingresar a poliza");
+			}
+			finally {
+				this.cerrarConexion();
+			}
+		}
+		return polizasAux;
 	}
 	
 	public ArrayList<Cliente> recuperarCliente(String nroC, String ap, String nom, String tipoDoc, String nroDoc) {
@@ -274,33 +326,22 @@ public class GestorBD {
 	
 	public Parametro recuperarParametro() {
 		Parametro aux = new Parametro();
-		float tasaRiesgo=0;
-		float tasaSiniestro=0;
-		float tasaSeguridad=0;
-		float tasaLocalidad=0;
-		float tasaHijo=0;
-		float tasaKm=0;
-		float tasaVehiculo=0;
-		float tasaCobertura=0;
 		connection = this.connectDatabase();
 		Statement stm = null;
 		ResultSet rs=null;
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM tasa;");
-			// AND nombre="+nom+" AND apellido="+ap+" AND nroDni="+nroDoc+" AND tipo="+tipoDoc+
+			rs=stm.executeQuery("SELECT * FROM tasa WHERE idTasa=(SELECT MAX(idTasa) FROM tasa);");
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
-				 //int idUsuario = rs.getInt(1);//traigo el valor de col 1 
-				 tasaVehiculo = rs.getFloat(2);
-				 tasaKm = rs.getFloat(3);
-				 tasaHijo = rs.getFloat(4);
-				 tasaLocalidad = rs.getFloat(5);
-				 tasaSeguridad = rs.getFloat(6);
-				 tasaCobertura = rs.getFloat(7);
-				 tasaSiniestro = rs.getFloat(8);
-				 tasaRiesgo = rs.getFloat(9);
-				 
-				 // System.out.println(idUsuario+"-"+nombre); //HASTA ACA PARA
+				 aux.setId(rs.getInt(1));
+				 aux.setTasaVehiculoActual(rs.getInt(2));
+				 aux.setTasaKmActual(rs.getInt(3));
+				 aux.setTasaHijoActual(rs.getInt(4));
+				 aux.setTasaLocalidadActual(rs.getInt(5));
+				 aux.setTasaSeguridadActual(rs.getInt(6));
+				 aux.setTasaCoberturaActual(rs.getInt(7));
+				 aux.setTasaSiniestroActual(rs.getInt(8));
+				 aux.setTasaRiesgoActual(rs.getInt(9));
 				 }
 				  
 		} catch (Exception e) {
@@ -310,33 +351,22 @@ public class GestorBD {
 			this.cerrarConexion();
 		}
 		
-		aux.setTasaVehiculoActual(tasaVehiculo);
-		aux.setTasaKmActual(tasaKm);
-		aux.setTasaHijoActual(tasaHijo);
-		aux.setTasaLocalidadActual(tasaLocalidad);
-		aux.setTasaSeguridadActual(tasaSeguridad);
-		aux.setTasaSiniestroActual(tasaSiniestro);
-		aux.setTasaRiesgoActual(tasaRiesgo);
-		aux.setTasaCoberturaActual(tasaCobertura);
-		
 		return aux;
 	}
 	
-	public TipoCobertura recuperarCobertura() {
+	public TipoCobertura recuperarCobertura(String cobertura) {
 		TipoCobertura aux = new TipoCobertura();
 		connection = this.connectDatabase();
 		Statement stm = null;
 		ResultSet rs=null;
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM tipoCobertura ");
+			rs=stm.executeQuery("SELECT * FROM tipoCobertura WHERE detalle='"+cobertura+"';");
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
 
-				 String nombre = rs.getString(2);
-				 String detalle = rs.getString(3);
-				  
-				  System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 aux.setId(rs.getInt(1));
+				 aux.setDetalle(rs.getString(2));
 				 }
 		} catch (Exception e) {
 			System.out.println("no se pudo ingresar a cobertura");
@@ -370,6 +400,56 @@ public class GestorBD {
 			this.cerrarConexion();
 		}
 		aux.setNombreLocalidad(nombre);
+	return aux;
+	}
+	
+	public int recuperarDomicilioRiesgo(int idLocalidad) {
+		int idDR = 0;
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM domicilioriesgo WHERE idLocalidad='"+idLocalidad+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				 idDR = rs.getInt(1);
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a domicilioriesgo");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+	return idDR;
+	}
+	
+	public Seguridad recuperarSeguridad(ArrayList seguridad) {
+		Seguridad aux = new Seguridad();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		int garaje = (int) seguridad.get(0);
+		int alarma = (int) seguridad.get(1);
+		int rastreo = (int) seguridad.get(2);
+		int tuercaSeguridad = (int) seguridad.get(3);
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM seguridad WHERE garaje='"+garaje+"' AND alarma='"+alarma+"' AND rastreo='"+rastreo+"' AND tuerca='"+tuercaSeguridad+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				 aux.setId(rs.getInt(1));
+				 aux.setGaraje(rs.getInt(2));
+				 aux.setAlarma(rs.getInt(3));
+				 aux.setRastreo(rs.getInt(4));
+				 aux.setTuerca(rs.getInt(5));
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a seguridad");
+		}
+		finally {
+			this.cerrarConexion();
+		}
 	return aux;
 	}
 	
@@ -478,14 +558,14 @@ public class GestorBD {
 			
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
 				Localidad localidadAux= new Localidad();
-				 nombre = rs.getString(2);
-				 codigoPostal=rs.getInt(4);
+				localidadAux.setId(rs.getInt(1));
+				nombre = rs.getString(2);
+				codigoPostal=rs.getInt(4);
 				 
-				 localidadAux.setCodigoPostal(codigoPostal);
-				 localidadAux.setNombreLocalidad(nombre);
-				 listaLocalidades.add(localidadAux);
-				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
-				 }
+				localidadAux.setCodigoPostal(codigoPostal);
+				localidadAux.setNombreLocalidad(nombre);
+				listaLocalidades.add(localidadAux);
+				}
 		} catch (Exception e) {
 			System.out.println("no se pudo ingresar a provincia");
 		}
@@ -1046,7 +1126,7 @@ public class GestorBD {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("no se pudo guardar poliza");
+			System.out.println("no se pudo guardar cuota");
 		}
 		finally {
 			this.cerrarConexion();
@@ -1054,7 +1134,42 @@ public class GestorBD {
 		
 	}
 	
+	public void guardarHijos(ArrayList<Hijo> hijos, String nroPoliza) {
+		
+		connection=this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+
+		try {
+			
+			for(Hijo aux : hijos) {
+				PreparedStatement insercion;
+				String sexo = aux.getSexo();
+				String estadoCivil = aux.getEstadoCivil();
+				Date fechaNacimiento = aux.getFechaNacimiento();
+				
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(fechaNacimiento);
+				String fechaFinal = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
+				
+				insercion = connection.prepareStatement("INSERT INTO `bd`.`hijo` (`fechaNacimiento`,`sexo`,`estadoCivil`,`numeroPoliza`) VALUES ('"+fechaFinal+"','"+sexo+"','"+estadoCivil+"','"+nroPoliza+"');");
 	
+				int res = insercion.executeUpdate(); //para ver si se ejecuta bien
+			
+				if(res>0) {
+					System.out.println("se guardo registro");
+				}
+			
+			}
+			
+		} catch (Exception e) {
+			System.out.println("no se pudo guardar hijo");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+	}
 	
 	
 	

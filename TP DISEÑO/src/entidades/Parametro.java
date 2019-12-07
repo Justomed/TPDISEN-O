@@ -1,64 +1,77 @@
 package entidades;
 
 public class Parametro {
-	private float tasaHijoActual;
-	private float tasaVehiculoActual;
-	private float tasaLocalidadActual;
-	private float tasaSeguridadActual;
-	private float tasaCoberturaActual;
-	private float tasaSiniestroActual;
-	private float tasaRiesgoActual;
-	private float tasaKmActual;
+	private int id;
+	private int tasaHijoActual;
+	private int tasaVehiculoActual;
+	private int tasaLocalidadActual;
+	private int tasaSeguridadActual;
+	private int tasaCoberturaActual;
+	private int tasaSiniestroActual;
+	private int tasaRiesgoActual;
+	private int tasaKmActual;
 	
+	public Parametro() {
+		
+	}
 	
-	public float getTasaHijoActual() {
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getTasaHijoActual() {
 		return tasaHijoActual;
 	}
-	public void setTasaHijoActual(float tasaHijoActual) {
+	public void setTasaHijoActual(int tasaHijoActual) {
 		this.tasaHijoActual = tasaHijoActual;
 	}
-	public float getTasaVehiculoActual() {
+	public int getTasaVehiculoActual() {
 		return tasaVehiculoActual;
 	}
-	public void setTasaVehiculoActual(float tasaVehiculoActual) {
+	public void setTasaVehiculoActual(int tasaVehiculoActual) {
 		this.tasaVehiculoActual = tasaVehiculoActual;
 	}
-	public float getTasaLocalidadActual() {
+	public int getTasaLocalidadActual() {
 		return tasaLocalidadActual;
 	}
-	public void setTasaLocalidadActual(float tasaLocalActual) {
-		this.tasaLocalidadActual = tasaLocalActual;
+	public void setTasaLocalidadActual(int tasaLocalidadActual) {
+		this.tasaLocalidadActual = tasaLocalidadActual;
 	}
-	public float getTasaSeguridadActual() {
+	public int getTasaSeguridadActual() {
 		return tasaSeguridadActual;
 	}
-	public void setTasaSeguridadActual(float tasaSeguridadActual) {
+	public void setTasaSeguridadActual(int tasaSeguridadActual) {
 		this.tasaSeguridadActual = tasaSeguridadActual;
 	}
-	public float getTasaCoberturaActual() {
+	public int getTasaCoberturaActual() {
 		return tasaCoberturaActual;
 	}
-	public void setTasaCoberturaActual(float tasaCoberturaActual) {
+	public void setTasaCoberturaActual(int tasaCoberturaActual) {
 		this.tasaCoberturaActual = tasaCoberturaActual;
 	}
-	public float getTasaSiniestroActual() {
+	public int getTasaSiniestroActual() {
 		return tasaSiniestroActual;
 	}
-	public void setTasaSiniestroActual(float tasaSiniestroActual) {
+	public void setTasaSiniestroActual(int tasaSiniestroActual) {
 		this.tasaSiniestroActual = tasaSiniestroActual;
 	}
-	public float getTasaRiesgoActual() {
+	public int getTasaRiesgoActual() {
 		return tasaRiesgoActual;
 	}
-	public void setTasaRiesgoActual(float tasaRiesgoActual) {
+	public void setTasaRiesgoActual(int tasaRiesgoActual) {
 		this.tasaRiesgoActual = tasaRiesgoActual;
 	}
-	public float getTasaKmActual() {
+	public int getTasaKmActual() {
 		return tasaKmActual;
 	}
-	public void setTasaKmActual(float tasaKmActual) {
+	public void setTasaKmActual(int tasaKmActual) {
 		this.tasaKmActual = tasaKmActual;
 	}
+	
+	
+	
 
 	
 	

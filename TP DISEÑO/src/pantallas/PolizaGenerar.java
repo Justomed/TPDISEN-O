@@ -29,9 +29,11 @@ import javax.swing.table.DefaultTableModel;
 import entidades.Cliente;
 import entidades.Cuota;
 import entidades.Hijo;
+import entidades.Localidad;
 import entidades.Marca;
 import entidades.Modelo;
 import entidades.Poliza;
+import entidades.Provincia;
 import gestores.GestorPoliza;
 
 public class PolizaGenerar extends JFrame{
@@ -71,9 +73,9 @@ public class PolizaGenerar extends JFrame{
 						 String sumaAseguradaPoliza,
 						 String kmAnio,
 						 String siniestros,
-						 String provincia,
-						 String localidad,
-						 ArrayList<Boolean> seguridad) {
+						 Provincia provincia,
+						 Localidad localidad,
+						 ArrayList seguridad) {
 		
 		this.setTitle("Poliza a generar");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

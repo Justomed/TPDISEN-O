@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,6 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import gestores.GestorBD;
+import gestores.GestorPoliza;
 
 public class GenerarInforme extends JFrame {
 
@@ -31,6 +35,7 @@ public class GenerarInforme extends JFrame {
 	private JPanel panelMontoAdelantadas;
 	private JPanel panelMontoDia;
 	private JPanel panelBotones;
+	private int mesAux=0;
 	
 	public GenerarInforme() {
 		
@@ -163,15 +168,33 @@ public class GenerarInforme extends JFrame {
 		panelMes.add(mesComboBox);
 		panelMes.add(anio);
 		
+		anioComboBox.addItem("2020");
 		anioComboBox.addItem("2019");
 		anioComboBox.addItem("2018");
 		
 		switch(fechaHoyAux.getMonthValue()) {
 		case 1:
-			anioComboBox.setSelectedIndex(1);
+			switch(fechaHoyAux.getYear()) {
+			case 2019:
+				anioComboBox.setSelectedIndex(2);
+				break;
+			case 2020:
+				anioComboBox.setSelectedIndex(1);
+				break;
+			}
 			break;
 		default:
-			anioComboBox.setSelectedIndex(0);
+			switch(fechaHoyAux.getYear()) {
+			case 2018:
+				anioComboBox.setSelectedIndex(0);
+				break;
+			case 2019:
+				anioComboBox.setSelectedIndex(1);
+				break;
+			case 2020:
+				anioComboBox.setSelectedIndex(2);
+				break;
+			}
 			break;
 		}
 		
@@ -284,7 +307,17 @@ public class GenerarInforme extends JFrame {
 		container.add(panelBotones, constraints);
 //--------------FUNCIONAMIENTO PANTALLA------------------
 		confirmar.addActionListener(e -> {
-			//IMPLEMENTAR CON GESTORBD EL METODO
+			GestorPoliza gestorPoliza = new GestorPoliza();
+			
+			mesAux = (mesComboBox.getSelectedIndex()+1);
+			ArrayList<String> informe = gestorPoliza.generarInformeMensual(String.valueOf(mesAux), (String) anioComboBox.getSelectedItem());
+			
+			totalMoraTxt.setText(informe.get(0));
+			montoMoraTxt.setText(informe.get(1));
+			totalDiaTxt.setText(informe.get(2));
+			montoAtrasadasTxt.setText(informe.get(3));
+			montoAdelantadasTxt.setText(informe.get(4));
+			montoDiaTxt.setText(informe.get(5));
 		});
 		
 		aceptar.addActionListener(e -> {

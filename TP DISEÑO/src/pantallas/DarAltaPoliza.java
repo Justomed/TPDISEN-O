@@ -113,7 +113,7 @@ public class DarAltaPoliza extends JFrame{
 	private Object[] hijosDeclarados;
 	private ArrayList<Hijo> listaHijos = new ArrayList<Hijo>();
 	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
-	private ArrayList<Boolean> seguridad = new ArrayList<Boolean>();
+	private ArrayList seguridad = new ArrayList();
 	private ArrayList<Provincia> listaProvincias = new ArrayList<Provincia>();
 	private ArrayList<Localidad> listaLocalidades = new ArrayList<Localidad>();
 	private ArrayList<Marca> listaMarcas = new ArrayList<Marca>();
@@ -151,6 +151,8 @@ public class DarAltaPoliza extends JFrame{
 		JComboBox siniestrosComboBox = new JComboBox();
 		JComboBox tipoCoberturaPopUpComboBox = new JComboBox();
 		JComboBox formaPagoPopUpComboBox = new JComboBox();
+		JComboBox sexoComboBox = new JComboBox();
+		JComboBox estadoCivilComboBox = new JComboBox();
 		JFormattedTextField nroClienteTxt = new JFormattedTextField("_ _ - _ _ _ _ _ _ _ _");
 		JFormattedTextField sumaAseguradaTxt = new JFormattedTextField("$_ _._ _ _._ _ _,_ _");
 		FocusTextField motorTxt = new FocusTextField();
@@ -166,8 +168,6 @@ public class DarAltaPoliza extends JFrame{
 		JTextField cpTxt = new JTextField();
 		JTextField calleTxt = new JTextField();
 		JTextField numeroTxt = new JTextField();
-		JTextField sexoPopUpTxt = new JTextField();
-		JTextField estadoCivilPopUpTxt = new JTextField();
 		JDateChooser fechaInicioPopUpCalendar = new JDateChooser("dd/MM/yy", "##/##/##",'_');
 		JDateChooser fechaNacimientoTxt = new JDateChooser("dd/MM/yy", "##/##/##",'_');
 		JLabel separador = new JLabel("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -902,6 +902,15 @@ public class DarAltaPoliza extends JFrame{
 		
 		//-------------------------PANEL BOTONES HIJOS---------------------------
 		
+		sexoComboBox.addItem("MASCULINO");
+		sexoComboBox.addItem("FEMENINO");
+		sexoComboBox.addItem("NO APLICA");
+		
+		estadoCivilComboBox.addItem("SOLTERO/A");
+		estadoCivilComboBox.addItem("CASADO/A");
+		estadoCivilComboBox.addItem("VIUDO/A");
+		estadoCivilComboBox.addItem("DIVORCIADO/A");
+		
 		panelHijos = new JPanel();
 		panelHijos.setBackground(Color.lightGray);
 		panelHijos.setVisible(true);
@@ -927,9 +936,9 @@ public class DarAltaPoliza extends JFrame{
 		panelHijosPopUpFecha.add(fechaNacimiento);
 		panelHijosPopUpFecha.add(fechaNacimientoTxt);
 		panelHijosPopUpFecha.add(sexoPopUp);
-		panelHijosPopUpFecha.add(sexoPopUpTxt);
+		panelHijosPopUpFecha.add(sexoComboBox);
 		panelHijosPopUpFecha.add(estadoCivilPopUp);
-		panelHijosPopUpFecha.add(estadoCivilPopUpTxt);
+		panelHijosPopUpFecha.add(estadoCivilComboBox);
 		
 		panelHijosPopUp.add(panelHijosPopUpFecha, BorderLayout.NORTH);
 		
@@ -944,8 +953,8 @@ public class DarAltaPoliza extends JFrame{
 			
 			if(respuesta == 0) { //si apreta OK, respuesta==0
 				String fechaAux = formato.format(fechaNacimientoTxt.getDate());
-				String sexoAux = sexoPopUpTxt.getText();
-				String estadoCivilAux = estadoCivilPopUpTxt.getText();
+				String sexoAux = (String) sexoComboBox.getSelectedItem();
+				String estadoCivilAux = (String) estadoCivilComboBox.getSelectedItem();
 				contador++;
 				Object[] hijosDeclarados = {contador, fechaAux, sexoAux, estadoCivilAux};
 				
@@ -1002,12 +1011,6 @@ public class DarAltaPoliza extends JFrame{
 		glHijosPopUp.setHgap(3);
 		panelPremioDescuento.setLayout(glPremioDescuento);
 		
-		/*tipoCoberturaPopUpComboBox.addItem("RESPONSABILIDAD CIVIL");
-		tipoCoberturaPopUpComboBox.addItem("RESPONSABILIDAD CIVIL, ROBO, INCENDIO TOTAL");
-		tipoCoberturaPopUpComboBox.addItem("TODO TOTAL");
-		tipoCoberturaPopUpComboBox.addItem("TERCEROS COMPLETO");
-		tipoCoberturaPopUpComboBox.addItem("TODO RIESGO CON FRANQUICIA");*/
-		
 		formaPagoPopUpComboBox.addItem("MENSUAL");
 		formaPagoPopUpComboBox.addItem("SEMESTRAL");
 		
@@ -1018,7 +1021,7 @@ public class DarAltaPoliza extends JFrame{
 		panelPremioDescuento.add(formaPagoPopUp);
 		panelPremioDescuento.add(formaPagoPopUpComboBox);
 		
-confirmar.addActionListener(e -> {
+		confirmar.addActionListener(e -> {
 
 			java.util.Date auxFechaHijo = null;
 			String auxSexoHijo;
@@ -1079,27 +1082,27 @@ confirmar.addActionListener(e -> {
 				} else {
 				
 				if(garaje.isSelected() == true) {
-					seguridad.add(true);
+					seguridad.add(1);
 				} else {
-					seguridad.add(false);
+					seguridad.add(0);
 				}
 				
 				if(alarma.isSelected() == true) {
-					seguridad.add(true);
+					seguridad.add(1);
 				} else {
-					seguridad.add(false);
+					seguridad.add(0);
 				}
 				
 				if(rastreo.isSelected() == true) {
-					seguridad.add(true);
+					seguridad.add(1);
 				} else {
-					seguridad.add(false);
+					seguridad.add(0);
 				}
 				
 				if(tuercaAntirrobo.isSelected() == true) {
-					seguridad.add(true);
+					seguridad.add(1);
 				} else {
-					seguridad.add(false);
+					seguridad.add(0);
 				}
 				
 				Marca marcaAux = new  Marca();
@@ -1114,6 +1117,21 @@ confirmar.addActionListener(e -> {
 				for(int i=0; i<listaModelos.size(); i++) {
 					if(listaModelos.get(i).getModelo() == modeloComboBox.getSelectedItem()) {
 						modeloAux = listaModelos.get(i);
+					}
+				}
+				
+				Localidad localidadAux = new Localidad();
+				Provincia provinciaAux = new Provincia();
+				
+				for(int i=0; i<listaLocalidades.size(); i++) {
+					if(listaLocalidades.get(i).getNombreLocalidad() == localidadComboBox.getSelectedItem()) {
+						localidadAux = listaLocalidades.get(i);
+					}
+				}
+				
+				for(int i=0; i<listaProvincias.size(); i++) {
+					if(listaProvincias.get(i).getNombreProvincia() == provinciaComboBox.getSelectedItem()) {
+						provinciaAux = listaProvincias.get(i);
 					}
 				}
 				
@@ -1134,8 +1152,8 @@ confirmar.addActionListener(e -> {
 							sumaAseguradaTxt.getText(), 
 							kmAnioComboBox.getSelectedItem().toString(), 
 							siniestrosComboBox.getSelectedItem().toString(), 
-							provinciaComboBox.getSelectedItem().toString(), 
-							localidadComboBox.getSelectedItem().toString(),
+							provinciaAux, 
+							localidadAux,
 							seguridad
 							);
 					frame.dispose();
@@ -1156,8 +1174,8 @@ confirmar.addActionListener(e -> {
 							sumaAseguradaTxt.getText(), 
 							kmAnioComboBox.getSelectedItem().toString(), 
 							siniestrosComboBox.getSelectedItem().toString(), 
-							provinciaComboBox.getSelectedItem().toString(), 
-							localidadComboBox.getSelectedItem().toString(),
+							provinciaAux, 
+							localidadAux,
 							seguridad
 							);
 					frame.dispose();
