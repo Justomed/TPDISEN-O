@@ -309,8 +309,7 @@ public class GenerarInforme extends JFrame {
 		confirmar.addActionListener(e -> {
 			GestorPoliza gestorPoliza = new GestorPoliza();
 			
-			mesAux = (mesComboBox.getSelectedIndex()+1);
-			ArrayList<String> informe = gestorPoliza.generarInformeMensual(String.valueOf(mesAux), (String) anioComboBox.getSelectedItem());
+			ArrayList<String> informe = gestorPoliza.generarInformeMensual((String) mesComboBox.getSelectedItem(), (String) anioComboBox.getSelectedItem());
 			
 			totalMoraTxt.setText(informe.get(0));
 			montoMoraTxt.setText(informe.get(1));
