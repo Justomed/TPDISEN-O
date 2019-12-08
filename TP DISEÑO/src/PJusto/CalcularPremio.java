@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,6 +30,7 @@ public class CalcularPremio extends JFrame {
 	private JPanel panelTituloPoliza;
 	private JPanel panelUnidades;
 	private JPanel panelAjusteUnidad;
+	private JPanel panelPago;
 	private JPanel panelAjustePago;
 	private JPanel panelBoton;
 	
@@ -38,7 +40,7 @@ public CalcularPremio() {
 	this.setTitle("Calcular premio - descuentos");
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setVisible(true);
-	this.setSize(500,600);
+	this.setSize(450,550);
 	this.setResizable(false);
 	Container container = getContentPane();
 	container.setLayout(new GridBagLayout());
@@ -60,6 +62,7 @@ public CalcularPremio() {
 	JTextArea unidades = new JTextArea("Unidades aseguradas:                                   ");
 	JTextArea ajusteUnidad = new JTextArea("Ajuste por mas de una unidad:                      ");
 	JTextArea ajustePago = new JTextArea("Ajuste por pago semestral:                            ");
+	JCheckBox pagoSemestral = new JCheckBox("Pago semestral");
 	JTextArea linea = new JTextArea("--------------------------------------------------------------------------");
 	
 	JButton calcular = new JButton("Calcular");
@@ -76,6 +79,7 @@ public CalcularPremio() {
 	JFormattedTextField ajusteUnidadTxt =new JFormattedTextField("_ _, _ _%");
 	JFormattedTextField ajustePagoTxt =new JFormattedTextField("_ _, _ _%");
 	
+	pagoSemestral.setBackground(Color.lightGray);
 	linea.setBackground(Color.lightGray);
 	tituloPremio.setBackground(Color.lightGray);
 	tituloPremio.setFont(new Font("Dialog", Font.BOLD, 15));
@@ -92,6 +96,8 @@ public CalcularPremio() {
 	unidades.setBackground(Color.lightGray);
 	ajusteUnidad.setBackground(Color.lightGray);
 	ajustePago.setBackground(Color.lightGray);
+	
+	ajustePagoTxt.setEnabled(false);
 	
 //----------------PANEL PREMIO ----------------------------------
 	panelPremio = new JPanel();
@@ -250,6 +256,17 @@ public CalcularPremio() {
 	constraints.gridy = 14;
 	container.add(panelAjusteUnidad, constraints);
 //----------------PANEL AJUSTE PAGO ----------------------------------
+	panelPago = new JPanel();
+	panelPago.setBackground(Color.lightGray);
+    panelPago.setVisible(true);
+	panelPago.setLayout(new FlowLayout());
+	panelPago.add(pagoSemestral);
+	constraints.anchor = GridBagConstraints.WEST;
+	constraints.gridx = 0;
+	constraints.gridy = 1;
+	constraints.gridy = 15;
+	container.add(panelPago, constraints);
+//----------------PANEL AJUSTE PAGO ----------------------------------
 	panelAjustePago = new JPanel();
 	panelAjustePago.setBackground(Color.lightGray);
     panelAjustePago.setVisible(true);
@@ -259,7 +276,7 @@ public CalcularPremio() {
 	constraints.anchor = GridBagConstraints.WEST;
 	constraints.gridx = 0;
 	constraints.gridy = 1;
-	constraints.gridy = 15;
+	constraints.gridy = 16;
 	container.add(panelAjustePago, constraints);
 //----------------PANEL AJUSTE PAGO ----------------------------------
 	panelBoton = new JPanel();
@@ -270,7 +287,7 @@ public CalcularPremio() {
 	constraints.anchor = GridBagConstraints.CENTER;
 	constraints.gridx = 0;
 	constraints.gridy = 1;
-	constraints.gridy = 16;
+	constraints.gridy = 17;
 	container.add(panelBoton, constraints);
 
 }
