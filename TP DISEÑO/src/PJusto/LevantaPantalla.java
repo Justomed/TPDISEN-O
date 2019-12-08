@@ -8,9 +8,12 @@ public class LevantaPantalla {
 		
 //		ConfirmarPago test = new ConfirmarPago();
 //		RegistroSistema test = new RegistroSistema();
-		FinalizarPago test = new FinalizarPago();
+//		FinalizarPago test = new FinalizarPago();
 //		RegistrarPago test = new RegistrarPago();
 //		BuscarPoliza test = new BuscarPoliza();
+		CalcularPremio test = new CalcularPremio();
+		
+		
 		test.setVisible(true);
 		
 
