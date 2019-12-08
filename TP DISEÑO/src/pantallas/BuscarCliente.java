@@ -1,12 +1,14 @@
 package pantallas;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,6 +26,7 @@ import entidades.Localidad;
 import entidades.Pais;
 import entidades.Provincia;
 import gestores.GestorCliente;
+import utility.MyOwnFocusTraversalPolicy;
 
 public class BuscarCliente extends JFrame{
 
@@ -65,6 +68,20 @@ public class BuscarCliente extends JFrame{
 		JButton buscar = new JButton("Buscar");
 		JButton aceptar = new JButton("Aceptar");
 		JButton cancelar = new JButton("Cancelar");
+		
+		Vector<Component> orden = new Vector<Component>();
+		
+		orden.add(nroClienteTxt);
+		orden.add(apellidoTxt);
+		orden.add(nombreTxt);
+		orden.add(tipoDocumentoComboBox);
+		orden.add(nroDocumentoTxt);
+		orden.add(buscar);
+		orden.add(aceptar);
+		orden.add(cancelar);
+		
+		MyOwnFocusTraversalPolicy newPolicy = new MyOwnFocusTraversalPolicy(orden);
+		this.setFocusTraversalPolicy(newPolicy);
 		
 		tipoDocumentoComboBox.addItem("--------------------------");
 		tipoDocumentoComboBox.addItem("DNI");

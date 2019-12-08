@@ -1,11 +1,13 @@
 package pantallas;
 //
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +16,7 @@ import javax.swing.JTextArea;
 
 import entidades.Cliente;
 import entidades.Poliza;
+import utility.MyOwnFocusTraversalPolicy;
 
 public class Menu extends JFrame{
 	
@@ -59,6 +62,17 @@ public class Menu extends JFrame{
 		menuTitulo.setBackground(Color.lightGray);
 		gestionPoliza.setBackground(Color.lightGray);
 		gestionCliente.setBackground(Color.lightGray);
+		
+		Vector<Component> orden = new Vector<Component>();
+		
+		orden.add(darAlta);
+		orden.add(registrar);
+		orden.add(generarInfo);
+		orden.add(buscar);
+		orden.add(salir);
+		
+		MyOwnFocusTraversalPolicy newPolicy = new MyOwnFocusTraversalPolicy(orden);
+		this.setFocusTraversalPolicy(newPolicy);
 		
 //----------------PANEL TITULO MENU ------------------------------------		
 		panelTituloMenu = new JPanel();

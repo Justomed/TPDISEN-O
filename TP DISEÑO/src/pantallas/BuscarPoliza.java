@@ -1,6 +1,7 @@
 package pantallas;
 //
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -8,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,6 +22,7 @@ import entidades.EstadoCuota;
 import entidades.Poliza;
 import gestores.GestorBD;
 import gestores.GestorPoliza;
+import utility.MyOwnFocusTraversalPolicy;
 
 public class BuscarPoliza extends JFrame {
 	
@@ -93,6 +96,16 @@ public class BuscarPoliza extends JFrame {
 		nroDocTxt.setEnabled(false);
 		montoTxt.setEnabled(false);
 		fechaTxt.setEnabled(false);
+		
+		Vector<Component> orden = new Vector<Component>();
+		
+		orden.add(nroPolizaTxt);
+		orden.add(buscar);
+		orden.add(aceptar);
+		orden.add(cancelar);
+		
+		MyOwnFocusTraversalPolicy newPolicy = new MyOwnFocusTraversalPolicy(orden);
+		this.setFocusTraversalPolicy(newPolicy);
 		
 //----------------PANEL NRO POLIZA ------------------------------------		
 		panelNroPoliza = new JPanel();

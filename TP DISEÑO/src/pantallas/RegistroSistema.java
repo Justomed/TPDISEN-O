@@ -1,17 +1,21 @@
 package pantallas;
 //
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import utility.MyOwnFocusTraversalPolicy;
 
 public class RegistroSistema extends JFrame{
 	
@@ -55,6 +59,16 @@ public class RegistroSistema extends JFrame{
 		ingresoTitulo.setBackground(Color.lightGray);
 		user.setBackground(Color.lightGray);
 		pass.setBackground(Color.lightGray);
+		
+Vector<Component> orden = new Vector<Component>();
+		
+		orden.add(userTxt);
+		orden.add(passTxt);
+		orden.add(ingresar);
+		orden.add(salir);
+		
+		MyOwnFocusTraversalPolicy newPolicy = new MyOwnFocusTraversalPolicy(orden);
+		this.setFocusTraversalPolicy(newPolicy);
 //----------------PANEL ASEGURADO ------------------------------------		
 		panelAsegurado = new JPanel();
 		panelAsegurado.setBackground(Color.lightGray);

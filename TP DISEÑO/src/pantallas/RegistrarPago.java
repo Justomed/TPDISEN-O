@@ -1,6 +1,7 @@
 package pantallas;
 //
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,6 +27,7 @@ import javax.swing.table.DefaultTableModel;
 import entidades.Cuota;
 import entidades.EstadoCuota;
 import entidades.Poliza;
+import utility.MyOwnFocusTraversalPolicy;
 
 public class RegistrarPago extends JFrame{
 	
@@ -111,6 +114,15 @@ public class RegistrarPago extends JFrame{
 		patenteTxt.setEnabled(false);
 		desdeTxt.setEnabled(false);
 		hastaTxt.setEnabled(false);
+		
+		Vector<Component> orden = new Vector<Component>();
+		
+		orden.add(buscar);
+		orden.add(abonar);
+		orden.add(cancelar);
+		
+		MyOwnFocusTraversalPolicy newPolicy = new MyOwnFocusTraversalPolicy(orden);
+		this.setFocusTraversalPolicy(newPolicy);
 //---------------- PANEL BUSCAR ---------------------
 		panelBuscar = new JPanel();
 		panelBuscar.setBackground(Color.lightGray);
