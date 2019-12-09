@@ -299,4 +299,5 @@ public class BuscarPoliza extends JFrame {
 		
 		return indice-1;
 	}
+
 }

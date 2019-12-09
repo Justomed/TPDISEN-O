@@ -594,4 +594,8 @@ public class GestorPoliza {
 	public static boolean isBetween(int numero, int menor, int mayor) {
 		return menor <= numero && numero <= mayor;
 	}
+	
+	public static boolean validarNroPoliza(String nro) {
+		return nro.matches("^[0-9]{13}$");
+	}
 }

@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -157,20 +158,55 @@ public class BuscarCliente extends JFrame{
 		panelAceptarCancelar.add(cancelar);
 		
 		buscar.addActionListener(e -> {
-			String tipoDocAux = (String) tipoDocumentoComboBox.getSelectedItem();
-			listaClientes = gestorCliente.recuperarCliente(nroClienteTxt.getText(), apellidoTxt.getText(), nombreTxt.getText(), tipoDocAux, nroDocumentoTxt.getText());
+			model.setRowCount(0);
+			contadorAux = 1;
+			String tipoDocAux = "";
+			String nroDoc = "";
 			
-			for(Cliente auxCliente : listaClientes) {
-				String nroAux = auxCliente.getId();
-				String apellidoAux = auxCliente.getApellido();
-				String nombreAux = auxCliente.getNombre();
-				String tipoAux = auxCliente.getTipoDni();
-				String documentoAux = auxCliente.getDni();
+			if(tipoDocumentoComboBox.getSelectedIndex() > 0) {
+				tipoDocAux = (String) tipoDocumentoComboBox.getSelectedItem();
+				nroDoc = nroDocumentoTxt.getText();
+			} 
+			
+			switch(gestorCliente.validarDatos(nroClienteTxt.getText(), apellidoTxt.getText(), nombreTxt.getText(), tipoDocAux, nroDoc)) {
+			case "cliente":
+				JOptionPane.showMessageDialog(this, "NUMERO DE CLIENTE INCORRECTO");
+				break;
+			case "apellido":
+				JOptionPane.showMessageDialog(this, "APELLIDO INCORRECTO");
+				break;
+			case "nombre":
+				JOptionPane.showMessageDialog(this, "NOMBRE INCORRECTO");
+				break;
+			case "DNI":
+				JOptionPane.showMessageDialog(this, "DNI INCORRECTO");
+				break;
+			case "LE":
+				JOptionPane.showMessageDialog(this, "LE INCORRECTA");
+				break;
+			case "LC":
+				JOptionPane.showMessageDialog(this, "LC INCORRECTA");
+				break;
+			default:
+				listaClientes = gestorCliente.recuperarCliente(nroClienteTxt.getText(), apellidoTxt.getText(), nombreTxt.getText(), tipoDocAux, nroDocumentoTxt.getText());
 				
-				Object[] datos = {contadorAux, nroAux, apellidoAux, nombreAux, tipoAux, documentoAux};
-				
-				model.addRow(datos);
-				contadorAux++;
+				if(listaClientes.size() == 0) {
+					JOptionPane.showMessageDialog(this, "NO SE ENCONTRARON CLIENTES");
+				} else {
+					for(Cliente auxCliente : listaClientes) {
+						String nroAux = auxCliente.getId();
+						String apellidoAux = auxCliente.getApellido();
+						String nombreAux = auxCliente.getNombre();
+						String tipoAux = auxCliente.getTipoDni();
+						String documentoAux = auxCliente.getDni();
+						
+						Object[] datos = {contadorAux, nroAux, apellidoAux, nombreAux, tipoAux, documentoAux};
+						
+						model.addRow(datos);
+						contadorAux++;
+				}
+				}
+			break;
 			}
 		});
 		
@@ -206,5 +242,6 @@ public class BuscarCliente extends JFrame{
 		container.add(panelAceptarCancelar, constraints);
 		
 	}
+
 	
 }

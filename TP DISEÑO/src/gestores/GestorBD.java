@@ -173,27 +173,223 @@ public class GestorBD {
 		String nombre;
 		String tipoDocumento;
 		String documento;
+		
+		String consulta = null;
+		
+		switch(nroC) {
+		case "":
+			switch(ap) {
+			case "":
+				switch(nom) {
+				case "":
+					switch(tipoDoc) {
+					case "":
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente;";
+							break;
+						}
+						break;
+					default:
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"';";
+							break;
+						default:
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"';";
+							break;
+						}
+						break;
+					}
+					break;
+				default:
+					switch(tipoDoc) {
+					case "":
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE nombre='"+nom+"';";
+							break;
+						}
+						break;
+					default:
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre='"+nom+"';";
+							break;
+						default:
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre='"+nom+"';";
+							break;
+						}
+						break;
+					}
+				}
+				break;
+			default:
+				switch(nom) {
+				case "":
+					switch(tipoDoc) {
+					case "":
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE apellido='"+ap+ "';";
+							break;
+						}
+						break;
+					default:
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND apellido='"+ap+ "';";
+							break;
+						default:
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND apellido='"+ap+ "';";
+							break;
+						}
+						break;
+					}
+					break;
+				default:
+					switch(tipoDoc) {
+					case "":
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE nombre='"+nom+"' AND apellido='"+ap+ "';";
+							break;
+						}
+						break;
+					default:
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre='"+nom+"' AND apellido='"+ap+ "';";
+							break;
+						default:
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre='"+nom+"' AND apellido='"+ap+ "';";
+							break;
+						}
+						break;
+					}
+				}
+				break;
+			}
+			break;
+		default:
+			switch(ap) {
+			case "":
+				switch(nom) {
+				case "":
+					switch(tipoDoc) {
+					case "":
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE numCliente='"+nroC+"';";
+							break;
+						}
+						break;
+					default:
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND numCliente='"+nroC+"';";
+							break;
+						default:
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND numCliente='"+nroC+"';";
+							break;
+						}
+						break;
+					}
+					break;
+				default:
+					switch(tipoDoc) {
+					case "":
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE nombre='"+nom+"' AND numCliente='"+nroC+"';";
+							break;
+						}
+						break;
+					default:
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre='"+nom+"' AND numCliente='"+nroC+"';";
+							break;
+						default:
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre='"+nom+"' AND numCliente='"+nroC+"';";
+							break;
+						}
+						break;
+					}
+				}
+				break;
+			default:
+				switch(nom) {
+				case "":
+					switch(tipoDoc) {
+					case "":
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							break;
+						}
+						break;
+					default:
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							break;
+						default:
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							break;
+						}
+						break;
+					}
+					break;
+				default:
+					switch(tipoDoc) {
+					case "":
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE nombre='"+nom+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							break;
+						}
+						break;
+					default:
+						switch(nroDoc) {
+						case "":
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre='"+nom+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							break;
+						default:
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre='"+nom+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							break;
+						}
+						break;
+					}
+				}
+				break;
+			}
+			break;
+		}
+		
+//		System.out.println(consulta);
+		
 		try {
 			stm= connection.createStatement();
-			rs=stm.executeQuery("SELECT * FROM cliente WHERE numCliente='"+nroC+ "' AND nombre='"+nom+"' AND apellido='"+ap+ "' AND tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"';");
-			// AND nombre="+nom+" AND apellido="+ap+" AND nroDni="+nroDoc+" AND tipo="+tipoDoc+
+//			rs=stm.executeQuery("SELECT * FROM cliente WHERE numCliente='"+nroC+ "' AND nombre='"+nom+"' AND apellido='"+ap+ "' AND tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"';");
+			rs=stm.executeQuery(consulta);
 			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
 				Cliente aux = new Cliente(); 
 				numero = rs.getString(1);//traigo el valor de col 1 
-				 nombre = rs.getString(2);
-				 apellido = rs.getString(3);
-				 documento = rs.getString(4);
-				 tipoDocumento = rs.getString(5);
+				nombre = rs.getString(2);
+				apellido = rs.getString(3);
+				documento = rs.getString(4);
+				tipoDocumento = rs.getString(5);
 				 
-				 aux.setId(numero);
-				 aux.setNombre(nombre);
-				 aux.setApellido(apellido);
-				 aux.setDni(documento);
-				 aux.setTipoDni(tipoDocumento);
-				 aux.setDomicilio(this.recuperarDomicilioCliente(rs.getInt(10)));
+				aux.setId(numero);
+				aux.setNombre(nombre);
+				aux.setApellido(apellido);
+				aux.setDni(documento);
+				aux.setTipoDni(tipoDocumento);
+				aux.setDomicilio(this.recuperarDomicilioCliente(rs.getInt(10)));
 				 
-				 clientes.add(aux);
-				 }
+				clientes.add(aux);
+				}
 				  
 		} catch (Exception e) {
 			System.out.println("no se pudo ingresar al cliente");
