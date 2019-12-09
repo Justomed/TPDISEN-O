@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,6 +15,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import entidades.Cliente;
+import entidades.Hijo;
+import entidades.Localidad;
+import entidades.Marca;
+import entidades.Modelo;
+import entidades.Provincia;
+import gestores.GestorPoliza;
 
 public class CalcularPremio extends JFrame {
 	
@@ -33,12 +42,36 @@ public class CalcularPremio extends JFrame {
 	private JPanel panelPago;
 	private JPanel panelAjustePago;
 	private JPanel panelBoton;
+	private float premio = 0;
+	private float descuento = 0;
+	private float sumaAsegurada = 0;
+	private int cantidadSeguridad = 0;
+	private int cantidadSiniestros = 0;
+	private int cantidadHijos = 0;
+	private int cantidadUnidades = 0;
 	
 	
-public CalcularPremio() {
+public CalcularPremio(Cliente cliente,
+					  ArrayList<Hijo> listaHijos,
+					  Marca marcaPoliza,
+					  Modelo modeloPoliza,
+					  String anioPoliza,
+					  String motorPoliza,
+					  String chasisPoliza,
+					  String patentePoliza,
+					  String fechaInicio,
+					  String cobertura,
+					  String formaPago,
+					  String sumaAseguradaPoliza,
+					  String kmAnio,
+					  String siniestros,
+					  Provincia provincia,
+					  Localidad localidad,
+					  ArrayList seguridad,
+					  String tipoPago) {
 	
 	this.setTitle("Calcular premio - descuentos");
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	this.setVisible(true);
 	this.setSize(450,550);
 	this.setResizable(false);
@@ -51,13 +84,13 @@ public CalcularPremio() {
 	
 	JTextArea tituloPremio = new JTextArea("Premio y derecho de emisión");
 	JTextArea prima = new JTextArea("Prima por cobertura:                                         ");
-	JTextArea ajusteDomicilio = new JTextArea("Ajuste por domicilio:                                         ");
-	JTextArea ajusteEstadistica = new JTextArea("Ajuste por estadistica de robo del vehiculo:");
+	JTextArea ajusteDomicilio = new JTextArea("Ajuste por domicilio:                                          ");
+	JTextArea ajusteEstadistica = new JTextArea("Ajuste por estadistica de robo del vehiculo:     ");
 	JTextArea ajusteKm = new JTextArea("Ajuste por km/año:                                            ");
-	JTextArea ajusteMedidas = new JTextArea("Ajuste por medidas de seguridad:                ");
-	JTextArea ajusteSiniestros = new JTextArea("Ajuste por siniestros:                                       ");
-	JTextArea ajusteHijos = new JTextArea("Ajuste por cantidad de hijos:                          ");
-	JTextArea derecho = new JTextArea("Derecho de emisión:                                       ");
+	JTextArea ajusteMedidas = new JTextArea("Ajuste por medidas de seguridad:                    ");
+	JTextArea ajusteSiniestros = new JTextArea("Ajuste por siniestros:                                         ");
+	JTextArea ajusteHijos = new JTextArea("Ajuste por cantidad de hijos:                             ");
+	JTextArea derecho = new JTextArea("Derecho de emisión:                                         ");
 	JTextArea tituloPoliza = new JTextArea("Descuentos a la póliza");
 	JTextArea unidades = new JTextArea("Unidades aseguradas:                                   ");
 	JTextArea ajusteUnidad = new JTextArea("Ajuste por mas de una unidad:                      ");
@@ -105,7 +138,9 @@ public CalcularPremio() {
 	ajusteHijosTxt.setEnabled(false);
 	ajustePagoTxt.setEnabled(false);
 	derechoTxt.setEnabled(false);
-	
+	unidadesTxt.setEnabled(false);
+	ajusteUnidadTxt.setEnabled(false);
+	ajustePagoTxt.setEnabled(false);	
 	
 //----------------PANEL PREMIO ----------------------------------
 	panelPremio = new JPanel();
@@ -286,6 +321,171 @@ public CalcularPremio() {
 	constraints.gridy = 1;
 	constraints.gridy = 16;
 	container.add(panelBoton, constraints);
-
-}
+//---------------------FUNCIONAMIENTO PANTALLA-------------------------
+	GestorPoliza gestorPoliza = new GestorPoliza();
+	cantidadUnidades = gestorPoliza.recuperarUnidadesAseguradas(cliente.getId());
+	
+	switch(siniestros) {
+	case "NINGUNO":
+		break;
+	case "UNO":
+		cantidadSiniestros = 2;
+		break;
+	case "DOS":
+		cantidadSiniestros = 4;
+		break;
+	default:
+		cantidadSiniestros = 6;
+		break;
+	}
+	
+	for(int i=0; i<seguridad.size(); i++) {
+		if(seguridad.get(i).equals(1)) {
+			cantidadSeguridad += 2;
+		}
+	}
+	
+	for(Hijo aux : listaHijos) {
+		cantidadHijos += 2;
+	}
+	
+	switch(cobertura) {
+	case "RESPONSABILIDAD CIVIL":
+		sumaAsegurada = (float) (Float.valueOf(sumaAseguradaPoliza.substring(1))*0.01);
+		break;
+	case "RESPONSABILIDAD CIVIL, ROBO, INCENDIO TOTAL":
+		sumaAsegurada = (float) (Float.valueOf(sumaAseguradaPoliza.substring(1))*0.02);
+		break;
+	case "TODO TOTAL":
+		sumaAsegurada = (float) (Float.valueOf(sumaAseguradaPoliza.substring(1))*0.04);
+		break;
+	case "TERCEROS COMPLETOS":
+		sumaAsegurada = (float) (Float.valueOf(sumaAseguradaPoliza.substring(1))*0.03);
+		break;
+	case "TODO RIESGO CON FRANQUICIA":
+		sumaAsegurada = (float) (Float.valueOf(sumaAseguradaPoliza.substring(1))*0.05);
+		break;
+	}
+	
+	primaTxt.setText("$"+sumaAsegurada+"0");
+	ajusteDomicilioTxt.setText("5%");
+	ajusteEstadisticaTxt.setText("5%");
+	ajusteKmTxt.setText("2%");
+	ajusteMedidasTxt.setText(cantidadSeguridad+"%");
+	ajusteSiniestrosTxt.setText(cantidadSiniestros+"%");
+	ajusteHijosTxt.setText(cantidadHijos+"%");
+	derechoTxt.setText("3%");
+	unidadesTxt.setText(String.valueOf(cantidadUnidades));
+	ajusteUnidadTxt.setText(String.valueOf(cantidadUnidades*5)+"%");
+	
+	switch(tipoPago) {
+	case "mensual":
+		ajustePagoTxt.setText("----");
+		break;
+	case "semestral":
+		ajustePagoTxt.setText("20%");
+		break;
+	}
+	
+	calcular.addActionListener(e -> {
+		float cantidadSeguridadPorcentaje = sumaAsegurada * (cantidadSeguridad/100);
+		float cantidadSiniestrosPorcentaje = sumaAsegurada * (cantidadSiniestros/100);
+		float cantidadHijosPorcentaje = sumaAsegurada * (cantidadHijos/100);
+		float domicilioPorcentaje = (float) (sumaAsegurada * 0.05);
+		float estadisticaPorcentaje = (float) (sumaAsegurada *0.05);
+		float kmPorcentaje = (float) (sumaAsegurada * 0.02);
+		float derechoPorcentaje = (float) (sumaAsegurada * 0.03);
+		
+		switch(cantidadSeguridad) {
+		case 0:
+			switch(cantidadSiniestros) {
+			case 0:
+				switch(cantidadHijos) {
+				case 0:
+					premio = sumaAsegurada + domicilioPorcentaje + estadisticaPorcentaje + kmPorcentaje + derechoPorcentaje;
+					break;
+				default:
+					premio = sumaAsegurada + domicilioPorcentaje + estadisticaPorcentaje + kmPorcentaje + derechoPorcentaje + cantidadHijosPorcentaje;
+					break;
+				}
+				break;
+			default:
+				switch(cantidadHijos) {
+				case 0:
+					premio = sumaAsegurada + domicilioPorcentaje + estadisticaPorcentaje + kmPorcentaje + derechoPorcentaje + cantidadSiniestrosPorcentaje;
+					break;
+				default:
+					premio = sumaAsegurada + domicilioPorcentaje + estadisticaPorcentaje + kmPorcentaje + derechoPorcentaje + cantidadHijosPorcentaje + cantidadSiniestrosPorcentaje;
+					break;
+				}
+				break;
+			}
+			break;
+		default:
+			switch(cantidadSiniestros) {
+			case 0:
+				switch(cantidadHijos) {
+				case 0:
+					premio = sumaAsegurada + domicilioPorcentaje + estadisticaPorcentaje + kmPorcentaje + derechoPorcentaje + cantidadSeguridadPorcentaje;
+					break;
+				default:
+					premio = sumaAsegurada + domicilioPorcentaje + estadisticaPorcentaje + kmPorcentaje + derechoPorcentaje + cantidadHijosPorcentaje + cantidadSeguridadPorcentaje;
+					break;
+				}
+				break;
+			default:
+				switch(cantidadHijos) {
+				case 0:
+					premio = sumaAsegurada + domicilioPorcentaje + estadisticaPorcentaje + kmPorcentaje + derechoPorcentaje + cantidadSiniestrosPorcentaje + cantidadSeguridadPorcentaje;
+					break;
+				default:
+					premio = sumaAsegurada + domicilioPorcentaje + estadisticaPorcentaje + kmPorcentaje + derechoPorcentaje + cantidadHijosPorcentaje + cantidadSiniestrosPorcentaje + cantidadSeguridadPorcentaje;
+					break;
+				}
+			break;
+			}
+		}	
+		
+		switch(tipoPago) {
+		case "mensual":
+			if(cantidadUnidades != 0) {
+				descuento = (sumaAsegurada * ((cantidadUnidades*5)/100));
+			}
+			break;
+		case "semestral":
+			if(cantidadUnidades != 0) {
+				descuento = (float) ((sumaAsegurada * ((cantidadUnidades*5)/100)) + (sumaAsegurada * 1.2));
+			} else {
+				descuento = (float) (sumaAsegurada *  1.2);
+			}
+			break;
+		}
+		
+		System.out.println(sumaAsegurada);
+		System.out.println(premio);
+		System.out.println(descuento);
+		
+		new ConfirmarPremio(cliente,
+				 			listaHijos,
+				 			marcaPoliza,
+				 			modeloPoliza,
+				 			anioPoliza,
+				 			motorPoliza,
+				 			chasisPoliza,
+				 			patentePoliza,
+				 			fechaInicio,
+				 			cobertura,
+				 			formaPago,
+				 			sumaAseguradaPoliza,
+				 			kmAnio,
+				 			siniestros,
+				 			provincia,
+				 			localidad,
+				 			seguridad,
+				 			premio,
+				 			descuento,
+				 			tipoPago);
+		this.dispose();
+	});	
+	}
 }

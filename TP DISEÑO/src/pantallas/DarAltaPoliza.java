@@ -1137,7 +1137,7 @@ public class DarAltaPoliza extends JFrame{
 				
 				switch((String) formaPagoPopUpComboBox.getSelectedItem()) {
 				case "MENSUAL":
-					new PolizaGenerar(
+					new CalcularPremio(
 							cliente, 
 							listaHijos, 
 							marcaAux, 
@@ -1154,12 +1154,13 @@ public class DarAltaPoliza extends JFrame{
 							siniestrosComboBox.getSelectedItem().toString(), 
 							provinciaAux, 
 							localidadAux,
-							seguridad
+							seguridad,
+							"mensual"
 							);
 					frame.dispose();
 					break;
 				case "SEMESTRAL":
-					new PolizaGenerarSemestral(
+					new CalcularPremio(
 							cliente, 
 							listaHijos, 
 							marcaAux, 
@@ -1176,7 +1177,8 @@ public class DarAltaPoliza extends JFrame{
 							siniestrosComboBox.getSelectedItem().toString(), 
 							provinciaAux, 
 							localidadAux,
-							seguridad
+							seguridad,
+							"semestral"
 							);
 					frame.dispose();
 				}

@@ -598,4 +598,11 @@ public class GestorPoliza {
 	public static boolean validarNroPoliza(String nro) {
 		return nro.matches("^[0-9]{13}$");
 	}
+	
+	public int recuperarUnidadesAseguradas(String cliente) {
+		GestorBD gestorBD = new GestorBD();
+		int aux = gestorBD.recuperarUnidadesAseguradas(cliente);
+		
+		return aux;
+	}
 }

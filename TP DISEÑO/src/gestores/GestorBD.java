@@ -992,7 +992,6 @@ public class GestorBD {
 		finally {
 			this.cerrarConexion();
 		}
-		System.out.println(suma);
 	return suma;
 	}	
 	
@@ -1367,6 +1366,29 @@ public class GestorBD {
 		
 	}
 	
-	
+	public int recuperarUnidadesAseguradas(String cliente) {
+		int aux = 0;
+		
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT count(*) FROM poliza WHERE numCliente='"+cliente+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux = rs.getInt(1);
+				  
+				  //System.out.println(nombre+"-"+detalle); //HASTA ACA PARA
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a poliza");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		
+		return aux;
+	}
 	
 }

@@ -6,7 +6,9 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -58,6 +60,7 @@ public class PolizaGenerar extends JFrame{
 	private JTable tablaDescuentos;
 	private JTable tablaCuotas;
 	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+	private DecimalFormat formatoDecimal = new DecimalFormat("#.##");
 	
 	public PolizaGenerar(Cliente cliente,
 						 ArrayList<Hijo> listaHijos,
@@ -75,7 +78,9 @@ public class PolizaGenerar extends JFrame{
 						 String siniestros,
 						 Provincia provincia,
 						 Localidad localidad,
-						 ArrayList seguridad) {
+						 ArrayList seguridad,
+						 float premioTotal,
+						 float descuento) {
 		
 		this.setTitle("Poliza a generar");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -132,11 +137,11 @@ public class PolizaGenerar extends JFrame{
 		inicioTxt.setText(fechaInicio);
 		finTxt.setText(formato.format(auxFechaFinVigencia));
 		sumaAseguradaTxt.setText(sumaAseguradaPoliza);
-		premioTxt.setText("$6600.00");
-		importeDescuentoTxt.setText("$600.00");
+		premioTxt.setText("$"+premioTotal+"0");
+		importeDescuentoTxt.setText("$"+descuento+"0");
 		diaPagoTxt.setText(formato.format(ultimoPago));
-		montoTotalTxt.setText("$6000.00");
-		importeCuotaTxt.setText("$6000.00");
+		montoTotalTxt.setText("$"+(premioTotal-descuento)+"0");
+		importeCuotaTxt.setText("$"+(premioTotal-descuento)+"0");
 		
 		apellidoTxt.setEnabled(false);
 		nombreTxt.setEnabled(false);
@@ -386,20 +391,22 @@ public class PolizaGenerar extends JFrame{
         
         
 //----------------PANEL TABLA DESCUENTOS ------------------------------------	        
-	panelTablaDescuento = new JPanel();
+		panelTablaDescuento = new JPanel();
 		panelTablaDescuento.setBackground(Color.lightGray);
 		panelTablaDescuento.setVisible(true);
 		panelTablaDescuento.setLayout(new FlowLayout());
 		DefaultTableModel model = new DefaultTableModel();
 
+		formatoDecimal.setRoundingMode(RoundingMode.CEILING);	
+		
 		model.addColumn("N° cuota");
 		model.addColumn("Monto descuento");
-		Object rowData[][] = {{"1", "$100.00"},
-							{"2", "$100.00"},
-							{"3", "$100.00"},
-							{"4", "$100.00"},
-							{"5", "$100.00"},
-							{"6", "$100.00"}
+		Object rowData[][] = {{"1", "$"+formatoDecimal.format(descuento/6)},
+							{"2", "$"+formatoDecimal.format(descuento/6)},
+							{"3", "$"+formatoDecimal.format(descuento/6)},
+							{"4", "$"+formatoDecimal.format(descuento/6)},
+							{"5", "$"+formatoDecimal.format(descuento/6)},
+							{"6", "$"+formatoDecimal.format(descuento/6)}
 		};
 		
 		model.addRow(rowData[0]);
@@ -431,12 +438,12 @@ public class PolizaGenerar extends JFrame{
 		panelTablaCuotas.setSize(1, 2);
 		model1.addColumn("N° cuota");
 		model1.addColumn("Monto cuota");
-		Object rowData1[][] = {{"1", "$1000.00"},
-				{"2", "$1000.00"},
-				{"3", "$1000.00"},
-				{"4", "$1000.00"},
-				{"5", "$1000.00"},
-				{"6", "$1000.00"}
+		Object rowData1[][] = {{"1", "$"+formatoDecimal.format((premioTotal-descuento)/6)},
+				{"2", "$"+formatoDecimal.format((premioTotal-descuento)/6)},
+				{"3", "$"+formatoDecimal.format((premioTotal-descuento)/6)},
+				{"4", "$"+formatoDecimal.format((premioTotal-descuento)/6)},
+				{"5", "$"+formatoDecimal.format((premioTotal-descuento)/6)},
+				{"6", "$"+formatoDecimal.format((premioTotal-descuento)/6)}
 		};
 		model1.addRow(rowData1[0]);
 		model1.addRow(rowData1[1]);

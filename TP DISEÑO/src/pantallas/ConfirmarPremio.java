@@ -5,12 +5,21 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
+
 //
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import entidades.Cliente;
+import entidades.Hijo;
+import entidades.Localidad;
+import entidades.Marca;
+import entidades.Modelo;
+import entidades.Provincia;
 
 public class ConfirmarPremio extends JFrame{
 	
@@ -20,7 +29,26 @@ public class ConfirmarPremio extends JFrame{
 	private JPanel panelBlanco;
 	private JPanel panelBlanco1;
 	
-	public ConfirmarPremio() {
+	public ConfirmarPremio(Cliente cliente,
+ 						   ArrayList<Hijo> listaHijos,
+ 						   Marca marcaPoliza,
+ 						   Modelo modeloPoliza,
+ 						   String anioPoliza,
+ 						   String motorPoliza,
+ 						   String chasisPoliza,
+ 						   String patentePoliza,
+ 						   String fechaInicio,
+ 						   String cobertura,
+ 						   String formaPago,
+ 						   String sumaAseguradaPoliza,
+ 						   String kmAnio,
+ 						   String siniestros,
+ 						   Provincia provincia,
+ 						   Localidad localidad,
+ 						   ArrayList seguridad,
+ 						   float premioTotal,
+ 						   float descuento,
+ 						   String tipoPago) {
 		
 		this.setTitle("Confirmar premio - descuentos");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,6 +129,55 @@ public class ConfirmarPremio extends JFrame{
 		constraints.gridy = 1;
 		constraints.gridy = 6;
 		container.add(panelBotones, constraints);
+//------------------FUNCIONAMIENTO PANTALLA-----------------
+		premioTxt.setText("$"+premioTotal+"0");
+		descuentoTotalTxt.setText("$"+descuento+"0");
+		
+		switch(tipoPago) {
+		case "mensual":
+			new PolizaGenerar (cliente,
+					   		   listaHijos,
+					   		   marcaPoliza,
+					   		   modeloPoliza,
+					   		   anioPoliza,
+					   		   motorPoliza,
+					   		   chasisPoliza,
+					   		   patentePoliza,
+					   		   fechaInicio,
+					   		   cobertura,
+					   		   formaPago,
+					   		   sumaAseguradaPoliza,
+					   		   kmAnio,
+					   		   siniestros,
+					   		   provincia,
+					   		   localidad,
+					   		   seguridad,
+					   		   premioTotal,
+					   		   descuento);
+			this.dispose();
+			break;
+		case "semestral":
+			new PolizaGenerarSemestral (cliente,
+										listaHijos,
+										marcaPoliza,
+										modeloPoliza,
+										anioPoliza,
+										motorPoliza,
+										chasisPoliza,
+										patentePoliza,
+										fechaInicio,
+										cobertura,
+										formaPago,
+										sumaAseguradaPoliza,
+										kmAnio,
+										siniestros,
+										provincia,
+										localidad,
+										seguridad,
+										premioTotal,
+										descuento);
+			break;
+		}
 	}
 
 }

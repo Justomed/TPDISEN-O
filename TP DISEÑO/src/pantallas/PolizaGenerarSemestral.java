@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -58,6 +59,7 @@ public class PolizaGenerarSemestral extends JFrame{
 	private JTable tablaDescuentos;
 	private JTable tablaCuotas;
 	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+	private DecimalFormat formatoDecimal = new DecimalFormat("#.##");
 	
 	public PolizaGenerarSemestral(Cliente cliente,
 						 ArrayList<Hijo> listaHijos,
@@ -75,7 +77,9 @@ public class PolizaGenerarSemestral extends JFrame{
 						 String siniestros,
 						 Provincia provincia,
 						 Localidad localidad,
-						 ArrayList seguridad) {
+						 ArrayList seguridad,
+						 float premioTotal,
+						 float descuento) {
 		
 		this.setTitle("Poliza a generar");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -131,10 +135,10 @@ public class PolizaGenerarSemestral extends JFrame{
 		inicioTxt.setText(fechaInicio);
 		finTxt.setText(formato.format(auxFechaFinVigencia));
 		sumaAseguradaTxt.setText(sumaAseguradaPoliza);
-		premioTxt.setText("$6600.00");
-		importeDescuentoTxt.setText("$600.00");
+		premioTxt.setText("$"+premioTotal+"0");
+		importeDescuentoTxt.setText("$"+descuento+"0");
 		diaPagoTxt.setText(formato.format(ultimoPago));
-		montoTotalTxt.setText("$6000.00");
+		montoTotalTxt.setText("$"+(premioTotal-descuento)+"0");
 		
 		apellidoTxt.setEnabled(false);
 		nombreTxt.setEnabled(false);
@@ -371,7 +375,7 @@ public class PolizaGenerarSemestral extends JFrame{
 
 		model.addColumn("N° cuota");
 		model.addColumn("Monto descuento");
-		Object rowData[] = {"1", "$600.00"};
+		Object rowData[] = {"1", "$"+descuento+"0"};
 		
 		model.addRow(rowData);
 		tablaDescuentos = new JTable(2,1);
