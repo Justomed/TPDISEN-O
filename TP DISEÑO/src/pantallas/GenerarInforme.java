@@ -1,6 +1,7 @@
 package pantallas;
 //
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -11,6 +12,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,6 +24,7 @@ import javax.swing.JTextField;
 
 import gestores.GestorBD;
 import gestores.GestorPoliza;
+import utility.MyOwnFocusTraversalPolicy;
 
 public class GenerarInforme extends JFrame {
 
@@ -92,6 +95,17 @@ public class GenerarInforme extends JFrame {
 		montoAtrasadasTxt.setEnabled(false);
 		montoAdelantadasTxt.setEnabled(false);
 		montoDiaTxt.setEnabled(false);
+		
+		Vector<Component> orden = new Vector<Component>();
+		
+		orden.add(mesComboBox);
+		orden.add(anioComboBox);
+		orden.add(confirmar);
+		orden.add(aceptar);
+		orden.add(cancelar);
+		
+		MyOwnFocusTraversalPolicy newPolicy = new MyOwnFocusTraversalPolicy(orden);
+		this.setFocusTraversalPolicy(newPolicy);
 //---------------- PANEL TITULO ---------------------
 		panelTitulo = new JPanel();
 		panelTitulo.setBackground(Color.lightGray);

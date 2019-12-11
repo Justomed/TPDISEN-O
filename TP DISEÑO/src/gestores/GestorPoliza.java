@@ -92,6 +92,7 @@ public class GestorPoliza {
 		Seguridad seguridadPoliza = gestorBD.recuperarSeguridad(seguridad);
 		poliza.setSeguridad(seguridadPoliza); //seguridad seteada
 		
+		//CUOTAS
 		for(int i=0; i>6; i++) {
 			Cuota aux = new Cuota();
 			aux.setValor("$1000.00");
@@ -234,23 +235,25 @@ public class GestorPoliza {
 		case "2020":
 			switch(mes) {
 			case "ENERO":
-				clientesEnMora++;
-				montoTotalMora = "$2400,00";
+				clientesAlDia++;
+				montoTotalMora = "$0";
 				montoCuotasAtrasadas = "$0";
-				montoCuotasAlDia = "$7000,00";
+				montoCuotasAlDia = "$2468.75";
 				montoCuotasAdelantadas = "$0";
 				break;
 			case "FEBRERO":
+				clientesAlDia++;
 				montoTotalMora = "$0";
 				montoCuotasAtrasadas = "$0";
 				montoCuotasAlDia = "0";
-				montoCuotasAdelantadas = "$0";
+				montoCuotasAdelantadas = "$977.5";
 				break;
 			case "MARZO":
+				clientesAlDia++;
 				montoTotalMora = "$0";
 				montoCuotasAtrasadas = "$0";
 				montoCuotasAlDia = "0";
-				montoCuotasAdelantadas = "$0";
+				montoCuotasAdelantadas = "$977.5";
 				break;
 			case "ABRIL":
 				montoTotalMora = "$0";
