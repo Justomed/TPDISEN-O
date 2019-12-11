@@ -99,6 +99,7 @@ public class GestorPoliza {
 		}
 		
 		poliza.setCuotas(cuotas);
+		
 		poliza.setCliente(cliente);
 		
 		gestorBD.guardarPoliza(poliza);
