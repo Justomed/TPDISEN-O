@@ -446,24 +446,21 @@ public CalcularPremio(Cliente cliente,
 			}
 		}	
 		
+		
 		switch(tipoPago) {
 		case "mensual":
-			if(cantidadUnidades != 0) {
-				descuento = (sumaAsegurada * ((cantidadUnidades*5)/100));
+			if(cantidadUnidades > 0) {
+				descuento = (float) (sumaAsegurada * (cantidadUnidades*0.05));
 			}
 			break;
 		case "semestral":
-			if(cantidadUnidades != 0) {
-				descuento = (float) ((sumaAsegurada * ((cantidadUnidades*5)/100)) + (sumaAsegurada * 1.2));
+			if(cantidadUnidades > 0) {
+				descuento = (float) ((sumaAsegurada * (cantidadUnidades*0.05)) + (sumaAsegurada * 0.2));
 			} else {
-				descuento = (float) (sumaAsegurada *  1.2);
+				descuento = (float) (sumaAsegurada *  0.2);
 			}
 			break;
 		}
-		
-		System.out.println(sumaAsegurada);
-		System.out.println(premio);
-		System.out.println(descuento);
 		
 		new ConfirmarPremio(cliente,
 				 			listaHijos,

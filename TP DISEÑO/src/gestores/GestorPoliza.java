@@ -61,6 +61,11 @@ public class GestorPoliza {
 		
 		poliza.setNroPoliza(nroPoliza);
 		
+		//USUARIO
+		GestorUsuario gestorUsuario = new GestorUsuario();
+		Usuario usuario = gestorUsuario.recuperarUsuario("cristianherr");
+		poliza.setUsuario(usuario);
+		
 		//PARAMETROS(TASAS)
 		GestorParametro gestorParametro = new GestorParametro();
 		Parametro parametro = gestorParametro.obtenerParametros();

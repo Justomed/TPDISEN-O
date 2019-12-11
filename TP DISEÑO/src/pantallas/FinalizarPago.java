@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -29,6 +30,7 @@ public class FinalizarPago extends JFrame{
 	private JPanel panelBotones;
 	private JPanel panelBlanco;
 	private JPanel panelBlanco1;
+	private DecimalFormat formatoDecimal = new DecimalFormat("#.##");
 	
 	public FinalizarPago(ArrayList<Cuota> cuotasAbonadas, float montoTotal) {
 		
@@ -144,13 +146,13 @@ public class FinalizarPago extends JFrame{
 		container.add(panelBotones, constraints);	
 //------------------FUNCIONAMIENTO PANTALLA--------------------------
 		
-		importeTxt.setText("$"+montoTotal+"0");
+		importeTxt.setText("$"+formatoDecimal.format(montoTotal));
 		
 		emitir.addActionListener(e -> {
 			GestorPago gestorPago = new GestorPago();
 			gestorPago.guardarPago(cuotasAbonadas, montoTotal);
 			
-			vueltoTxt.setText("$"+(Float.valueOf(montoTxt.getText()) - montoTotal)+"0");
+			vueltoTxt.setText("$"+formatoDecimal.format((Float.valueOf(montoTxt.getText()) - montoTotal)));
 			JOptionPane.showMessageDialog(this, panelVuelto, "Pago emitido", JOptionPane.PLAIN_MESSAGE);
 			
 			new Menu();

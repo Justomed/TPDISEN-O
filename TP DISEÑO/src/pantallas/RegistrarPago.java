@@ -7,7 +7,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,6 +49,7 @@ public class RegistrarPago extends JFrame{
 	private JTable tablaCuotasPendientes;
 	private JTable tablaCuotasFuturas;
 	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+	private DecimalFormat formatoDecimal = new DecimalFormat("#.##");
 	private ArrayList<Cuota> cuotasPendientes = new ArrayList<Cuota>();
 	private ArrayList<Cuota> cuotasFuturas = new ArrayList<Cuota>();
 	private ArrayList<Cuota> cuotasAbonadas = new ArrayList<Cuota>();
@@ -327,14 +330,15 @@ public class RegistrarPago extends JFrame{
 			hastaTxt.setText(formato.format(poliza.getFechaFinVigencia()));		
 			
 			Date fechaHoy = new Date();
+			formatoDecimal.setRoundingMode(RoundingMode.CEILING);
 			
 			for(Cuota auxCuota : poliza.getCuotas()) {
 				if(fechaHoy.after(auxCuota.getFechaVencimiento())) {
 					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
 						System.out.println(auxCuota.getMontoFinal());
 						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
-						String montoFinal = String.valueOf(montoAux*1.2);
-						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal+"0"};
+						String montoFinal = formatoDecimal.format(montoAux*1.2);
+						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
 						modeloTablaPendientes.addRow(fila);
 						auxCuota.setMontoFinal("$"+montoFinal+"0");
 						cuotasPendientes.add(auxCuota);
@@ -342,8 +346,8 @@ public class RegistrarPago extends JFrame{
 				} else {
 					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
 						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
-						String montoFinal = String.valueOf(montoAux*0.9);
-						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal+"0"};
+						String montoFinal = formatoDecimal.format(montoAux*0.9);
+						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
 						modeloTablaFuturas.addRow(fila);
 						auxCuota.setMontoFinal("$"+montoFinal+"0");
 						cuotasFuturas.add(auxCuota);

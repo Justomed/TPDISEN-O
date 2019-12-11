@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -32,6 +33,7 @@ public class ConfirmarPago extends JFrame{
 	private JPanel panelBlanco;
 	private JPanel panelBlanco1;
 	private DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+	private DecimalFormat formatoDecimal = new DecimalFormat("#.##");
 	private float montoTotal = 0;
 	
 	public ConfirmarPago(ArrayList<Cuota> cuotasAbonadas) {
@@ -139,7 +141,7 @@ public class ConfirmarPago extends JFrame{
 			montoTotal = montoTotal + Float.valueOf(cuotaAux.getMontoFinal().substring(1));
 		}
 		
-		importeTxt.setText("$"+montoTotal+"0");
+		importeTxt.setText("$"+formatoDecimal.format(montoTotal));
 		
 		continuar.addActionListener(e -> {
 			new FinalizarPago(cuotasAbonadas, montoTotal);

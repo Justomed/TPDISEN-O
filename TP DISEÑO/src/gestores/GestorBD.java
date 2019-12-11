@@ -25,6 +25,7 @@ import entidades.Poliza;
 import entidades.Provincia;
 import entidades.Seguridad;
 import entidades.TipoCobertura;
+import entidades.Usuario;
 import entidades.Vehiculo;
 
 import java.sql.ResultSet;
@@ -70,6 +71,27 @@ public class GestorBD {
 		}
 	}
 	
+	public Usuario recuperarUsuario(String usuario) {
+		Usuario aux = new Usuario();
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT * FROM usuario WHERE nombreUsuario='"+usuario+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				aux.setUsuario(rs.getString(1));				
+				  
+				 }
+		} catch (Exception e) {
+			System.out.println("no se pudo ingresar a pago");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		return aux;
+	}
 	
 	public void guardarPoliza(Poliza p) {
 		connection=this.connectDatabase();
@@ -78,6 +100,7 @@ public class GestorBD {
 		String nroP=p.getNroPoliza();
 		String nroCliente=p.getCliente().getId();
 		String patente=p.getPatente();
+		String usuario=p.getUsuario().getUsuario();
 		int idParametros=p.getParametro().getId();
 		int idDomicilioRiesgo=p.getDomicilioDeRiesgo().getId();
 		int idSeguridad=p.getSeguridad().getId();
@@ -96,7 +119,7 @@ public class GestorBD {
 		try {
 
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`,`numCliente`,`idDomicilioRiesgo`,`idTasa`,`idSeguridad`,`idTipoCobertura`,`patente`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"','"+nroCliente+"','"+idDomicilioRiesgo+"','"+idParametros+"','"+idSeguridad+"','"+idCobertura+"','"+patente+"');");
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`,`numCliente`,`idDomicilioRiesgo`,`idTasa`,`idSeguridad`,`nombreUsuario`,`idTipoCobertura`,`patente`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"','"+nroCliente+"','"+idDomicilioRiesgo+"','"+idParametros+"','"+idSeguridad+"','"+usuario+"','"+idCobertura+"','"+patente+"');");
 			int res = insercion.executeUpdate(); //para ver si se ejecuta bien
 			
 			if(res>0) {

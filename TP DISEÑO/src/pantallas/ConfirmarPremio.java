@@ -176,6 +176,7 @@ public class ConfirmarPremio extends JFrame{
 										seguridad,
 										premioTotal,
 										descuento);
+			this.dispose();
 			break;
 		}
 	}
