@@ -67,13 +67,13 @@ public class GestorCliente {
 		return dni.matches("^[0-9]{7,8}$");
 	}
 	public static boolean validarNombre(String nombre) {
-		return nombre.matches("^[A-Z]{1}[a-z]{1,39}$");
+		return nombre.matches("^[A-Za-z ]*$");
 	}
 	public static boolean validarApellido(String apellido) {
-		return apellido.matches("^[A-Z]{1}[a-z]{1,39}$");
+		return apellido.matches("^[A-Za-z ]*$");
 	}
 	public static boolean validarLE(String le) {
-		return le.matches("^[M,F][0-9]{7}$");
+		return le.matches("^[M,F][0-9]{7}|[m,f][0-9]{7}$");
 	}
 	public static boolean validarLC(String lc) {
 		return lc.matches("^[0-9]{7}$");

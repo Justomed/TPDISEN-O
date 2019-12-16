@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -241,8 +242,15 @@ public class BuscarPoliza extends JFrame {
 		container.add(panelBoton, constraints);
 //------------------FUNCIONAMIENTO PANTALLA-------------------------
 		buscar.addActionListener(e -> {
+			if(nroPolizaTxt.getText().length() != 13) {
+				JOptionPane.showMessageDialog(this, "NUMERO DE POLIZA INVALIDO");
+			} else {
+				
 			poliza = gestorPoliza.recuperarPoliza(nroPolizaTxt.getText());
-			
+			if(poliza.getNroPoliza() == null) {
+				JOptionPane.showMessageDialog(this, "NO SE ENCONTRO NINGUNA POLIZA");
+			} else {
+				
 			nroClienteTxt.setText(poliza.getCliente().getId());
 			nroPolizaaTxt.setText(poliza.getNroPoliza());
 			apellidoTxt.setText(poliza.getCliente().getApellido());
@@ -273,6 +281,8 @@ public class BuscarPoliza extends JFrame {
 				fechaTxt.setText("NO REGISTRADO");
 				montoTxt.setText("NO REGISTRADO");
 				break;
+			}
+			}
 			}
 		});
 		

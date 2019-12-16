@@ -340,7 +340,7 @@ public class RegistrarPago extends JFrame{
 						String montoFinal = formatoDecimal.format(montoAux*1.2);
 						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
 						modeloTablaPendientes.addRow(fila);
-						auxCuota.setMontoFinal("$"+montoFinal+"0");
+						auxCuota.setMontoFinal("$"+montoFinal);
 						cuotasPendientes.add(auxCuota);
 					}
 				} else {
@@ -349,7 +349,7 @@ public class RegistrarPago extends JFrame{
 						String montoFinal = formatoDecimal.format(montoAux*0.9);
 						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
 						modeloTablaFuturas.addRow(fila);
-						auxCuota.setMontoFinal("$"+montoFinal+"0");
+						auxCuota.setMontoFinal("$"+montoFinal);
 						cuotasFuturas.add(auxCuota);
 					}
 				}

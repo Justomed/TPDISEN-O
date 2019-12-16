@@ -14,7 +14,7 @@ public class GestorPago {
 
 	public void guardarPago(ArrayList<Cuota> cuotas, float montoTotal) {
 		Pago pago = new Pago();
-		pago.setMonto("$"+montoTotal+"0");
+		pago.setMonto("$"+montoTotal);
 		pago.setFecha(new Date());
 		
 		GestorBD gestorBD = new GestorBD();

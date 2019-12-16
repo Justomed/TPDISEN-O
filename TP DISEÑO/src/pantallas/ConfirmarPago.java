@@ -152,7 +152,7 @@ public class ConfirmarPago extends JFrame{
 			cuotasAbonadas.remove(tablaCuotas.getSelectedRow());
 			modeloTablaCuotas.removeRow(tablaCuotas.getSelectedRow());
 			this.calcularMontoTotal(cuotasAbonadas);
-			importeTxt.setText("$"+montoTotal+"0");
+			importeTxt.setText("$"+formatoDecimal.format(montoTotal));
 		});
 		
 		cancelar.addActionListener(e -> {

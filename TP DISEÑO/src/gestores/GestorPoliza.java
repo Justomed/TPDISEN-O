@@ -11,6 +11,8 @@ import jdk.nashorn.api.tree.ForInLoopTree;
 
 public class GestorPoliza {
 	
+	private GestorBD gestorBD = new GestorBD();
+	
 	public GestorPoliza() {}
 
 	public void darAltaPoliza(ArrayList<Hijo> listaHijos, 
@@ -47,20 +49,6 @@ public class GestorPoliza {
 		poliza.setNroSiniestros(siniestros);
 		poliza.setPatente(patentePoliza);
 		
-		String sucursal = "0001";
-		String nroClienteAux = cliente.getId().substring(4);
-		Random r = new Random();
-		int random = r.nextInt(100);
-		
-		String nroPoliza;
-		if(random < 10) {
-			nroPoliza = sucursal + nroClienteAux + '0' + random;
-		} else {
-			nroPoliza = sucursal + nroClienteAux + random;
-		}
-		
-		poliza.setNroPoliza(nroPoliza);
-		
 		//USUARIO
 		GestorUsuario gestorUsuario = new GestorUsuario();
 		Usuario usuario = gestorUsuario.recuperarUsuario("cristianherr");
@@ -87,6 +75,13 @@ public class GestorPoliza {
 		Vehiculo vehiculo = new Vehiculo(marcaPoliza, modeloPoliza, anio); //vehiculo creado
 		poliza.setVehiculo(vehiculo); //vehiculo seteado
 		
+		//NUMERO POLIZA
+		String sucursal = "0001";
+		String nroClienteAux = String.valueOf(vehiculo.getMarca().getId()) + String.valueOf(vehiculo.getModelo().getId()) + cliente.getId().substring(6);
+		String numeroPoliza = "01";	
+		String nroPoliza = sucursal + nroClienteAux + numeroPoliza;
+		poliza.setNroPoliza(nroPoliza);
+		
 		//SEGURIDAD
 		GestorBD gestorBD = new GestorBD();
 		Seguridad seguridadPoliza = gestorBD.recuperarSeguridad(seguridad);
@@ -100,7 +95,6 @@ public class GestorPoliza {
 		}
 		
 		poliza.setCuotas(cuotas);
-		
 		poliza.setCliente(cliente);
 		
 		gestorBD.guardarPoliza(poliza);
@@ -110,43 +104,34 @@ public class GestorPoliza {
 
 	}
 	
-	public String validarDatos(String patente, String motor, String chasis, ArrayList<Hijo> listaHijos) {
+	public String validarDatos(String patente, String motor, String chasis) {
+		
+		
+		
+		if(this.validarMotor(motor) == false) {
+			return "motor";
+		}
+		
+		if(gestorBD.validarMotor(motor)) {
+			return "existe motor";
+		}
+		
+		if(this.validarChasis(chasis) == false) {
+			return "chasis";
+		}
+		
+		if(gestorBD.validarChasis(chasis)) {
+			return "existe chasis";
+		}
 		
 		if(this.validarPatente(patente) == false) {
 			return "patente";
 		}
-		if(this.validarMotor(motor) == false) {
-			return "motor";
+		
+		if(gestorBD.validarPatente(patente)) {
+			return "existe patente";
 		}
-		if(this.validarChasis(chasis) == false) {
-			return "chasis";
-		}
-
-		for(Hijo aux : listaHijos) {
-			
-			Date hoy = new Date();
-			
-			switch(aux.getFechaNacimiento().compareTo(hoy)) {
-			case 0:
-				return "hijos";
-			case 1:
-				return "hijos";
-			case -1:
-				Calendar auxHijo = Calendar.getInstance();
-				Calendar auxHoy = Calendar.getInstance();
-				
-				auxHijo.setTime(aux.getFechaNacimiento());
-				auxHoy.setTime(hoy);
-				
-				if(auxHoy.get(Calendar.YEAR) - auxHijo.get(Calendar.YEAR) < 18) {
-					return "hijos";
-				}
-				
-				if(auxHoy.get(Calendar.YEAR) - auxHijo.get(Calendar.YEAR) > 30) {
-					return "hijos";
-				}
-			}
-		}
+		
 		return "";
 	}
 
@@ -172,13 +157,13 @@ public class GestorPoliza {
 	}
 	
 	public static boolean validarMotor(String motor) {
-		return motor.matches("^[A-Z]{10}[0-9]{7}$");
+		return motor.matches("^[A-Za-z]{10}[0-9]{7}$");
 	}
 	public static boolean validarPatente(String patente) {
-		return patente.matches("^[A-Z]{3}[0-9]{3}|[A-Z]{2}[0-9]{3}[A-Z]{2}$");
+		return patente.matches("^[A-Za-z]{3}[0-9]{3}|[A-Za-z]{2}[0-9]{3}[A-Za-z]{2}$");
 	}
 	public static boolean validarChasis(String chasis) {
-		return chasis.matches("^[A-Z]{1}[0-9]{7}$");
+		return chasis.matches("^[A-Za-z]{1}[0-9]{7}$");
 	}
 	
 	public Poliza recuperarPoliza(String poliza) {
@@ -192,11 +177,13 @@ public class GestorPoliza {
 	}
 	
 	public void actualizarEstadoCuotas(ArrayList<Cuota> cuotas) {
-		for(Cuota aux : cuotas) {
-			if(aux.getPago().getMonto() != null) {
-				aux.setEstado(EstadoCuota.PAGA);
-			} else {
-				aux.setEstado(EstadoCuota.IMPAGA);
+		if(!(cuotas == null)) {
+			for(Cuota aux : cuotas) {
+				if(aux.getPago().getMonto() != null) {
+					aux.setEstado(EstadoCuota.PAGA);
+				} else {
+					aux.setEstado(EstadoCuota.IMPAGA);
+				}
 			}
 		}
 	}
@@ -204,6 +191,50 @@ public class GestorPoliza {
 	public void pagarCuotas(ArrayList<Cuota> cuotas, int idPago) {
 		GestorBD gestorBD = new GestorBD();
 		gestorBD.actualizarCuotasPagas(cuotas, idPago);
+	}
+	
+	public boolean validarFechaNacimiento(Date fechaNacimiento) {
+		Calendar fechaAux = Calendar.getInstance();
+		Calendar fechaAValidar = Calendar.getInstance();
+		
+		fechaAValidar.setTime(fechaNacimiento);
+		
+		if(fechaAux.get(Calendar.YEAR) - fechaAValidar.get(Calendar.YEAR) >= 18 && fechaAux.get(Calendar.YEAR) - fechaAValidar.get(Calendar.YEAR) <= 31) {
+			switch(fechaAux.get(Calendar.YEAR) - fechaAValidar.get(Calendar.YEAR)) {
+			case 18:
+				if(fechaAux.get(Calendar.MONTH) - fechaAValidar.get(Calendar.MONTH) > 0) {
+					return true;
+				} else {
+					if(fechaAux.get(Calendar.MONTH) - fechaAValidar.get(Calendar.MONTH) < 0) {
+						return false;
+					} else {
+						if(fechaAux.get(Calendar.DAY_OF_MONTH) - fechaAValidar.get(Calendar.DAY_OF_MONTH) >= 0) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+				}
+			case 31:
+				if(fechaAux.get(Calendar.MONTH) - fechaAValidar.get(Calendar.MONTH) < 0) {
+					return true;
+				} else {
+					if(fechaAux.get(Calendar.MONTH) - fechaAValidar.get(Calendar.MONTH) > 0) {
+						return false;
+					} else {
+						if(fechaAux.get(Calendar.DAY_OF_MONTH) - fechaAValidar.get(Calendar.DAY_OF_MONTH) < 0) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+				}
+			default:
+				return true;
+			}
+		} else {
+			return false;
+		}
 	}
 	
 	public ArrayList<String> generarInformeMensual(String mes, String anio) {

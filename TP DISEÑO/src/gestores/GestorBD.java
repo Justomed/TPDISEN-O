@@ -93,6 +93,87 @@ public class GestorBD {
 		return aux;
 	}
 	
+	public boolean validarMotor(String motor) {
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;	
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT count(*) FROM poliza WHERE motor='"+motor+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				if(rs.getInt(1) == 1) {
+					return true;
+				} else {
+					return false;
+				}
+				  
+				}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("no se pudo ingresar a poliza");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		return false;
+	}
+	
+	public boolean validarChasis(String chasis) {
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;	
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT count(*) FROM poliza WHERE chasis='"+chasis+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				if(rs.getInt(1) == 1) {
+					return true;
+				} else {
+					return false;
+				}
+				  
+				}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("no se pudo ingresar a poliza");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		return false;
+	}
+	
+	public boolean validarPatente(String patente) {
+		connection = this.connectDatabase();
+		Statement stm = null;
+		ResultSet rs=null;	
+		
+		try {
+			stm= connection.createStatement();
+			rs=stm.executeQuery("SELECT count(*) FROM poliza WHERE patente='"+patente+"';");
+			
+			while(rs.next()) {//se va a ejecutar siempre que haya una fila por mostrar
+				if(rs.getInt(1) == 1) {
+					return true;
+				} else {
+					return false;
+				}
+				  
+				}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("no se pudo ingresar a poliza");
+		}
+		finally {
+			this.cerrarConexion();
+		}
+		return false;
+	}
+	
 	public void guardarPoliza(Poliza p) {
 		connection=this.connectDatabase();
 		String kmPA=p.getKmPorAnio();
@@ -101,6 +182,8 @@ public class GestorBD {
 		String nroCliente=p.getCliente().getId();
 		String patente=p.getPatente();
 		String usuario=p.getUsuario().getUsuario();
+		String chasis=p.getChasis();
+		String motor=p.getMotor();
 		int idParametros=p.getParametro().getId();
 		int idDomicilioRiesgo=p.getDomicilioDeRiesgo().getId();
 		int idSeguridad=p.getSeguridad().getId();
@@ -119,7 +202,7 @@ public class GestorBD {
 		try {
 
 			PreparedStatement insercion;
-			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`,`numCliente`,`idDomicilioRiesgo`,`idTasa`,`idSeguridad`,`nombreUsuario`,`idTipoCobertura`,`patente`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"','"+nroCliente+"','"+idDomicilioRiesgo+"','"+idParametros+"','"+idSeguridad+"','"+usuario+"','"+idCobertura+"','"+patente+"');");
+			insercion = connection.prepareStatement("INSERT INTO `bd`.`poliza` (`numeroPoliza`, `kmPorAnio`, `numeroSiniestros`,`fechaInicioVigencia`,`fechaFinVigencia`,`numCliente`,`idDomicilioRiesgo`,`idTasa`,`idSeguridad`,`nombreUsuario`,`idTipoCobertura`,`patente`,`motor`,`chasis`) VALUES ('"+nroP+"', '"+kmPA+"', '"+nroS+"','"+fechaInicio+"','"+fechaFin+"','"+nroCliente+"','"+idDomicilioRiesgo+"','"+idParametros+"','"+idSeguridad+"','"+usuario+"','"+idCobertura+"','"+patente+"','"+motor+"','"+chasis+"');");
 			int res = insercion.executeUpdate(); //para ver si se ejecuta bien
 			
 			if(res>0) {

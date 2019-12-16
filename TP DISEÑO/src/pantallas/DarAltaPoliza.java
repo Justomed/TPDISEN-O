@@ -952,20 +952,26 @@ public class DarAltaPoliza extends JFrame{
 			int respuesta = JOptionPane.showConfirmDialog(this, panelHijosPopUp, "Declarar hijo", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 			
 			if(respuesta == 0) { //si apreta OK, respuesta==0
-				String fechaAux = formato.format(fechaNacimientoTxt.getDate());
-				String sexoAux = (String) sexoComboBox.getSelectedItem();
-				String estadoCivilAux = (String) estadoCivilComboBox.getSelectedItem();
-				contador++;
-				Object[] hijosDeclarados = {contador, fechaAux, sexoAux, estadoCivilAux};
 				
-				if(hijosDeclarados != null) {
-					model.addRow(hijosDeclarados);
+				if(gestorPoliza.validarFechaNacimiento(fechaNacimientoTxt.getDate())) {
+					String fechaAux = formato.format(fechaNacimientoTxt.getDate());
+					String sexoAux = (String) sexoComboBox.getSelectedItem();
+					String estadoCivilAux = (String) estadoCivilComboBox.getSelectedItem();
+					contador++;
+					Object[] hijosDeclarados = {contador, fechaAux, sexoAux, estadoCivilAux};
+					
+					if(hijosDeclarados != null) {
+						model.addRow(hijosDeclarados);
+					}
+				} else {
+					JOptionPane.showMessageDialog(this, "FECHA DE NACIMIENTO INVALIDA");
 				}
 			}
 		});
 		
 		eliminarHijo.addActionListener(e -> {
 			model.removeRow(tablaHijos.getSelectedRow());
+			contador--;			
 		});			
 		
 		constraints.anchor = GridBagConstraints.WEST;
@@ -1026,19 +1032,43 @@ public class DarAltaPoliza extends JFrame{
 			java.util.Date auxFechaHijo = null;
 			String auxSexoHijo;
 			String auxEstadoHijo;
+			String patenteAux;
 			
-			for(int i=0; i < tablaHijos.getRowCount(); i++) {
-				try {
-					auxFechaHijo = formato.parse(tablaHijos.getValueAt(i, 1).toString());
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
-				auxSexoHijo = tablaHijos.getValueAt(i, 2).toString();
-				auxEstadoHijo = tablaHijos.getValueAt(i, 3).toString();
-				Hijo hijoAux = new Hijo(auxFechaHijo, auxSexoHijo, auxEstadoHijo);
-				listaHijos.add(hijoAux);
+			String motorAux = motorTxt.getText().substring(0, 10).toUpperCase();
+			motorAux += motorTxt.getText().substring(10);
+			
+			String chasisAux = chasisTxt.getText().substring(0, 1).toUpperCase();
+			chasisAux += chasisTxt.getText().substring(1);
+			
+			if(patenteTxt.getText().length() == 7) {
+				patenteAux = patenteTxt.getText().substring(0, 2).toUpperCase() + patenteTxt.getText().substring(5).toUpperCase();
+				patenteAux = patenteAux.substring(0, 2) + patenteTxt.getText().substring(2, 5) + patenteAux.substring(2);
+			} else {
+				patenteAux = patenteTxt.getText().substring(0, 3).toUpperCase();
+				patenteAux += patenteTxt.getText().substring(3);
 			}
-			switch(gestorPoliza.validarDatos(patenteTxt.getText(), motorTxt.getText(), chasisTxt.getText(), listaHijos)) {
+			
+			System.out.println(motorAux);
+			System.out.println(chasisAux);
+			System.out.println(patenteAux);
+			
+			if(provinciaComboBox.getSelectedIndex() == 0) {
+				JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE UNA PROVINCIA");
+			} else {
+				if(localidadComboBox.getSelectedIndex() == 0) {
+					JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE UNA LOCALIDAD");
+				} else {
+					if(marcaComboBox.getSelectedIndex() == 0) {
+						JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE UNA MARCA");
+					} else {
+						if(modeloComboBox.getSelectedIndex() == 0) {
+							JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE UN MODELO");
+						} else {
+							if(anioComboBox.getSelectedIndex() == 0) {
+								JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE UN AÑO");
+							} else {
+			
+			switch(gestorPoliza.validarDatos(patenteAux, motorAux, chasisAux)) {
 			case "patente":
 				JOptionPane.showMessageDialog(this, "PATENTE NO VALIDA. Por favor verifique los datos ingresados.");
 				break;
@@ -1048,10 +1078,36 @@ public class DarAltaPoliza extends JFrame{
 			case "chasis":
 				JOptionPane.showMessageDialog(this, "CHASIS NO VALIDO. Por favor verifique los datos ingresados.");
 				break;
-			case "hijos":
-				JOptionPane.showMessageDialog(this, "FECHA DE NACIMIENTO NO VALIDA. Por favor verifique los datos ingresados.");
+			case "existe motor":
+				JOptionPane.showMessageDialog(this, "YA EXISTE UNA POLIZA VIGENTE CON EL NUMERO DE MOTOR INGRESADO");
+				break;
+			case "existe chasis":
+				JOptionPane.showMessageDialog(this, "YA EXISTE UNA POLIZA VIGENTE CON EL NUMERO DE CHASIS INGRESADO");
+				break;
+			case "existe patente":
+				JOptionPane.showMessageDialog(this, "YA EXISTE UNA POLIZA VIGENTE CON LA PATENTE INGRESADA");
 				break;
 			default:
+				
+				if(kmAnioComboBox.getSelectedIndex() == 0) {
+					JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE CANTIDAD DE KM/AÑO");
+				} else {
+					if(siniestrosComboBox.getSelectedIndex() == 0) {
+						JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE CANTIDAD DE SINIESTROS");
+					} else {
+				
+				for(int i=0; i < tablaHijos.getRowCount(); i++) {
+					try {
+						auxFechaHijo = formato.parse(tablaHijos.getValueAt(i, 1).toString());
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					}
+					auxSexoHijo = tablaHijos.getValueAt(i, 2).toString();
+					auxEstadoHijo = tablaHijos.getValueAt(i, 3).toString();
+					Hijo hijoAux = new Hijo(auxFechaHijo, auxSexoHijo, auxEstadoHijo);
+					listaHijos.add(hijoAux);
+				}
+				
 			//setea fecha del proximo dia por defecto
 			Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.DATE, +1);
@@ -1143,9 +1199,9 @@ public class DarAltaPoliza extends JFrame{
 							marcaAux, 
 							modeloAux, 
 							anioComboBox.getSelectedItem().toString(),
-							motorTxt.getText(), 
-							chasisTxt.getText(), 
-							patenteTxt.getText(),
+							motorAux, 
+							chasisAux, 
+							patenteAux,
 							fechaInicioAux, 
 							coberturaAux, 
 							formaPagoAux, 
@@ -1166,9 +1222,9 @@ public class DarAltaPoliza extends JFrame{
 							marcaAux, 
 							modeloAux, 
 							anioComboBox.getSelectedItem().toString(),
-							motorTxt.getText(), 
-							chasisTxt.getText(), 
-							patenteTxt.getText(),
+							motorAux, 
+							chasisAux, 
+							patenteAux,
 							fechaInicioAux, 
 							coberturaAux, 
 							formaPagoAux, 
@@ -1187,6 +1243,13 @@ public class DarAltaPoliza extends JFrame{
 				}
 			}
 		}
+				}
+			}
+		}
+	}
+}
+}
+}
 		});
 
 	cancelar.addActionListener(e -> {
