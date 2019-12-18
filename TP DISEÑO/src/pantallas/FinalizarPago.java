@@ -31,8 +31,9 @@ public class FinalizarPago extends JFrame{
 	private JPanel panelBlanco;
 	private JPanel panelBlanco1;
 	private DecimalFormat formatoDecimal = new DecimalFormat("#.##");
+	private GestorPago gestorPago = new GestorPago();
 	
-	public FinalizarPago(ArrayList<Cuota> cuotasAbonadas, float montoTotal) {
+	public FinalizarPago(ArrayList<Cuota> cuotasAbonadas, float montoTotal, String tipoDePago) {
 		
 		this.setTitle("Finalizar pago de póliza");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -146,17 +147,34 @@ public class FinalizarPago extends JFrame{
 		container.add(panelBotones, constraints);	
 //------------------FUNCIONAMIENTO PANTALLA--------------------------
 		
-		importeTxt.setText("$"+formatoDecimal.format(montoTotal));
+		switch(tipoDePago) {
+		case "mensual":
+			importeTxt.setText("$"+formatoDecimal.format(montoTotal));
+			break;
+		case "semestral":
+			importeTxt.setText("$"+formatoDecimal.format(montoTotal)+".00");
+			break;
+		}
 		
 		emitir.addActionListener(e -> {
-			GestorPago gestorPago = new GestorPago();
-			gestorPago.guardarPago(cuotasAbonadas, montoTotal);
 			
-			vueltoTxt.setText("$"+formatoDecimal.format((Float.valueOf(montoTxt.getText()) - montoTotal)));
-			JOptionPane.showMessageDialog(this, panelVuelto, "Pago emitido", JOptionPane.PLAIN_MESSAGE);
-			
-			new Menu();
-			this.dispose();
+			if(montoTotal - Float.valueOf(montoTxt.getText()) > 0) {
+				JOptionPane.showMessageDialog(this, "MONTO INGRESADO INSUFICIENTE");
+			} else {
+				switch(tipoDePago) {
+				case "mensual":
+					gestorPago.guardarPago(cuotasAbonadas, "$"+formatoDecimal.format(montoTotal));
+					break;
+				case "semestral":
+					gestorPago.guardarPago(cuotasAbonadas, "$"+formatoDecimal.format(montoTotal)+".00");
+					break;
+				}
+				vueltoTxt.setText("$"+formatoDecimal.format((Float.valueOf(montoTxt.getText()) - montoTotal)));
+				JOptionPane.showMessageDialog(this, panelVuelto, "Pago emitido", JOptionPane.PLAIN_MESSAGE);
+				
+				new Menu();
+				this.dispose();
+			}
 		});
 		
 		cancelar.addActionListener(e -> {

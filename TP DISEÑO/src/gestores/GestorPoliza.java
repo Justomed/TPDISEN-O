@@ -12,10 +12,11 @@ import jdk.nashorn.api.tree.ForInLoopTree;
 public class GestorPoliza {
 	
 	private GestorBD gestorBD = new GestorBD();
+	private String nroClienteAux;
 	
 	public GestorPoliza() {}
 
-	public void darAltaPoliza(ArrayList<Hijo> listaHijos, 
+	public String darAltaPoliza(ArrayList<Hijo> listaHijos, 
 							  String cobertura, 
 							  Provincia provincia, 
 							  Localidad localidad,
@@ -77,7 +78,11 @@ public class GestorPoliza {
 		
 		//NUMERO POLIZA
 		String sucursal = "0001";
-		String nroClienteAux = String.valueOf(vehiculo.getMarca().getId()) + String.valueOf(vehiculo.getModelo().getId()) + cliente.getId().substring(6);
+		if(patentePoliza.length() == 7) {
+			nroClienteAux = String.valueOf(vehiculo.getMarca().getId()).substring(0, 1) + String.valueOf(vehiculo.getModelo().getId()).substring(0, 1) + patentePoliza.substring(2, 5) + cliente.getId().substring(9);
+		} else {
+			nroClienteAux = String.valueOf(vehiculo.getMarca().getId()).substring(0, 1) + String.valueOf(vehiculo.getModelo().getId()).substring(0, 1) + patentePoliza.substring(3) + cliente.getId().substring(9);
+		}
 		String numeroPoliza = "01";	
 		String nroPoliza = sucursal + nroClienteAux + numeroPoliza;
 		poliza.setNroPoliza(nroPoliza);
@@ -97,11 +102,17 @@ public class GestorPoliza {
 		poliza.setCuotas(cuotas);
 		poliza.setCliente(cliente);
 		
-		gestorBD.guardarPoliza(poliza);
-		gestorVehiculo.guardarVehiculo(vehiculo, poliza.getNroPoliza());
-		gestorBD.guardarCuota(cuotas, poliza.getNroPoliza());
-		gestorBD.guardarHijos(listaHijos, poliza.getNroPoliza());
-
+		Poliza polizaAux = gestorBD.recuperarPoliza(poliza.getNroPoliza());
+		
+		if(polizaAux.getNroPoliza() == null) {
+			gestorBD.guardarPoliza(poliza);
+			gestorVehiculo.guardarVehiculo(vehiculo, poliza.getNroPoliza());
+			gestorBD.guardarCuota(cuotas, poliza.getNroPoliza());
+			gestorBD.guardarHijos(listaHijos, poliza.getNroPoliza());
+			return "aceptado";
+		} else {
+			return "error";
+		}
 	}
 	
 	public String validarDatos(String patente, String motor, String chasis) {
@@ -191,6 +202,35 @@ public class GestorPoliza {
 	public void pagarCuotas(ArrayList<Cuota> cuotas, int idPago) {
 		GestorBD gestorBD = new GestorBD();
 		gestorBD.actualizarCuotasPagas(cuotas, idPago);
+	}
+	
+	public boolean validarFechaCuota(Date fechaCuota) {
+		Calendar fechaAux = Calendar.getInstance();
+		Calendar fechaAValidar = Calendar.getInstance();
+		
+		fechaAValidar.setTime(fechaCuota);
+		
+		if(fechaAux.get(Calendar.YEAR) - fechaAValidar.get(Calendar.YEAR) == 0) {
+			if(fechaAux.get(Calendar.MONTH) - fechaAValidar.get(Calendar.MONTH) > 0) {
+				return false;
+			} else {
+				if(fechaAux.get(Calendar.MONTH) - fechaAValidar.get(Calendar.MONTH) < 0) {
+					return true;
+				} else {
+					if(fechaAux.get(Calendar.DAY_OF_MONTH) - fechaAValidar.get(Calendar.DAY_OF_MONTH) > 0) {
+						return false;
+					} else {
+						return true;
+					}
+				}
+			}
+		} else {
+			if(fechaAux.get(Calendar.YEAR) - fechaAValidar.get(Calendar.YEAR) < 0) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	public boolean validarFechaNacimiento(Date fechaNacimiento) {

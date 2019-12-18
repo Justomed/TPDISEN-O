@@ -494,7 +494,7 @@ public class PolizaGenerar extends JFrame{
 				e1.printStackTrace();
 			}
 
-			gestorPoliza.darAltaPoliza(listaHijos,
+			String resultado = gestorPoliza.darAltaPoliza(listaHijos,
 									   cobertura,
 									   provincia,
 									   localidad,
@@ -514,9 +514,16 @@ public class PolizaGenerar extends JFrame{
 									   siniestros
 			);
 			
-			JOptionPane.showMessageDialog(this, "POLIZA CREADA EXITOSAMENTE");
-			new Menu();
-			this.dispose();
+			switch(resultado) {
+			case "error":
+				JOptionPane.showMessageDialog(this, "ERROR AL CREAR LA POLIZA");
+				break;
+			case "aceptado":
+				JOptionPane.showMessageDialog(this, "POLIZA CREADA EXITOSAMENTE");
+				new Menu();
+				this.dispose();
+				break;
+			}
 			
 		});
 		

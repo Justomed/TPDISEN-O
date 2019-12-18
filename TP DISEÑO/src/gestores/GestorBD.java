@@ -313,17 +313,17 @@ public class GestorBD {
 					case "":
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE nombre='"+nom+"';";
+							consulta = "SELECT * FROM cliente WHERE nombre LIKE '"+nom+"%';";
 							break;
 						}
 						break;
 					default:
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre='"+nom+"';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre LIKE '"+nom+"%';";
 							break;
 						default:
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre='"+nom+"';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre LIKE '"+nom+"%';";
 							break;
 						}
 						break;
@@ -337,17 +337,17 @@ public class GestorBD {
 					case "":
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE apellido='"+ap+ "';";
+							consulta = "SELECT * FROM cliente WHERE apellido LIKE '"+ap+"%';";
 							break;
 						}
 						break;
 					default:
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND apellido='"+ap+ "';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND apellido LIKE '"+ap+"%';";
 							break;
 						default:
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND apellido='"+ap+ "';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND apellido LIKE '"+ap+"%';";
 							break;
 						}
 						break;
@@ -358,17 +358,17 @@ public class GestorBD {
 					case "":
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE nombre='"+nom+"' AND apellido='"+ap+ "';";
+							consulta = "SELECT * FROM cliente WHERE nombre LIKE '"+nom+"%' AND apellido LIKE '"+ap+"%';";
 							break;
 						}
 						break;
 					default:
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre='"+nom+"' AND apellido='"+ap+ "';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre LIKE '"+nom+"%' AND apellido LIKE '"+ap+"%';";
 							break;
 						default:
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre='"+nom+"' AND apellido='"+ap+ "';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre LIKE '"+nom+"%' AND apellido LIKE '"+ap+"%';";
 							break;
 						}
 						break;
@@ -407,17 +407,17 @@ public class GestorBD {
 					case "":
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE nombre='"+nom+"' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE nombre LIKE '"+nom+"%' AND numCliente='"+nroC+"';";
 							break;
 						}
 						break;
 					default:
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre='"+nom+"' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre LIKE '"+nom+"%' AND numCliente='"+nroC+"';";
 							break;
 						default:
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre='"+nom+"' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre LIKE '"+nom+"%' AND numCliente='"+nroC+"';";
 							break;
 						}
 						break;
@@ -431,17 +431,17 @@ public class GestorBD {
 					case "":
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE apellido LIKE '"+ap+"%' AND numCliente='"+nroC+"';";
 							break;
 						}
 						break;
 					default:
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND apellido LIKE '"+ap+"%' AND numCliente='"+nroC+"';";
 							break;
 						default:
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND apellido LIKE '"+ap+"%' AND numCliente='"+nroC+"';";
 							break;
 						}
 						break;
@@ -452,17 +452,17 @@ public class GestorBD {
 					case "":
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE nombre='"+nom+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE nombre LIKE '"+nom+"%' AND apellido LIKE '"+ap+"%' AND numCliente='"+nroC+"';";
 							break;
 						}
 						break;
 					default:
 						switch(nroDoc) {
 						case "":
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre='"+nom+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nombre LIKE '"+nom+"%' AND apellido LIKE '"+ap+"%' AND numCliente='"+nroC+"';";
 							break;
 						default:
-							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre='"+nom+"' AND apellido='"+ap+ "' AND numCliente='"+nroC+"';";
+							consulta = "SELECT * FROM cliente WHERE tipoDocumento='"+tipoDoc+"' AND nroDni='"+nroDoc+"' AND nombre LIKE '"+nom+"%' AND apellido LIKE '"+ap+"%' AND numCliente='"+nroC+"';";
 							break;
 						}
 						break;

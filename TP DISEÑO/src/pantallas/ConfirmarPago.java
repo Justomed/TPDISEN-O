@@ -36,7 +36,7 @@ public class ConfirmarPago extends JFrame{
 	private DecimalFormat formatoDecimal = new DecimalFormat("#.##");
 	private float montoTotal = 0;
 	
-	public ConfirmarPago(ArrayList<Cuota> cuotasAbonadas) {
+	public ConfirmarPago(ArrayList<Cuota> cuotasAbonadas, String tipoDePago) {
 		
 		this.setTitle("Confirmar pago de póliza");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -141,10 +141,17 @@ public class ConfirmarPago extends JFrame{
 			montoTotal = montoTotal + Float.valueOf(cuotaAux.getMontoFinal().substring(1));
 		}
 		
-		importeTxt.setText("$"+formatoDecimal.format(montoTotal));
+		switch(tipoDePago) {
+		case "mensual":
+			importeTxt.setText("$"+formatoDecimal.format(montoTotal));
+			break;
+		case "semestral":
+			importeTxt.setText("$"+formatoDecimal.format(montoTotal)+".00");
+		}
+		
 		
 		continuar.addActionListener(e -> {
-			new FinalizarPago(cuotasAbonadas, montoTotal);
+			new FinalizarPago(cuotasAbonadas, montoTotal, tipoDePago);
 			this.dispose();
 		});
 		

@@ -29,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import entidades.Cuota;
 import entidades.EstadoCuota;
 import entidades.Poliza;
+import gestores.GestorPoliza;
 import utility.MyOwnFocusTraversalPolicy;
 
 public class RegistrarPago extends JFrame{
@@ -53,6 +54,8 @@ public class RegistrarPago extends JFrame{
 	private ArrayList<Cuota> cuotasPendientes = new ArrayList<Cuota>();
 	private ArrayList<Cuota> cuotasFuturas = new ArrayList<Cuota>();
 	private ArrayList<Cuota> cuotasAbonadas = new ArrayList<Cuota>();
+	private GestorPoliza gestorPoliza = new GestorPoliza();
+	private String tipoDePago;
 	
 	
 	public RegistrarPago(Poliza poliza) {
@@ -331,26 +334,100 @@ public class RegistrarPago extends JFrame{
 			
 			Date fechaHoy = new Date();
 			formatoDecimal.setRoundingMode(RoundingMode.CEILING);
+			int contadorCuotas = 0;
 			
 			for(Cuota auxCuota : poliza.getCuotas()) {
-				if(fechaHoy.after(auxCuota.getFechaVencimiento())) {
-					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
-						System.out.println(auxCuota.getMontoFinal());
-						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
-						String montoFinal = formatoDecimal.format(montoAux*1.2);
-						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
-						modeloTablaPendientes.addRow(fila);
-						auxCuota.setMontoFinal("$"+montoFinal);
-						cuotasPendientes.add(auxCuota);
+				contadorCuotas++;
+			}
+			
+			if(contadorCuotas == 6) {
+				tipoDePago = "mensual";
+			} else {
+				tipoDePago = "semestral";
+			}
+			
+			switch(tipoDePago) {
+			case "mensual":
+				for(Cuota auxCuota : poliza.getCuotas()) {
+					if(!gestorPoliza.validarFechaCuota(auxCuota.getFechaVencimiento())) {
+						if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
+							System.out.println(auxCuota.getMontoFinal());
+							float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
+							String montoFinal = formatoDecimal.format(montoAux*1.2);
+							System.out.println(montoAux);
+							System.out.println("true: "+montoFinal);
+							Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+							modeloTablaPendientes.addRow(fila);
+							auxCuota.setMontoFinal("$"+montoFinal);
+							cuotasPendientes.add(auxCuota);
+						}
+					} else {
+						if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
+							Calendar fechaAuxHoy = Calendar.getInstance();
+							Calendar fechaCuota = Calendar.getInstance();
+							
+							fechaCuota.setTime(auxCuota.getFechaVencimiento());
+							
+							if(fechaAuxHoy.get(Calendar.MONTH) == fechaCuota.get(Calendar.MONTH)) {
+								float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
+								String montoFinal = formatoDecimal.format(montoAux);
+								System.out.println("true: "+montoFinal);
+								Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+								modeloTablaFuturas.addRow(fila);
+								auxCuota.setMontoFinal("$"+montoFinal);
+								cuotasFuturas.add(auxCuota);
+							} else {
+								float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
+								String montoFinal = formatoDecimal.format(montoAux*0.9);
+								System.out.println("true: "+montoFinal);
+								Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+								modeloTablaFuturas.addRow(fila);
+								auxCuota.setMontoFinal("$"+montoFinal);
+								cuotasFuturas.add(auxCuota);
+							}
+						}
 					}
-				} else {
-					if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
-						float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
-						String montoFinal = formatoDecimal.format(montoAux*0.9);
-						Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
-						modeloTablaFuturas.addRow(fila);
-						auxCuota.setMontoFinal("$"+montoFinal);
-						cuotasFuturas.add(auxCuota);
+				}
+				break;
+			case "semestral":
+				for(Cuota auxCuota : poliza.getCuotas()) {
+					if(!gestorPoliza.validarFechaCuota(auxCuota.getFechaVencimiento())) {
+						if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
+							System.out.println(auxCuota.getMontoFinal());
+							float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
+							String montoFinal = formatoDecimal.format(montoAux*1.2) + ".00";
+							System.out.println(montoAux);
+							System.out.println("true: "+montoFinal);
+							Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+							modeloTablaPendientes.addRow(fila);
+							auxCuota.setMontoFinal("$"+montoFinal);
+							cuotasPendientes.add(auxCuota);
+						}
+					} else {
+						if(auxCuota.getEstado() == EstadoCuota.IMPAGA) {
+							Calendar fechaAuxHoy = Calendar.getInstance();
+							Calendar fechaCuota = Calendar.getInstance();
+							
+							fechaCuota.setTime(auxCuota.getFechaVencimiento());
+							
+							if(fechaAuxHoy.get(Calendar.MONTH) == fechaCuota.get(Calendar.MONTH)) {
+								float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
+								String montoFinal = formatoDecimal.format(montoAux) + ".00";
+								System.out.println("true: "+montoFinal);
+								Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+								modeloTablaFuturas.addRow(fila);
+								auxCuota.setMontoFinal("$"+montoFinal);
+								cuotasFuturas.add(auxCuota);
+							} else {
+								float montoAux = Float.valueOf(auxCuota.getMontoFinal().substring(1));
+								String montoFinal = formatoDecimal.format(montoAux*0.9) + ".00";
+								System.out.println("true: "+montoFinal);
+								Object [] fila = {formato.format(auxCuota.getFechaVencimiento()), auxCuota.getMontoFinal(), "$"+montoFinal};
+								modeloTablaFuturas.addRow(fila);
+								auxCuota.setMontoFinal("$"+montoFinal);
+								cuotasFuturas.add(auxCuota);
+							}
+						}
 					}
 				}
 			}
@@ -389,7 +466,7 @@ public class RegistrarPago extends JFrame{
 			}
 			
 			if(cuotasAbonadas.size() > 0) {
-				new ConfirmarPago(cuotasAbonadas);
+				new ConfirmarPago(cuotasAbonadas, tipoDePago);
 				this.dispose();
 			}
 		});

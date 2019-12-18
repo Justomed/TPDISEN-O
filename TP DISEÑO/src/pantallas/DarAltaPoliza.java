@@ -213,7 +213,7 @@ public class DarAltaPoliza extends JFrame{
 		JCheckBox rastreo = new JCheckBox("¿Posee dispositivo de rastreo vehicular?");
 		JCheckBox tuercaAntirrobo = new JCheckBox("¿Posee tuercas antirrobo en las cuatro ruedas?");
 		
-		motorTxt.setText("ZZZZZZZZZZZ9999999");
+		motorTxt.setText("ZZZZZZZZZZ9999999");
 		chasisTxt.setText("Z9999999");
 		patenteTxt.setText("AAA999/AA999AA");
 		
@@ -1028,7 +1028,6 @@ public class DarAltaPoliza extends JFrame{
 		panelPremioDescuento.add(formaPagoPopUpComboBox);
 		
 		confirmar.addActionListener(e -> {
-
 			java.util.Date auxFechaHijo = null;
 			String auxSexoHijo;
 			String auxEstadoHijo;
@@ -1048,9 +1047,9 @@ public class DarAltaPoliza extends JFrame{
 				patenteAux += patenteTxt.getText().substring(3);
 			}
 			
-			System.out.println(motorAux);
-			System.out.println(chasisAux);
-			System.out.println(patenteAux);
+			if(cliente.getDni() == null) {
+				JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE UN CLIENTE");
+			} else {
 			
 			if(provinciaComboBox.getSelectedIndex() == 0) {
 				JOptionPane.showMessageDialog(this, "POR FAVOR SELECCIONE UNA PROVINCIA");
@@ -1243,6 +1242,7 @@ public class DarAltaPoliza extends JFrame{
 				}
 			}
 		}
+					
 				}
 			}
 		}
@@ -1250,6 +1250,7 @@ public class DarAltaPoliza extends JFrame{
 }
 }
 }
+			}
 		});
 
 	cancelar.addActionListener(e -> {
